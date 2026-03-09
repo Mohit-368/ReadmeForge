@@ -8,7 +8,7 @@
 [![Made with HTML](https://img.shields.io/badge/Made%20with-HTML%2FJS%2FCSS-orange.svg)](#)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
-[🚀 Live Demo](#) · [🐛 Report a Bug](../../issues) · [✨ Request a Feature](../../issues)
+[🚀 Live Demo](https://makeareadme.netlify.app) · [🐛 Report a Bug](../../issues) · [✨ Request a Feature](../../issues)
 
 
 
@@ -32,9 +32,10 @@
 ---
 
 ## 📸 Screenshots
+<img width="1918" height="1076" alt="Screenshot 2026-03-09 142503" src="https://github.com/user-attachments/assets/542aac38-9554-49ee-adec-369281ad399f" />
 
-<!-- Add your screenshots here -->
-> *Screenshots coming soon — feel free to open a PR to add them!*
+<img width="1915" height="1077" alt="Screenshot 2026-03-09 142522" src="https://github.com/user-attachments/assets/f7f12c58-c2e8-4fb3-b30a-12835a2f62cc" />
+
 
 ---
 
