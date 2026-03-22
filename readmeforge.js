@@ -1123,3 +1123,23 @@
 
   init();
 })();
+const preview = document.getElementById("previewBody");
+const btn = document.getElementById("backToTopBtn");
+
+// Show button when scrolling
+preview.addEventListener("scroll", () => {
+  if (preview.scrollTop > 200) {
+    btn.style.display = "block";
+  } else {
+    btn.style.display = "none";
+  }
+});
+
+// Smooth scroll to top
+btn.addEventListener("click", () => {
+  preview.scrollTo({
+    top: 0,
+    behavior: "smooth",
+  });
+});
+
