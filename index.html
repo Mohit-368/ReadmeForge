@@ -1,732 +1,535 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>
-      READMEForge — Generate Professional GitHub READMEs in 30 Seconds
-    </title>
 
-    <!-- Combined Fonts: Space Grotesk, JetBrains Mono, and Inter for the Hero -->
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="readmeforge.css" />
-  </head>
-  <body>
-    <!-- ── FUTURISTIC HERO HEADER ── -->
-    <div class="hero-wrapper">
-      <!-- Top Logo -->
-      <header class="top-nav">
-        <div class="hero-logo">
-          README
-          <!-- SVG 4-Pointed Sparkle Star -->
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M12 2L14.4 9.6L22 12L14.4 14.4L12 22L9.6 14.4L2 12L9.6 9.6L12 2Z"
-              fill="white"
-            />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>
+    READMEForge — Generate Professional GitHub READMEs in 30 Seconds
+  </title>
+
+  <!-- Combined Fonts: Space Grotesk, JetBrains Mono, and Inter for the Hero -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="readmeforge.css" />
+</head>
+
+<body>
+  <!-- ── FUTURISTIC HERO HEADER ── -->
+  <div class="hero-wrapper">
+    <!-- Top Logo -->
+    <header class="top-nav">
+      <div class="hero-logo">
+        README
+        <!-- SVG 4-Pointed Sparkle Star -->
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2L14.4 9.6L22 12L14.4 14.4L12 22L9.6 14.4L2 12L9.6 9.6L12 2Z" fill="white" />
+        </svg>
+        FORGE
+      </div>
+
+      <!-- Source Code Link in Hero Header -->
+      <a href="https://github.com/Mohit-368/ReadmeForge" target="_blank" class="hero-source-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+          stroke-linejoin="round">
+          <polyline points="16 18 22 12 16 6"></polyline>
+          <polyline points="8 6 2 12 8 18"></polyline>
+        </svg>
+        Source Code
+      </a>
+    </header>
+
+    <!-- Giant Typographic Title -->
+    <main class="hero-content">
+      <h1 class="hero-title">GitHub<br />Readme.Md<br />maker</h1>
+    </main>
+
+    <!-- Pure CSS 3D Decorative Assets -->
+    <div class="css-asterisk">
+      <div class="ast-arm"></div>
+      <div class="ast-arm"></div>
+      <div class="ast-arm"></div>
+    </div>
+
+    <div class="css-pills">
+      <div class="css-pill"></div>
+      <div class="css-pill"></div>
+      <div class="css-pill"></div>
+    </div>
+
+    <!-- Call to Action -->
+    <div class="scroll-action">
+      <a href="#app-builder" class="scroll-btn">Scroll to Create</a>
+    </div>
+  </div>
+
+  <!-- ── APP WORKSPACE ── -->
+  <div id="app-builder">
+    <!-- ── HEADER ── -->
+    <header class="header">
+      <a href="#" class="logo">
+        <div class="logo-mark">RF</div>
+        <span class="logo-name">README<span>Forge</span></span>
+      </a>
+      <div class="header-center">
+        <span style="
+              font-size: 11px;
+              color: var(--muted);
+              font-family: &quot;JetBrains Mono&quot;, monospace;
+              margin-right: 4px;
+            ">sections:</span>
+        <span id="sectionCount" style="font-size: 12px; font-weight: 700; color: var(--accent)">0</span>
+        <span style="
+              font-size: 11px;
+              color: var(--muted);
+              font-family: &quot;JetBrains Mono&quot;, monospace;
+            ">
+          active</span>
+      </div>
+      <div class="header-right">
+        <!-- Source Code Link in App Header -->
+        <a href="#" target="_blank" class="hbtn" style="
+              text-decoration: none;
+              display: inline-flex;
+              align-items: center;
+              gap: 6px;
+            ">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="16 18 22 12 16 6"></polyline>
+            <polyline points="8 6 2 12 8 18"></polyline>
           </svg>
-          FORGE
+          Source
+        </a>
+        <button class="hbtn" onclick="resetAll()">↺ Reset</button>
+        <button class="hbtn" onclick="copyMarkdown()">Copy MD</button>
+        <button class="hbtn primary" id="modalPrintBtn" onclick="downloadPDF()">
+          ⬇ Download PDF
+        </button>
+      </div>
+    </header>
+
+    <div class="main">
+      <!-- ── SIDEBAR ── -->
+      <aside class="sidebar">
+        <!-- Templates -->
+        <div class="sidebar-section">
+          <div class="sidebar-label">Templates</div>
+          <div class="templates-grid">
+            <button class="template-btn" onclick="applyTemplate('webapp')">
+              🌐 Web App
+            </button>
+            <button class="template-btn" onclick="applyTemplate('ml')">
+              🤖 ML / AI
+            </button>
+            <button class="template-btn" onclick="applyTemplate('api')">
+              ⚡ Backend API
+            </button>
+            <button class="template-btn" onclick="applyTemplate('cli')">
+              💻 CLI Tool
+            </button>
+            <button class="template-btn" onclick="applyTemplate('mobile')">
+              📱 Mobile App
+            </button>
+            <button class="template-btn" onclick="applyTemplate('lib')">
+              📦 Library
+            </button>
+            <button class="template-btn" onclick="applyTemplate('hackathon')">
+              🏆 Hackathon
+            </button>
+            <button class="template-btn" onclick="applyTemplate('oss')">
+              🔓 Open Source
+            </button>
+          </div>
         </div>
 
-        <!-- Source Code Link in Hero Header -->
-        <a
-          href="https://github.com/Mohit-368/ReadmeForge"
-          target="_blank"
-          class="hero-source-link"
-        >
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
+        <!-- Section Toggles -->
+        <div class="sidebar-section" style="flex: 1">
+          <div class="sidebar-label">Sections</div>
+          <div class="section-toggles" id="sectionToggles">
+            <!-- populated by JS -->
+          </div>
+        </div>
+      </aside>
+
+      <!-- ── EDITOR ── -->
+      <div class="editor">
+        <div class="editor-inner" id="editorInner">
+          <!-- 1. Project Title & Badges -->
+          <div class="editor-section" id="sec-title">
+            <div class="es-header">
+              <div class="es-num">1</div>
+              <div class="es-title">Project Title & Badges</div>
+            </div>
+            <div class="es-body">
+              <div class="two-col">
+                <div>
+                  <label>PROJECT NAME *</label>
+                  <input type="text" id="projName" placeholder="AwesomeProject" oninput="scheduleRender()" />
+                </div>
+                <div>
+                  <label>TAGLINE</label>
+                  <input type="text" id="tagline" placeholder="A blazing-fast tool for..." oninput="scheduleRender()" />
+                </div>
+              </div>
+              <div class="two-col">
+                <div>
+                  <label>GITHUB USER</label>
+                  <input type="text" id="ghUser" placeholder="octocat" oninput="scheduleRender()" />
+                </div>
+                <div>
+                  <label>REPO NAME</label>
+                  <input type="text" id="repoSlug" placeholder="awesome-project" oninput="scheduleRender()" />
+                </div>
+              </div>
+              <div>
+                <label>AUTO BADGES — click to toggle</label>
+                <div class="badge-picker" id="badgePicker">
+                  <!-- populated by JS -->
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. Description -->
+          <div class="editor-section" id="sec-description">
+            <div class="es-header">
+              <div class="es-num">2</div>
+              <div class="es-title">Description</div>
+            </div>
+            <div class="es-body">
+              <div>
+                <label>SHORT DESCRIPTION</label>
+                <textarea id="description" placeholder="What does your project do? What problem does it solve?"
+                  style="min-height: 90px" oninput="scheduleRender()"></textarea>
+              </div>
+              <div>
+                <label>LIVE DEMO URL (optional)</label>
+                <input type="url" id="demoUrl" placeholder="https://yourapp.com" oninput="scheduleRender()" />
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. Features -->
+          <div class="editor-section" id="sec-features">
+            <div class="es-header">
+              <div class="es-num">3</div>
+              <div class="es-title">Features</div>
+            </div>
+            <div class="es-body">
+              <div>
+                <label>KEY FEATURES — use "### Category" for groups, "- item" for
+                  bullets</label>
+                <textarea id="features" style="min-height: 130px" oninput="scheduleRender()"
+                  placeholder="### 🔐 Authentication&#10;- Email OTP verification&#10;- Secure login / logout&#10;&#10;### 📝 Posts&#10;- Create, Read, Update, Delete"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4. Tech Stack -->
+          <div class="editor-section" id="sec-techstack">
+            <div class="es-header">
+              <div class="es-num">4</div>
+              <div class="es-title">Tech Stack</div>
+              <span class="es-badge" id="techCount" style="display: none">0 selected</span>
+            </div>
+            <div class="es-body">
+              <div>
+                <label>CLICK TO SELECT YOUR STACK</label>
+                <div class="tech-picker" id="techPicker">
+                  <!-- populated by JS -->
+                </div>
+              </div>
+              <div>
+                <label>OR ADD CUSTOM (comma separated)</label>
+                <input type="text" id="customTech" placeholder="Celery, Redis, Nginx..." oninput="scheduleRender()" />
+              </div>
+            </div>
+          </div>
+
+          <!-- 5. Installation -->
+          <div class="editor-section" id="sec-installation">
+            <div class="es-header">
+              <div class="es-num">5</div>
+              <div class="es-title">Installation</div>
+            </div>
+            <div class="es-body">
+              <div>
+                <label>PREREQUISITES</label>
+                <input type="text" id="prereqs" placeholder="Python 3.10+, Node.js 18+" oninput="scheduleRender()" />
+              </div>
+              <div>
+                <label>INSTALL COMMANDS (one per line)</label>
+                <textarea id="installCmds" style="min-height: 100px" oninput="scheduleRender()"
+                  placeholder="git clone https://github.com/user/repo.git&#10;cd repo&#10;pip install -r requirements.txt&#10;python manage.py migrate&#10;python manage.py runserver"></textarea>
+              </div>
+              <div>
+                <label>ENV VARIABLES (optional)</label>
+                <textarea id="envVars" style="min-height: 70px" oninput="scheduleRender()"
+                  placeholder="SECRET_KEY=your_secret&#10;DATABASE_URL=sqlite:///db.sqlite3&#10;DEBUG=True"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- 6. Usage -->
+          <div class="editor-section" id="sec-usage">
+            <div class="es-header">
+              <div class="es-num">6</div>
+              <div class="es-title">Usage</div>
+            </div>
+            <div class="es-body">
+              <div>
+                <label>RUN COMMAND / USAGE INSTRUCTIONS</label>
+                <textarea id="usageCmd" style="min-height: 80px" oninput="scheduleRender()"
+                  placeholder="python manage.py runserver&#10;&#10;# Then open http://127.0.0.1:8000/"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- 7. Project Structure -->
+          <div class="editor-section" id="sec-structure">
+            <div class="es-header">
+              <div class="es-num">7</div>
+              <div class="es-title">Project Structure Visualizer</div>
+            </div>
+            <div class="es-body">
+              <div>
+                <label>PASTE YOUR FOLDER STRUCTURE (indented with spaces)</label>
+                <textarea id="rawStructure" style="min-height: 120px" oninput="updateStructurePreview()"
+                  placeholder="src/&#10;  api/&#10;  models/&#10;  utils/&#10;templates/&#10;static/&#10;main.py&#10;requirements.txt&#10;README.md"></textarea>
+              </div>
+              <div>
+                <label>VISUAL PREVIEW</label>
+                <div class="struct-preview" id="structPreview">
+                  Paste structure above to preview...
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 8. Screenshots -->
+          <div class="editor-section" id="sec-screenshots">
+            <div class="es-header">
+              <div class="es-num">8</div>
+              <div class="es-title">Screenshots</div>
+            </div>
+            <div class="es-body">
+              <div>
+                <label>LIVE DEMO / VIDEO LINK (optional)</label>
+                <input type="url" id="videoUrl" placeholder="https://youtube.com/watch?v=..."
+                  oninput="scheduleRender()" />
+              </div>
+              <div>
+                <label>DRAG &amp; DROP SCREENSHOTS</label>
+                <div class="drop-zone" id="dropZone">
+                  <div class="drop-zone-icon">🖼️</div>
+                  <p>Drop images here or click to browse</p>
+                  <small>PNG, JPG, GIF — they'll be linked as Markdown</small>
+                  <input type="file" id="fileInput" multiple accept="image/*" style="display: none" />
+                </div>
+                <div class="screenshot-list" id="screenshotList"></div>
+              </div>
+              <div>
+                <label>OR ADD IMAGE URLS (format: Label | URL, one per
+                  line)</label>
+                <textarea id="imageUrls" style="min-height: 60px" oninput="scheduleRender()"
+                  placeholder="Landing Page | https://i.imgur.com/abc.png&#10;Dashboard | https://i.imgur.com/xyz.png"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- 9. API Docs -->
+          <div class="editor-section" id="sec-api">
+            <div class="es-header">
+              <div class="es-num">9</div>
+              <div class="es-title">API Documentation</div>
+            </div>
+            <div class="es-body">
+              <div>
+                <label>API ENDPOINTS — format: METHOD /path | Description (one per
+                  line)</label>
+                <textarea id="apiDocs" style="min-height: 100px" oninput="scheduleRender()"
+                  placeholder="GET /api/users | Get all users&#10;POST /api/users | Create a new user&#10;GET /api/users/:id | Get user by ID&#10;PUT /api/users/:id | Update user&#10;DELETE /api/users/:id | Delete user"></textarea>
+              </div>
+              <div>
+                <label>API BASE URL (optional)</label>
+                <input type="text" id="apiBase" placeholder="https://api.yourapp.com/v1" oninput="scheduleRender()" />
+              </div>
+            </div>
+          </div>
+
+          <!-- 10. Contributing -->
+          <div class="editor-section" id="sec-contributing">
+            <div class="es-header">
+              <div class="es-num">10</div>
+              <div class="es-title">Contributing</div>
+            </div>
+            <div class="es-body">
+              <div>
+                <label>CUSTOM CONTRIBUTING NOTES (optional — default guide
+                  auto-generated)</label>
+                <textarea id="contribNotes" style="min-height: 70px" oninput="scheduleRender()"
+                  placeholder="Any specific guidelines, code style rules, branch naming conventions..."></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- 11. License & Author -->
+          <div class="editor-section" id="sec-author">
+            <div class="es-header">
+              <div class="es-num">11</div>
+              <div class="es-title">License &amp; Author</div>
+            </div>
+            <div class="es-body">
+              <div class="two-col">
+                <div>
+                  <label>LICENSE</label>
+                  <select id="license" onchange="scheduleRender()">
+                    <option value="MIT">MIT</option>
+                    <option value="Apache-2.0">Apache 2.0</option>
+                    <option value="GPL-3.0">GPL 3.0</option>
+                    <option value="BSD-3-Clause">BSD 3-Clause</option>
+                    <option value="ISC">ISC</option>
+                    <option value="Unlicense">Unlicense</option>
+                    <option value="AGPL-3.0">AGPL 3.0</option>
+                    <option value="none">No License</option>
+                  </select>
+                </div>
+                <div>
+                  <label>FULL NAME</label>
+                  <input type="text" id="authorName" placeholder="Your Name" oninput="scheduleRender()" />
+                </div>
+              </div>
+              <div class="two-col">
+                <div>
+                  <label>GITHUB USERNAME</label>
+                  <input type="text" id="authorGh" placeholder="username" oninput="scheduleRender()" />
+                </div>
+                <div>
+                  <label>EMAIL (optional)</label>
+                  <input type="email" id="authorEmail" placeholder="you@email.com" oninput="scheduleRender()" />
+                </div>
+              </div>
+              <div class="two-col">
+                <div>
+                  <label>LINKEDIN (optional)</label>
+                  <input type="url" id="authorLinkedin" placeholder="https://linkedin.com/in/you"
+                    oninput="scheduleRender()" />
+                </div>
+                <div>
+                  <label>PORTFOLIO (optional)</label>
+                  <input type="url" id="authorWebsite" placeholder="https://yoursite.com" oninput="scheduleRender()" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── PREVIEW ── -->
+      <aside class="preview">
+        <div class="preview-header">
+          <div class="preview-tabs">
+            <button class="ptab active" id="tabRendered" onclick="setTab('rendered')">
+              Preview (Better at full dimensions)
+            </button>
+            <button class="ptab" id="tabRaw" onclick="setTab('raw')">
+              Raw MD
+            </button>
+          </div>
+          <div class="preview-actions">
+            <button class="pbtn green" onclick="copyMarkdown()">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" />
+                <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" />
+              </svg>
+              Copy
+            </button>
+            <button class="pbtn" onclick="downloadMd()">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+                <polyline points="7,10 12,15 17,10" />
+                <line x1="12" y1="15" x2="12" y2="3" />
+              </svg>
+              .md
+            </button>
+          </div>
+        </div>
+        <div class="preview-body" id="previewBody">
+          <div class="empty-preview">
+            <div class="icon">📄</div>
+            <h3>Live preview appears here</h3>
+            <p>Start filling in the editor →</p>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <!-- ── FOOTER ── -->
+  <footer class="app-footer">
+    <div class="footer-content">
+      <div class="footer-left">
+        <div class="footer-logo">RF</div>
+        <p>Designed & Built by <strong>Mohit Kumar</strong></p>
+      </div>
+      <div class="footer-right">
+        <!-- Source Code Link -->
+        <a href="https://github.com/Mohit-368/ReadmeForge" target="_blank" class="footer-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
             <polyline points="16 18 22 12 16 6"></polyline>
             <polyline points="8 6 2 12 8 18"></polyline>
           </svg>
           Source Code
         </a>
-      </header>
 
-      <!-- Giant Typographic Title -->
-      <main class="hero-content">
-        <h1 class="hero-title">GitHub<br />Readme.Md<br />maker</h1>
-      </main>
+        <div class="footer-divider"></div>
 
-      <!-- Pure CSS 3D Decorative Assets -->
-      <div class="css-asterisk">
-        <div class="ast-arm"></div>
-        <div class="ast-arm"></div>
-        <div class="ast-arm"></div>
-      </div>
-
-      <div class="css-pills">
-        <div class="css-pill"></div>
-        <div class="css-pill"></div>
-        <div class="css-pill"></div>
-      </div>
-
-      <!-- Call to Action -->
-      <div class="scroll-action">
-        <a href="#app-builder" class="scroll-btn">Scroll to Create</a>
-      </div>
-    </div>
-
-    <!-- ── APP WORKSPACE ── -->
-    <div id="app-builder">
-      <!-- ── HEADER ── -->
-      <header class="header">
-        <a href="#" class="logo">
-          <div class="logo-mark">RF</div>
-          <span class="logo-name">README<span>Forge</span></span>
+        <!-- GitHub Link -->
+        <a href="https://github.com/Mohit-368" target="_blank" class="footer-icon" title="GitHub">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path
+              d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
+            </path>
+          </svg>
         </a>
-        <div class="header-center">
-          <span
-            style="
-              font-size: 11px;
-              color: var(--muted);
-              font-family: &quot;JetBrains Mono&quot;, monospace;
-              margin-right: 4px;
-            "
-            >sections:</span
-          >
-          <span
-            id="sectionCount"
-            style="font-size: 12px; font-weight: 700; color: var(--accent)"
-            >0</span
-          >
-          <span
-            style="
-              font-size: 11px;
-              color: var(--muted);
-              font-family: &quot;JetBrains Mono&quot;, monospace;
-            "
-          >
-            active</span
-          >
-        </div>
-        <div class="header-right">
-          <!-- Source Code Link in App Header -->
-          <a
-            href="#"
-            target="_blank"
-            class="hbtn"
-            style="
-              text-decoration: none;
-              display: inline-flex;
-              align-items: center;
-              gap: 6px;
-            "
-          >
-            <svg
-              width="14"
-              height="14"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <polyline points="16 18 22 12 16 6"></polyline>
-              <polyline points="8 6 2 12 8 18"></polyline>
-            </svg>
-            Source
-          </a>
-          <button class="hbtn" onclick="resetAll()">↺ Reset</button>
-          <button class="hbtn" onclick="copyMarkdown()">Copy MD</button>
-          <button class="hbtn primary" onclick="downloadMd()">
-            ⬇ Download README.md
-          </button>
-        </div>
-      </header>
 
-      <div class="main">
-        <!-- ── SIDEBAR ── -->
-        <aside class="sidebar">
-          <!-- Templates -->
-          <div class="sidebar-section">
-            <div class="sidebar-label">Templates</div>
-            <div class="templates-grid">
-              <button class="template-btn" onclick="applyTemplate('webapp')">
-                🌐 Web App
-              </button>
-              <button class="template-btn" onclick="applyTemplate('ml')">
-                🤖 ML / AI
-              </button>
-              <button class="template-btn" onclick="applyTemplate('api')">
-                ⚡ Backend API
-              </button>
-              <button class="template-btn" onclick="applyTemplate('cli')">
-                💻 CLI Tool
-              </button>
-              <button class="template-btn" onclick="applyTemplate('mobile')">
-                📱 Mobile App
-              </button>
-              <button class="template-btn" onclick="applyTemplate('lib')">
-                📦 Library
-              </button>
-              <button class="template-btn" onclick="applyTemplate('hackathon')">
-                🏆 Hackathon
-              </button>
-              <button class="template-btn" onclick="applyTemplate('oss')">
-                🔓 Open Source
-              </button>
-            </div>
-          </div>
-
-          <!-- Section Toggles -->
-          <div class="sidebar-section" style="flex: 1">
-            <div class="sidebar-label">Sections</div>
-            <div class="section-toggles" id="sectionToggles">
-              <!-- populated by JS -->
-            </div>
-          </div>
-        </aside>
-
-        <!-- ── EDITOR ── -->
-        <div class="editor">
-          <div class="editor-inner" id="editorInner">
-            <!-- 1. Project Title & Badges -->
-            <div class="editor-section" id="sec-title">
-              <div class="es-header">
-                <div class="es-num">1</div>
-                <div class="es-title">Project Title & Badges</div>
-              </div>
-              <div class="es-body">
-                <div class="two-col">
-                  <div>
-                    <label>PROJECT NAME *</label>
-                    <input
-                      type="text"
-                      id="projName"
-                      placeholder="AwesomeProject"
-                      oninput="scheduleRender()"
-                    />
-                  </div>
-                  <div>
-                    <label>TAGLINE</label>
-                    <input
-                      type="text"
-                      id="tagline"
-                      placeholder="A blazing-fast tool for..."
-                      oninput="scheduleRender()"
-                    />
-                  </div>
-                </div>
-                <div class="two-col">
-                  <div>
-                    <label>GITHUB USER</label>
-                    <input
-                      type="text"
-                      id="ghUser"
-                      placeholder="octocat"
-                      oninput="scheduleRender()"
-                    />
-                  </div>
-                  <div>
-                    <label>REPO NAME</label>
-                    <input
-                      type="text"
-                      id="repoSlug"
-                      placeholder="awesome-project"
-                      oninput="scheduleRender()"
-                    />
-                  </div>
-                </div>
-                <div>
-                  <label>AUTO BADGES — click to toggle</label>
-                  <div class="badge-picker" id="badgePicker">
-                    <!-- populated by JS -->
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- 2. Description -->
-            <div class="editor-section" id="sec-description">
-              <div class="es-header">
-                <div class="es-num">2</div>
-                <div class="es-title">Description</div>
-              </div>
-              <div class="es-body">
-                <div>
-                  <label>SHORT DESCRIPTION</label>
-                  <textarea
-                    id="description"
-                    placeholder="What does your project do? What problem does it solve?"
-                    style="min-height: 90px"
-                    oninput="scheduleRender()"
-                  ></textarea>
-                </div>
-                <div>
-                  <label>LIVE DEMO URL (optional)</label>
-                  <input
-                    type="url"
-                    id="demoUrl"
-                    placeholder="https://yourapp.com"
-                    oninput="scheduleRender()"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <!-- 3. Features -->
-            <div class="editor-section" id="sec-features">
-              <div class="es-header">
-                <div class="es-num">3</div>
-                <div class="es-title">Features</div>
-              </div>
-              <div class="es-body">
-                <div>
-                  <label
-                    >KEY FEATURES — use "### Category" for groups, "- item" for
-                    bullets</label
-                  >
-                  <textarea
-                    id="features"
-                    style="min-height: 130px"
-                    oninput="scheduleRender()"
-                    placeholder="### 🔐 Authentication&#10;- Email OTP verification&#10;- Secure login / logout&#10;&#10;### 📝 Posts&#10;- Create, Read, Update, Delete"
-                  ></textarea>
-                </div>
-              </div>
-            </div>
-
-            <!-- 4. Tech Stack -->
-            <div class="editor-section" id="sec-techstack">
-              <div class="es-header">
-                <div class="es-num">4</div>
-                <div class="es-title">Tech Stack</div>
-                <span class="es-badge" id="techCount" style="display: none"
-                  >0 selected</span
-                >
-              </div>
-              <div class="es-body">
-                <div>
-                  <label>CLICK TO SELECT YOUR STACK</label>
-                  <div class="tech-picker" id="techPicker">
-                    <!-- populated by JS -->
-                  </div>
-                </div>
-                <div>
-                  <label>OR ADD CUSTOM (comma separated)</label>
-                  <input
-                    type="text"
-                    id="customTech"
-                    placeholder="Celery, Redis, Nginx..."
-                    oninput="scheduleRender()"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <!-- 5. Installation -->
-            <div class="editor-section" id="sec-installation">
-              <div class="es-header">
-                <div class="es-num">5</div>
-                <div class="es-title">Installation</div>
-              </div>
-              <div class="es-body">
-                <div>
-                  <label>PREREQUISITES</label>
-                  <input
-                    type="text"
-                    id="prereqs"
-                    placeholder="Python 3.10+, Node.js 18+"
-                    oninput="scheduleRender()"
-                  />
-                </div>
-                <div>
-                  <label>INSTALL COMMANDS (one per line)</label>
-                  <textarea
-                    id="installCmds"
-                    style="min-height: 100px"
-                    oninput="scheduleRender()"
-                    placeholder="git clone https://github.com/user/repo.git&#10;cd repo&#10;pip install -r requirements.txt&#10;python manage.py migrate&#10;python manage.py runserver"
-                  ></textarea>
-                </div>
-                <div>
-                  <label>ENV VARIABLES (optional)</label>
-                  <textarea
-                    id="envVars"
-                    style="min-height: 70px"
-                    oninput="scheduleRender()"
-                    placeholder="SECRET_KEY=your_secret&#10;DATABASE_URL=sqlite:///db.sqlite3&#10;DEBUG=True"
-                  ></textarea>
-                </div>
-              </div>
-            </div>
-
-            <!-- 6. Usage -->
-            <div class="editor-section" id="sec-usage">
-              <div class="es-header">
-                <div class="es-num">6</div>
-                <div class="es-title">Usage</div>
-              </div>
-              <div class="es-body">
-                <div>
-                  <label>RUN COMMAND / USAGE INSTRUCTIONS</label>
-                  <textarea
-                    id="usageCmd"
-                    style="min-height: 80px"
-                    oninput="scheduleRender()"
-                    placeholder="python manage.py runserver&#10;&#10;# Then open http://127.0.0.1:8000/"
-                  ></textarea>
-                </div>
-              </div>
-            </div>
-
-            <!-- 7. Project Structure -->
-            <div class="editor-section" id="sec-structure">
-              <div class="es-header">
-                <div class="es-num">7</div>
-                <div class="es-title">Project Structure Visualizer</div>
-              </div>
-              <div class="es-body">
-                <div>
-                  <label
-                    >PASTE YOUR FOLDER STRUCTURE (indented with spaces)</label
-                  >
-                  <textarea
-                    id="rawStructure"
-                    style="min-height: 120px"
-                    oninput="updateStructurePreview()"
-                    placeholder="src/&#10;  api/&#10;  models/&#10;  utils/&#10;templates/&#10;static/&#10;main.py&#10;requirements.txt&#10;README.md"
-                  ></textarea>
-                </div>
-                <div>
-                  <label>VISUAL PREVIEW</label>
-                  <div class="struct-preview" id="structPreview">
-                    Paste structure above to preview...
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- 8. Screenshots -->
-            <div class="editor-section" id="sec-screenshots">
-              <div class="es-header">
-                <div class="es-num">8</div>
-                <div class="es-title">Screenshots</div>
-              </div>
-              <div class="es-body">
-                <div>
-                  <label>LIVE DEMO / VIDEO LINK (optional)</label>
-                  <input
-                    type="url"
-                    id="videoUrl"
-                    placeholder="https://youtube.com/watch?v=..."
-                    oninput="scheduleRender()"
-                  />
-                </div>
-                <div>
-                  <label>DRAG &amp; DROP SCREENSHOTS</label>
-                  <div class="drop-zone" id="dropZone">
-                    <div class="drop-zone-icon">🖼️</div>
-                    <p>Drop images here or click to browse</p>
-                    <small>PNG, JPG, GIF — they'll be linked as Markdown</small>
-                    <input
-                      type="file"
-                      id="fileInput"
-                      multiple
-                      accept="image/*"
-                      style="display: none"
-                    />
-                  </div>
-                  <div class="screenshot-list" id="screenshotList"></div>
-                </div>
-                <div>
-                  <label
-                    >OR ADD IMAGE URLS (format: Label | URL, one per
-                    line)</label
-                  >
-                  <textarea
-                    id="imageUrls"
-                    style="min-height: 60px"
-                    oninput="scheduleRender()"
-                    placeholder="Landing Page | https://i.imgur.com/abc.png&#10;Dashboard | https://i.imgur.com/xyz.png"
-                  ></textarea>
-                </div>
-              </div>
-            </div>
-
-            <!-- 9. API Docs -->
-            <div class="editor-section" id="sec-api">
-              <div class="es-header">
-                <div class="es-num">9</div>
-                <div class="es-title">API Documentation</div>
-              </div>
-              <div class="es-body">
-                <div>
-                  <label
-                    >API ENDPOINTS — format: METHOD /path | Description (one per
-                    line)</label
-                  >
-                  <textarea
-                    id="apiDocs"
-                    style="min-height: 100px"
-                    oninput="scheduleRender()"
-                    placeholder="GET /api/users | Get all users&#10;POST /api/users | Create a new user&#10;GET /api/users/:id | Get user by ID&#10;PUT /api/users/:id | Update user&#10;DELETE /api/users/:id | Delete user"
-                  ></textarea>
-                </div>
-                <div>
-                  <label>API BASE URL (optional)</label>
-                  <input
-                    type="text"
-                    id="apiBase"
-                    placeholder="https://api.yourapp.com/v1"
-                    oninput="scheduleRender()"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <!-- 10. Contributing -->
-            <div class="editor-section" id="sec-contributing">
-              <div class="es-header">
-                <div class="es-num">10</div>
-                <div class="es-title">Contributing</div>
-              </div>
-              <div class="es-body">
-                <div>
-                  <label
-                    >CUSTOM CONTRIBUTING NOTES (optional — default guide
-                    auto-generated)</label
-                  >
-                  <textarea
-                    id="contribNotes"
-                    style="min-height: 70px"
-                    oninput="scheduleRender()"
-                    placeholder="Any specific guidelines, code style rules, branch naming conventions..."
-                  ></textarea>
-                </div>
-              </div>
-            </div>
-
-            <!-- 11. License & Author -->
-            <div class="editor-section" id="sec-author">
-              <div class="es-header">
-                <div class="es-num">11</div>
-                <div class="es-title">License &amp; Author</div>
-              </div>
-              <div class="es-body">
-                <div class="two-col">
-                  <div>
-                    <label>LICENSE</label>
-                    <select id="license" onchange="scheduleRender()">
-                      <option value="MIT">MIT</option>
-                      <option value="Apache-2.0">Apache 2.0</option>
-                      <option value="GPL-3.0">GPL 3.0</option>
-                      <option value="BSD-3-Clause">BSD 3-Clause</option>
-                      <option value="ISC">ISC</option>
-                      <option value="Unlicense">Unlicense</option>
-                      <option value="AGPL-3.0">AGPL 3.0</option>
-                      <option value="none">No License</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label>FULL NAME</label>
-                    <input
-                      type="text"
-                      id="authorName"
-                      placeholder="Your Name"
-                      oninput="scheduleRender()"
-                    />
-                  </div>
-                </div>
-                <div class="two-col">
-                  <div>
-                    <label>GITHUB USERNAME</label>
-                    <input
-                      type="text"
-                      id="authorGh"
-                      placeholder="username"
-                      oninput="scheduleRender()"
-                    />
-                  </div>
-                  <div>
-                    <label>EMAIL (optional)</label>
-                    <input
-                      type="email"
-                      id="authorEmail"
-                      placeholder="you@email.com"
-                      oninput="scheduleRender()"
-                    />
-                  </div>
-                </div>
-                <div class="two-col">
-                  <div>
-                    <label>LINKEDIN (optional)</label>
-                    <input
-                      type="url"
-                      id="authorLinkedin"
-                      placeholder="https://linkedin.com/in/you"
-                      oninput="scheduleRender()"
-                    />
-                  </div>
-                  <div>
-                    <label>PORTFOLIO (optional)</label>
-                    <input
-                      type="url"
-                      id="authorWebsite"
-                      placeholder="https://yoursite.com"
-                      oninput="scheduleRender()"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- ── PREVIEW ── -->
-        <aside class="preview">
-          <div class="preview-header">
-            <div class="preview-tabs">
-              <button
-                class="ptab active"
-                id="tabRendered"
-                onclick="setTab('rendered')"
-              >
-                Preview (Better at full dimensions)
-              </button>
-              <button class="ptab" id="tabRaw" onclick="setTab('raw')">
-                Raw MD
-              </button>
-            </div>
-            <div class="preview-actions">
-              <button class="pbtn green" onclick="copyMarkdown()">
-                <svg
-                  width="11"
-                  height="11"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <rect x="9" y="9" width="13" height="13" rx="2" />
-                  <path
-                    d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"
-                  />
-                </svg>
-                Copy
-              </button>
-              <button class="pbtn" onclick="downloadMd()">
-                <svg
-                  width="11"
-                  height="11"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
-                  <polyline points="7,10 12,15 17,10" />
-                  <line x1="12" y1="15" x2="12" y2="3" />
-                </svg>
-                .md
-              </button>
-            </div>
-          </div>
-          <div class="preview-body" id="previewBody">
-            <div class="empty-preview">
-              <div class="icon">📄</div>
-              <h3>Live preview appears here</h3>
-              <p>Start filling in the editor →</p>
-            </div>
-          </div>
-        </aside>
+        <!-- LinkedIn Link -->
+        <a href="https://www.linkedin.com/in/mohitkumar368/" target="_blank" class="footer-icon" title="LinkedIn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+            <rect x="2" y="9" width="4" height="12"></rect>
+            <circle cx="4" cy="4" r="2"></circle>
+          </svg>
+        </a>
       </div>
     </div>
+  </footer>
 
-    <!-- ── FOOTER ── -->
-    <footer class="app-footer">
-      <div class="footer-content">
-        <div class="footer-left">
-          <div class="footer-logo">RF</div>
-          <p>Designed & Built by <strong>Mohit Kumar</strong></p>
-        </div>
-        <div class="footer-right">
-          <!-- Source Code Link -->
-          <a
-            href="https://github.com/Mohit-368/ReadmeForge"
-            target="_blank"
-            class="footer-link"
-          >
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <polyline points="16 18 22 12 16 6"></polyline>
-              <polyline points="8 6 2 12 8 18"></polyline>
-            </svg>
-            Source Code
-          </a>
+  <div class="toast" id="toast"></div>
 
-          <div class="footer-divider"></div>
-
-          <!-- GitHub Link -->
-          <a
-            href="https://github.com/Mohit-368"
-            target="_blank"
-            class="footer-icon"
-            title="GitHub"
-          >
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path
-                d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"
-              ></path>
-            </svg>
-          </a>
-
-          <!-- LinkedIn Link -->
-          <a
-            href="https://www.linkedin.com/in/mohitkumar368/"
-            target="_blank"
-            class="footer-icon"
-            title="LinkedIn"
-          >
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path
-                d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"
-              ></path>
-              <rect x="2" y="9" width="4" height="12"></rect>
-              <circle cx="4" cy="4" r="2"></circle>
-            </svg>
-          </a>
-        </div>
+  <!-- ── DOWNLOAD PREVIEW MODAL ── -->
+  <div id="downloadModalOverlay" class="modal-overlay hidden">
+    <div class="modal">
+      <header class="modal-header">
+        <h2 class="modal-title">README Preview</h2>
+        <button class="modal-close" onclick="closeDownloadModal()">✕</button>
+      </header>
+      <div class="modal-body" id="modalPreviewBody">
+        <!-- Content injected via JS -->
       </div>
-    </footer>
+      <footer class="modal-footer">
+        <button class="hbtn" onclick="closeDownloadModal()">Cancel</button>
+        <button class="hbtn primary">⬇ Print to PDF</button>
+      </footer>
+    </div>
+  </div>
 
-    <div class="toast" id="toast"></div>
+  <script src="readmeforge.js"></script>
+</body>
 
-    <script src="readmeforge.js"></script>
-  </body>
 </html>
