@@ -1345,3 +1345,28 @@ select option {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--muted);
 }
+.preview-body {
+  position: relative;
+  overflow-y: auto;
+}
+
+/* Back to Top Button */
+.back-to-top-btn {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  padding: 8px 12px;
+  font-size: 12px;
+  border: none;
+  border-radius: 6px;
+  background: #111;
+  color: #fff;
+  cursor: pointer;
+  display: none;
+  opacity: 0.8;
+  transition: opacity 0.2s ease;
+}
+
+.back-to-top-btn:hover {
+  opacity: 1;
+}
