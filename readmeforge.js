@@ -1121,5 +1121,37 @@
     if (el) el.value = val;
   }
 
+  // ── Back to Top Button ───────────────────────────────────────
+  function initBackToTop() {
+    var previewBody = document.getElementById("previewBody");
+    var backToTopBtn = document.getElementById("backToTopBtn");
+    if (!previewBody || !backToTopBtn) return;
+
+    // Throttle scroll events for performance (16ms ≈ 60fps)
+    var ticking = false;
+    previewBody.addEventListener("scroll", function () {
+      if (!ticking) {
+        window.requestAnimationFrame(function () {
+          if (previewBody.scrollTop > 100) {
+            backToTopBtn.classList.add("visible");
+          } else {
+            backToTopBtn.classList.remove("visible");
+          }
+          ticking = false;
+        });
+        ticking = true;
+      }
+    });
+
+    // Smooth scroll to top on click (keyboard accessible via Tab + Enter/Space)
+    backToTopBtn.addEventListener("click", function () {
+      previewBody.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+    });
+  }
+
   init();
+  initBackToTop();
 })();
