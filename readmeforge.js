@@ -832,6 +832,16 @@
     if (currentTab === "rendered") {
       body.innerHTML =
         '<div class="gh-preview">' + md2html(currentMd) + "</div>";
+
+      var btn = document.createElement("button");
+      btn.className = "back-to-top";
+      btn.innerText = "⬆ Back to top";
+
+      btn.onclick = function () {
+        body.scrollTo({ top: 0, behavior: "smooth" });
+      };
+
+      body.appendChild(btn);
     } else {
       body.innerHTML = '<div class="raw-view">' + esc(currentMd) + "</div>";
     }
