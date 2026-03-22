@@ -1121,5 +1121,65 @@
     if (el) el.value = val;
   }
 
+  // ── Back to Top Button ───────────────────────────────────────
+var backToTopInitialized = false;
+
+function initBackToTop() {
+  // Prevent duplicate initialization
+  if (backToTopInitialized) return;
+  
+  const previewBody = document.getElementById("previewBody");
+  const backToTopBtn = document.getElementById("backToTopBtn");
+  const SCROLL_THRESHOLD = 100;
+
+  if (!previewBody || !backToTopBtn) {
+    backToTopInitialized = true;
+    return;
+  }
+
+  // Debounce utility function to limit scroll event frequency
+  function debounce(func, wait) {
+    let timeout;
+    return function executedFunction() {
+      const context = this;
+      const args = arguments;
+      clearTimeout(timeout);
+      timeout = setTimeout(function () {
+        func.apply(context, args);
+      }, wait);
+    };
+  }
+
+  // Show/hide button based on scroll position (debounced)
+  function handleScroll() {
+    if (previewBody.scrollTop > SCROLL_THRESHOLD) {
+      backToTopBtn.style.display = "flex";
+    } else {
+      backToTopBtn.style.display = "none";
+    }
+  }
+
+  // Smooth scroll to top when button is clicked
+  function scrollToTop() {
+    previewBody.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+  }
+
+  // Create debounced version of handleScroll (16ms = ~60fps)
+  const debouncedHandleScroll = debounce(handleScroll, 16);
+
+  // Add event listeners
+  previewBody.addEventListener("scroll", debouncedHandleScroll);
+  backToTopBtn.addEventListener("click", scrollToTop);
+
+  // Initial check in case content is already scrolled
+  handleScroll();
+
+  backToTopInitialized = true;
+}
+
+initBackToTop();
   init();
 })();

@@ -992,6 +992,7 @@ select option {
   flex: 1;
   overflow-y: auto;
   padding: 24px;
+  position: relative;
 }
 
 /* GitHub-style rendered preview */
@@ -1344,4 +1345,42 @@ select option {
 }
 ::-webkit-scrollbar-thumb:hover {
   background: var(--muted);
+}
+
+/* Back to Top Button */
+#backToTopBtn {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  color: var(--text);
+  cursor: pointer;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+#backToTopBtn:hover {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+}
+
+#backToTopBtn:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--primary-light), 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+#backToTopBtn svg {
+  width: 20px;
+  height: 20px;
 }
