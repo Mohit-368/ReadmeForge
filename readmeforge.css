@@ -988,6 +988,25 @@ select option {
   background: rgba(16, 185, 129, 0.2);
   color: #10b981;
 }
+.back-to-top {
+  position: absolute;
+  bottom: 16px;
+  right: 20px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: all 0.3s ease;
+}
+.back-to-top.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+.back-to-top:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: translateY(-1px);
+}
 .preview-body {
   flex: 1;
   overflow-y: auto;
