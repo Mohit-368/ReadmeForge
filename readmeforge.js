@@ -1150,7 +1150,7 @@ function initBackToTop() {
     };
   }
 
-  // Show/hide button based on scroll position (debounced)
+  // Show button only after scrolling past threshold to avoid cluttering UI when not needed
   function handleScroll() {
     if (previewBody.scrollTop > SCROLL_THRESHOLD) {
       backToTopBtn.style.display = "flex";
