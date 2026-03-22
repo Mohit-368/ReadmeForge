@@ -206,6 +206,10 @@
     setupDropZone();
     updateSectionCount();
     scheduleRender();
+    var previewBody = document.getElementById("previewBody");
+    if (previewBody) {
+      previewBody.addEventListener("scroll", updateBackToTopButton);
+    }
   }
 
   // ── Build UI components ───────────────────────────────────────
@@ -1065,6 +1069,30 @@
     toast("✓ README.md downloaded!");
   }
   window.downloadMd = downloadMd;
+
+  function scrollToTop() {
+    var previewBody = document.getElementById("previewBody");
+    if (previewBody) {
+      previewBody.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+    }
+  }
+  window.scrollToTop = scrollToTop;
+
+  function updateBackToTopButton() {
+    var backToTopBtn = document.getElementById("backToTop");
+    var previewBody = document.getElementById("previewBody");
+    if (backToTopBtn && previewBody) {
+      if (previewBody.scrollTop > 300) {
+        backToTopBtn.classList.add("visible");
+      } else {
+        backToTopBtn.classList.remove("visible");
+      }
+    }
+  }
+  window.updateBackToTopButton = updateBackToTopButton;
 
   function resetAll() {
     document
