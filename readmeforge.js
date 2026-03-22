@@ -206,6 +206,8 @@
     setupDropZone();
     updateSectionCount();
     scheduleRender();
+    // Initialize back-to-top button for initial empty state
+    setTimeout(initBackToTop, 100);
   }
 
   // ── Build UI components ───────────────────────────────────────
@@ -824,16 +826,52 @@
   function render() {
     currentMd = generateMarkdown();
     var body = document.getElementById("previewBody");
+
     if (!currentMd.trim()) {
       body.innerHTML =
-        '<div class="empty-preview"><div class="icon">📄</div><h3>Live preview appears here</h3><p>Start filling in the editor →</p></div>';
+        '<button class="back-to-top" id="backToTopBtn" title="Back to top"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg></button><div class="empty-preview"><div class="icon">📄</div><h3>Live preview appears here</h3><p>Start filling in the editor →</p></div>';
+      initBackToTop();
       return;
     }
     if (currentTab === "rendered") {
       body.innerHTML =
-        '<div class="gh-preview">' + md2html(currentMd) + "</div>";
+        '<button class="back-to-top" id="backToTopBtn" title="Back to top"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg></button><div class="gh-preview">' + md2html(currentMd) + "</div>";
     } else {
-      body.innerHTML = '<div class="raw-view">' + esc(currentMd) + "</div>";
+      body.innerHTML = '<button class="back-to-top" id="backToTopBtn" title="Back to top"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg></button><div class="raw-view">' + esc(currentMd) + "</div>";
+    }
+
+    // Re-bind scroll event after render
+    initBackToTop();
+  }
+
+  // ── Back to top button functionality ───────────────────────────────
+  function initBackToTop() {
+    var backToTopBtn = document.getElementById("backToTopBtn");
+    if (!backToTopBtn) return;
+
+    // Remove existing event listeners by cloning the element
+    var newBtn = backToTopBtn.cloneNode(true);
+    backToTopBtn.parentNode.replaceChild(newBtn, backToTopBtn);
+
+    // Click handler - smooth scroll to top
+    newBtn.addEventListener("click", function() {
+      document.getElementById("previewBody").scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+    });
+
+    // Scroll event listener on previewBody
+    var previewBody = document.getElementById("previewBody");
+    if (previewBody) {
+      previewBody.addEventListener("scroll", function() {
+        // Show button when scrolled past 100px threshold
+        if (previewBody.scrollTop > 100) {
+          newBtn.classList.add("visible");
+        } else {
+          newBtn.classList.remove("visible");
+        }
+      });
     }
   }
 
