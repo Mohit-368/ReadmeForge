@@ -1,6 +1,6 @@
 
 
-# 📝 ReadmeForge
+#  ReadmeForge
 
 **The fastest way to craft beautiful GitHub READMEs — no Markdown knowledge required.**
 
@@ -8,30 +8,41 @@
 [![Made with HTML](https://img.shields.io/badge/Made%20with-HTML%2FJS%2FCSS-orange.svg)](#)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
-[🚀 Live Demo](https://makeareadme.netlify.app) · [🐛 Report a Bug](../../issues) · [✨ Request a Feature](../../issues)
+[ Live Demo](https://makeareadme.netlify.app) · [ Report a Bug](../../issues) · [Request a Feature](../../issues)
 
+---
+
+## Open Source Features
+
+<div align="center">
+  <a href="https://www.nsoc.in">
+    <img src="assets/image.webp" alt="Featured in Nexus Spring of Code" width="50"/>
+  <br/>
+    <sub><b>Featured in Nexus Spring of Code 2026 </b></sub>
+  </a>
+</div>
 
 
 ---
 
-## 📖 About
+##  About
 
 **ReadmeForge** is a browser-based README generator that lets you build polished GitHub repository documentation in minutes — no Markdown expertise needed. Simply fill in your project's sections, toggle the content you want, upload screenshots, and watch a live preview update in real time. When you're done, copy the raw Markdown and paste it straight into your repo.
 
 ---
 
-## ✨ Features
+##  Features
 
-- 🧩 **Section-based builder** — Fill in structured fields for title, description, installation, usage, and more
-- 👁️ **Live side-by-side preview** — See your rendered README as you type
-- 🖼️ **Screenshot support** — Insert images directly into your README
-- 📋 **One-click raw copy** — Grab the raw Markdown and paste it into GitHub instantly
-- ☑️ **Toggle sections** — Include only what your project needs
-- 🎨 **Zero dependencies** — Pure HTML, CSS, and JavaScript; runs entirely in the browser
+-  **Section-based builder** — Fill in structured fields for title, description, installation, usage, and more
+-  **Live side-by-side preview** — See your rendered README as you type
+-  **Screenshot support** — Insert images directly into your README
+-  **One-click raw copy** — Grab the raw Markdown and paste it into GitHub instantly
+-  **Toggle sections** — Include only what your project needs
+-  **Zero dependencies** — Pure HTML, CSS, and JavaScript; runs entirely in the browser
 
 ---
 
-## 📸 Screenshots
+##  Screenshots
 <img width="1918" height="1076" alt="Screenshot 2026-03-09 142503" src="https://github.com/user-attachments/assets/542aac38-9554-49ee-adec-369281ad399f" />
 
 <img width="1915" height="1077" alt="Screenshot 2026-03-09 142522" src="https://github.com/user-attachments/assets/f7f12c58-c2e8-4fb3-b30a-12835a2f62cc" />
