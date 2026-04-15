@@ -80,6 +80,13 @@
       el: "sec-author",
       default: true,
     },
+    {
+      id: "contact",
+      label: "Contact",
+      icon: "ðŸ“¬",
+      el: "sec-contact",
+      default: false,
+    },
   ];
 
   var sectionState = {};
@@ -481,9 +488,14 @@
     var license = document.getElementById("license").value;
     var authorName = v("authorName");
     var authorGh = v("authorGh");
-    var authorEmail = v("authorEmail");
-    var authorLi = v("authorLinkedin");
-    var authorWeb = v("authorWebsite");
+    var contact = getContactDetails({
+      fallbackName: authorName || authorGh || ghUser,
+      name: v("contactName"),
+      email: v("contactEmail"),
+      linkedin: v("contactLinkedin"),
+      twitter: v("contactTwitter"),
+      website: v("contactWebsite"),
+    });
     var customTech = v("customTech");
 
     var md = "";
@@ -572,6 +584,7 @@
       if (on("screenshots")) md += "- [Screenshots](#-screenshots)\n";
       if (on("api")) md += "- [API Reference](#-api-reference)\n";
       if (on("contributing")) md += "- [Contributing](#-contributing)\n";
+      if (on("contact")) md += "- [Contact](#-contact)\n";
       if (on("author")) md += "- [License](#-license)\n- [Author](#-author)\n";
       md += "\n---\n\n";
     }
@@ -787,7 +800,12 @@
       md += "---\n\n";
     }
 
-    // 11. License & Author
+    // 11. Contact
+    if (on("contact")) {
+      md += buildContactSection(contact);
+    }
+
+    // 12. License & Author
     if (on("author")) {
       if (license !== "none")
         md +=
@@ -804,12 +822,6 @@
           "](https://github.com/" +
           authorGh +
           ")\n";
-      if (authorEmail)
-        md += "- 📧 Email: [" + authorEmail + "](mailto:" + authorEmail + ")\n";
-      if (authorLi)
-        md += "- 💼 LinkedIn: [" + displayName + "](" + authorLi + ")\n";
-      if (authorWeb)
-        md += "- 🌐 Website: [" + authorWeb + "](" + authorWeb + ")\n";
       md += "\n---\n\n";
       md +=
         "> Made with ❤️ by [" +
@@ -1169,6 +1181,7 @@
     document.getElementById("screenshotList").innerHTML = "";
     document.getElementById("structPreview").textContent =
       "Paste structure above to preview...";
+    resetContactVisibilityFields();
     document.querySelectorAll(".tech-chip").forEach(function (c) {
       c.classList.remove("selected");
     });
@@ -1180,7 +1193,7 @@
     SECTIONS.forEach(function (s) {
       sectionState[s.id] = s.default;
     });
-    counts.forEach((count) => count.textContent = '0')
+    counts.forEach((count) => (count.textContent = "0"));
     buildSectionToggles();
     updateSectionCount();
     scheduleRender();
@@ -1201,6 +1214,130 @@
   function v(id) {
     var el = document.getElementById(id);
     return el ? el.value.trim() : "";
+  }
+  function isFieldVisible(id) {
+    var el = document.getElementById(id);
+    return !el || el.checked;
+  }
+  function badgeLink(label, badgeUrl, linkUrl) {
+    return "[![" + label + "](" + badgeUrl + ")](" + linkUrl + ")";
+  }
+  function buildContactSection(contact) {
+    var entries = getVisibleContactEntries(contact);
+    if (!entries.length) return "";
+
+    var badges = entries
+      .map(function (entry) {
+        return entry.badge;
+      })
+      .filter(Boolean);
+    var lines = entries
+      .map(function (entry) {
+        return entry.line;
+      })
+      .filter(Boolean);
+
+    var md = "## \uD83D\uDCEC Contact\n\n";
+    if (badges.length) md += badges.join(" ") + "\n\n";
+    if (lines.length) md += lines.join("\n") + "\n\n";
+    md += "---\n\n";
+    return md;
+  }
+  function resetContactVisibilityFields() {
+    document
+      .querySelectorAll('#sec-contact input[type="checkbox"]')
+      .forEach(function (el) {
+        el.checked = true;
+      });
+  }
+  function getVisibleContactEntries(contact) {
+    var entries = [
+      {
+        visible: isFieldVisible("showContactName") && contact.name,
+        line: "- **Name:** " + contact.name,
+      },
+      {
+        visible: isFieldVisible("showContactEmail") && contact.email,
+        badge: badgeLink(
+          "Email",
+          "https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white",
+          "mailto:" + contact.email,
+        ),
+        line: "- **Email:** [" + contact.email + "](mailto:" + contact.email + ")",
+      },
+      {
+        visible: isFieldVisible("showContactLinkedin") && contact.linkedin,
+        badge: badgeLink(
+          "LinkedIn",
+          "https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white",
+          contact.linkedin,
+        ),
+        line: "- **LinkedIn:** [Connect on LinkedIn](" + contact.linkedin + ")",
+      },
+      {
+        visible: isFieldVisible("showContactTwitter") && contact.twitter.url,
+        badge: badgeLink(
+          "Twitter",
+          "https://img.shields.io/badge/Twitter-1D9BF0?style=for-the-badge&logo=x&logoColor=white",
+          contact.twitter.url,
+        ),
+        line:
+          "- **Twitter:** [" +
+          contact.twitter.label +
+          "](" +
+          contact.twitter.url +
+          ")",
+      },
+      {
+        visible: isFieldVisible("showContactWebsite") && contact.website,
+        badge: badgeLink(
+          "Website",
+          "https://img.shields.io/badge/Website-0f172a?style=for-the-badge&logo=googlechrome&logoColor=white",
+          contact.website,
+        ),
+        line: "- **Website:** [" + contact.website + "](" + contact.website + ")",
+      },
+    ];
+
+    return entries.filter(function (entry) {
+      return entry.visible;
+    });
+  }
+  function getContactDetails(values) {
+    return {
+      name: values.name || values.fallbackName || "",
+      email: values.email,
+      linkedin: normalizeLinkedIn(values.linkedin),
+      twitter: normalizeTwitter(values.twitter),
+      website: normalizeWebsite(values.website),
+    };
+  }
+  function normalizeWebsite(value) {
+    if (!value) return "";
+    if (/^https?:\/\//i.test(value)) return value;
+    return "https://" + value;
+  }
+  function normalizeLinkedIn(value) {
+    if (!value) return "";
+    if (/^https?:\/\//i.test(value)) return value;
+    return "https://linkedin.com/in/" + value.replace(/^@/, "");
+  }
+  function normalizeTwitter(value) {
+    if (!value) return { label: "", url: "" };
+    var cleaned = value.trim();
+    if (/^https?:\/\//i.test(cleaned)) {
+      var match = cleaned.match(/(?:twitter|x)\.com\/([^/?#]+)/i);
+      var handleFromUrl = match ? match[1].replace(/^@/, "") : cleaned;
+      return {
+        label: "@" + handleFromUrl,
+        url: cleaned,
+      };
+    }
+    var handle = cleaned.replace(/^@/, "");
+    return {
+      label: "@" + handle,
+      url: "https://x.com/" + handle,
+    };
   }
   function setVal(id, val) {
     var el = document.getElementById(id);

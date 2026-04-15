@@ -379,10 +379,71 @@
             </div>
           </div>
 
-          <!-- 11. License & Author -->
-          <div class="editor-section" id="sec-author">
+          <!-- 11. Contact -->
+          <div class="editor-section hidden" id="sec-contact">
             <div class="es-header">
               <div class="es-num">11</div>
+              <div class="es-title">Contact</div>
+            </div>
+            <div class="es-body">
+              <div>
+                <label>SHOW IN CONTACT SECTION</label>
+                <div class="contact-visibility-grid">
+                  <label class="contact-toggle">
+                    <input type="checkbox" id="showContactName" checked onchange="scheduleRender()" />
+                    <span>Name</span>
+                  </label>
+                  <label class="contact-toggle">
+                    <input type="checkbox" id="showContactEmail" checked onchange="scheduleRender()" />
+                    <span>Email</span>
+                  </label>
+                  <label class="contact-toggle">
+                    <input type="checkbox" id="showContactLinkedin" checked onchange="scheduleRender()" />
+                    <span>LinkedIn</span>
+                  </label>
+                  <label class="contact-toggle">
+                    <input type="checkbox" id="showContactTwitter" checked onchange="scheduleRender()" />
+                    <span>Twitter</span>
+                  </label>
+                  <label class="contact-toggle">
+                    <input type="checkbox" id="showContactWebsite" checked onchange="scheduleRender()" />
+                    <span>Website</span>
+                  </label>
+                </div>
+              </div>
+              <div class="two-col">
+                <div>
+                  <label>CONTACT NAME</label>
+                  <input type="text" id="contactName" placeholder="Your Name" oninput="scheduleRender()" />
+                </div>
+                <div>
+                  <label>EMAIL</label>
+                  <input type="email" id="contactEmail" placeholder="you@email.com" oninput="scheduleRender()" />
+                </div>
+              </div>
+              <div class="two-col">
+                <div>
+                  <label>LINKEDIN</label>
+                  <input type="url" id="contactLinkedin" placeholder="https://linkedin.com/in/you"
+                    oninput="scheduleRender()" />
+                </div>
+                <div>
+                  <label>TWITTER</label>
+                  <input type="text" id="contactTwitter" placeholder="@yourhandle or https://x.com/yourhandle"
+                    oninput="scheduleRender()" />
+                </div>
+              </div>
+              <div>
+                <label>PERSONAL WEBSITE</label>
+                <input type="url" id="contactWebsite" placeholder="https://yoursite.com" oninput="scheduleRender()" />
+              </div>
+            </div>
+          </div>
+
+          <!-- 12. License & Author -->
+          <div class="editor-section" id="sec-author">
+            <div class="es-header">
+              <div class="es-num">12</div>
               <div class="es-title">License &amp; Author</div>
             </div>
             <div class="es-body">
@@ -409,21 +470,6 @@
                 <div>
                   <label>GITHUB USERNAME</label>
                   <input type="text" id="authorGh" placeholder="username" oninput="scheduleRender()" />
-                </div>
-                <div>
-                  <label>EMAIL (optional)</label>
-                  <input type="email" id="authorEmail" placeholder="you@email.com" oninput="scheduleRender()" />
-                </div>
-              </div>
-              <div class="two-col">
-                <div>
-                  <label>LINKEDIN (optional)</label>
-                  <input type="url" id="authorLinkedin" placeholder="https://linkedin.com/in/you"
-                    oninput="scheduleRender()" />
-                </div>
-                <div>
-                  <label>PORTFOLIO (optional)</label>
-                  <input type="url" id="authorWebsite" placeholder="https://yoursite.com" oninput="scheduleRender()" />
                 </div>
               </div>
             </div>
