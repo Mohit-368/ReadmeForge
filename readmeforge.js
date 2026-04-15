@@ -818,7 +818,23 @@
         (authorGh || ghUser) +
         ")\n";
     }
+    // 12. Contact Section
+var hasContact = authorEmail || authorLi || authorWeb;
 
+if (hasContact) {
+  md += "\n## 📬 Contact\n\n";
+
+if (authorEmail)
+  md += "- 📧 Email: [" + authorEmail + "](mailto:" + authorEmail + ")\n";
+
+if (authorLi)
+  md += "- 💼 LinkedIn: [" + displayName + "](" + authorLi + ")\n";
+
+if (authorWeb)
+  md += "- 🌐 Website: [" + authorWeb + "](" + authorWeb + ")\n";
+
+ md += "\n---\n\n";
+}
     return md;
   }
 
