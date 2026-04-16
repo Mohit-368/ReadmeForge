@@ -3,6 +3,7 @@
   var currentMd = "";
   var currentTab = "rendered";
   var screenshots = [];
+  var faqItems = [];
   var renderTimer = null;
 
   const inputs = document.querySelectorAll(".textInput");
@@ -66,6 +67,7 @@
       default: true,
     },
     { id: "api", label: "API Docs", icon: "⚡", el: "sec-api", default: false },
+    { id: "faq", label: "FAQ", icon: "❓", el: "sec-faq", default: true },
     {
       id: "contributing",
       label: "Contributing",
@@ -212,6 +214,7 @@
     buildTechPicker();
     buildBadgePicker();
     setupDropZone();
+    setupFaqBuilder();
     updateSectionCount();
     scheduleRender();
   }
@@ -459,6 +462,117 @@
     scheduleRender();
   };
 
+  function setupFaqBuilder() {
+    var addBtn = document.getElementById("faqAddBtn");
+    if (addBtn) {
+      addBtn.addEventListener("click", function () {
+        faqItems.push({ question: "", answer: "" });
+        renderFaqList();
+        scheduleRender();
+      });
+    }
+    faqItems = [{ question: "", answer: "" }];
+    renderFaqList();
+  }
+
+  function renderFaqList() {
+    var list = document.getElementById("faqList");
+    if (!list) return;
+    list.innerHTML = "";
+
+    if (!faqItems.length) {
+      list.innerHTML =
+        '<div class="faq-empty">No FAQ entries yet. Click "Add Question" to get started.</div>';
+      updateFaqPreview();
+      return;
+    }
+
+    faqItems.forEach(function (item, idx) {
+      var row = document.createElement("div");
+      row.className = "faq-item";
+      row.innerHTML =
+        '<div class="faq-item-head">' +
+        '<span class="faq-item-title">Question ' +
+        (idx + 1) +
+        "</span>" +
+        '<button type="button" class="faq-delete-btn" data-idx="' +
+        idx +
+        '">Delete</button>' +
+        "</div>" +
+        "<label>QUESTION</label>" +
+        '<input type="text" class="faq-question" data-idx="' +
+        idx +
+        '" placeholder="What problem does this project solve?" value="' +
+        escAttr(item.question) +
+        '">' +
+        "<label>ANSWER</label>" +
+        '<textarea class="faq-answer" data-idx="' +
+        idx +
+        '" style="min-height: 90px" placeholder="This project helps by...">' +
+        esc(item.answer) +
+        "</textarea>";
+      list.appendChild(row);
+    });
+
+    list.querySelectorAll(".faq-question").forEach(function (input) {
+      input.addEventListener("input", function (e) {
+        var idx = Number(e.target.dataset.idx);
+        faqItems[idx].question = e.target.value;
+        updateFaqPreview();
+        scheduleRender();
+      });
+    });
+
+    list.querySelectorAll(".faq-answer").forEach(function (textarea) {
+      textarea.addEventListener("input", function (e) {
+        var idx = Number(e.target.dataset.idx);
+        faqItems[idx].answer = e.target.value;
+        updateFaqPreview();
+        scheduleRender();
+      });
+    });
+
+    list.querySelectorAll(".faq-delete-btn").forEach(function (btn) {
+      btn.addEventListener("click", function (e) {
+        var idx = Number(e.target.dataset.idx);
+        faqItems.splice(idx, 1);
+        renderFaqList();
+        scheduleRender();
+      });
+    });
+
+    updateFaqPreview();
+  }
+
+  function getFaqMarkdown() {
+    var cleaned = faqItems
+      .map(function (item) {
+        return {
+          question: String(item.question || "").trim(),
+          answer: String(item.answer || "").trim(),
+        };
+      })
+      .filter(function (item) {
+        return item.question && item.answer;
+      });
+    if (!cleaned.length) return "";
+
+    var lines = ["## ❓ FAQ", ""];
+    cleaned.forEach(function (item) {
+      lines.push("### " + item.question);
+      lines.push(item.answer);
+      lines.push("");
+    });
+    return lines.join("\n").trim();
+  }
+
+  function updateFaqPreview() {
+    var preview = document.getElementById("faqPreview");
+    if (!preview) return;
+    var faqMd = getFaqMarkdown();
+    preview.textContent = faqMd || "Add a question to preview your FAQ section...";
+  }
+
   // ── Generate Markdown ─────────────────────────────────────────
   function generateMarkdown() {
     var name = v("projName") || "My Project";
@@ -477,6 +591,7 @@
     var imageUrls = v("imageUrls");
     var apiDocs = v("apiDocs");
     var apiBase = v("apiBase");
+    var faqMd = getFaqMarkdown();
     var contribNotes = v("contribNotes");
     var license = document.getElementById("license").value;
     var authorName = v("authorName");
@@ -571,6 +686,7 @@
       if (on("structure")) md += "- [Project Structure](#-project-structure)\n";
       if (on("screenshots")) md += "- [Screenshots](#-screenshots)\n";
       if (on("api")) md += "- [API Reference](#-api-reference)\n";
+      if (on("faq") && faqMd) md += "- [FAQ](#-faq)\n";
       if (on("contributing")) md += "- [Contributing](#-contributing)\n";
       if (on("author")) md += "- [License](#-license)\n- [Author](#-author)\n";
       md += "\n---\n\n";
@@ -773,7 +889,12 @@
       md += "\n---\n\n";
     }
 
-    // 10. Contributing
+    // 10. FAQ
+    if (on("faq") && faqMd) {
+      md += faqMd + "\n\n---\n\n";
+    }
+
+    // 11. Contributing
     if (on("contributing")) {
       md += "## 🤝 Contributing\n\nContributions are always welcome!\n\n";
       md += "1. Fork the repository\n";
@@ -787,7 +908,7 @@
       md += "---\n\n";
     }
 
-    // 11. License & Author
+    // 12. License & Author
     if (on("author")) {
       if (license !== "none")
         md +=
@@ -1025,6 +1146,10 @@
       .replace(/>/g, "&gt;");
   }
 
+  function escAttr(s) {
+    return esc(s).replace(/"/g, "&quot;");
+  }
+
   // ── Export ────────────────────────────────────────────────────
   function copyMarkdown() {
     if (!currentMd) {
@@ -1166,9 +1291,11 @@
     selectedBadges.add("stars");
     selectedBadges.add("prs");
     screenshots = [];
+    faqItems = [{ question: "", answer: "" }];
     document.getElementById("screenshotList").innerHTML = "";
     document.getElementById("structPreview").textContent =
       "Paste structure above to preview...";
+    renderFaqList();
     document.querySelectorAll(".tech-chip").forEach(function (c) {
       c.classList.remove("selected");
     });

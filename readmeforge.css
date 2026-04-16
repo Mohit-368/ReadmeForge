@@ -979,6 +979,85 @@ select option {
   color: #fff;
 }
 
+/* FAQ builder */
+.faq-toolbar {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.faq-add-btn {
+  padding: 9px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  background: rgba(16, 185, 129, 0.14);
+  color: var(--green);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: "Space Grotesk", sans-serif;
+}
+
+.faq-add-btn:hover {
+  background: rgba(16, 185, 129, 0.25);
+  transform: translateY(-1px);
+}
+
+.faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.faq-empty {
+  border: 1px dashed var(--border2);
+  background: var(--surface2);
+  color: var(--muted);
+  border-radius: 10px;
+  padding: 14px;
+  font-size: 12px;
+  font-family: "JetBrains Mono", monospace;
+}
+
+.faq-item {
+  border: 1px solid var(--border2);
+  border-radius: 12px;
+  padding: 14px;
+  background: var(--surface2);
+}
+
+.faq-item-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.faq-item-title {
+  font-size: 12px;
+  font-family: "JetBrains Mono", monospace;
+  color: var(--muted2);
+  font-weight: 700;
+}
+
+.faq-delete-btn {
+  border: 1px solid rgba(244, 63, 94, 0.3);
+  background: rgba(244, 63, 94, 0.14);
+  color: var(--red);
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: "JetBrains Mono", monospace;
+}
+
+.faq-delete-btn:hover {
+  background: var(--red);
+  color: #fff;
+}
+
 /* ── PREVIEW PANEL ── */
 .preview-header {
   padding: 16px 20px;
@@ -1507,6 +1586,12 @@ select option {
   .two-col {
     grid-template-columns: 1fr;
     gap: 16px;
+  }
+
+  .faq-item-head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
   }
 
   .editor-inner {
