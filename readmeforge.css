@@ -1818,3 +1818,55 @@ select option {
 .hidden {
   display: none !important;
 }
+
+@media (max-width: 375px) {
+  .header {
+    padding: 12px;
+    gap: 12px;
+  }
+
+  .header-right {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+  }
+
+  .hbtn,
+  .hbtn.primary {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .sidebar-section {
+    padding: 16px;
+  }
+
+  .templates-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .template-btn {
+    padding: 10px 12px;
+    font-size: 11px;
+  }
+
+  .editor-inner,
+  .preview-body {
+    padding: 12px;
+  }
+
+  .preview-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .preview-actions .pbtn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .gh-preview {
+    padding: 20px 16px;
+    font-size: 14px;
+  }
+}
