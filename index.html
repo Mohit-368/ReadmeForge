@@ -86,6 +86,7 @@
               font-family: &quot;JetBrains Mono&quot;, monospace;
             ">
           active</span>
+        <span id="autoSaveStatus" class="autosave-status">✓ Auto-saved</span>
       </div>
       <div class="header-right">
         <!-- Source Code Link in App Header -->
@@ -102,6 +103,7 @@
           </svg>
           Source
         </a>
+        <button class="hbtn" onclick="clearSavedData()">🗑 Clear Saved</button>
         <button class="hbtn" onclick="resetAll()">↺ Reset</button>
         <button class="hbtn" onclick="copyMarkdown()">Copy MD</button>
         <button class="hbtn primary" id="modalPrintBtn" onclick="downloadPDF()">

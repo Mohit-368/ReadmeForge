@@ -4,6 +4,101 @@
   var currentTab = "rendered";
   var screenshots = [];
   var renderTimer = null;
+  var saveTimer = null;
+  var autoSaveTimer = null;
+
+  // ── localStorage Auto-Save ────────────────────────────────────
+  var STORAGE_KEY = "readmeforge-data";
+
+  var FIELD_IDS = [
+    "projName", "tagline", "ghUser", "repoSlug", "description", "demoUrl",
+    "features", "prereqs", "installCmds", "envVars", "usageCmd", "rawStructure",
+    "videoUrl", "imageUrls", "apiDocs", "apiBase", "contribNotes", "authorName",
+    "authorGh", "authorEmail", "authorLinkedin", "authorWebsite", "customTech"
+  ];
+
+  function saveToLocalStorage() {
+    var data = {
+      fields: {},
+      license: (document.getElementById("license") || {}).value || "MIT",
+      techs: Array.from(selectedTechs),
+      badges: Array.from(selectedBadges),
+      sections: Object.assign({}, sectionState)
+    };
+    FIELD_IDS.forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el) data.fields[id] = el.value;
+    });
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      showAutoSavedIndicator();
+    } catch (e) {
+      console.error("Auto-save failed:", e);
+    }
+  }
+
+  function loadFromLocalStorage() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return false;
+      var data = JSON.parse(raw);
+
+      if (!data || typeof data !== "object" || !data.fields) {
+        console.warn("Auto-save: stored data is malformed, discarding.");
+        localStorage.removeItem(STORAGE_KEY);
+        return false;
+      }
+
+      FIELD_IDS.forEach(function (id) {
+        var el = document.getElementById(id);
+        if (el && typeof data.fields[id] === "string") el.value = data.fields[id];
+      });
+
+      var licenseEl = document.getElementById("license");
+      if (licenseEl && data.license) licenseEl.value = data.license;
+
+      if (Array.isArray(data.techs)) selectedTechs = new Set(data.techs);
+      if (Array.isArray(data.badges)) selectedBadges = new Set(data.badges);
+
+      if (data.sections && typeof data.sections === "object") {
+        Object.keys(data.sections).forEach(function (id) {
+          if (Object.prototype.hasOwnProperty.call(sectionState, id)) {
+            sectionState[id] = !!data.sections[id];
+          }
+        });
+      }
+
+      return true;
+    } catch (e) {
+      console.error("Auto-save: failed to restore data:", e);
+      return false;
+    }
+  }
+
+  function showAutoSavedIndicator() {
+    var el = document.getElementById("autoSaveStatus");
+    if (!el) return;
+    el.classList.add("visible");
+    clearTimeout(autoSaveTimer);
+    autoSaveTimer = setTimeout(function () {
+      el.classList.remove("visible");
+    }, 2000);
+  }
+
+  function scheduleSave() {
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(saveToLocalStorage, 600);
+  }
+
+  function clearSavedData() {
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+    } catch (e) {
+      console.error("Failed to clear saved data:", e);
+    }
+    toast("✓ Saved data cleared!");
+  }
+  window.clearSavedData = clearSavedData;
 
   const inputs = document.querySelectorAll(".textInput");
   const counts = document.querySelectorAll(".wordCount");
@@ -208,11 +303,26 @@
 
   // ── Init ──────────────────────────────────────────────────────
   function init() {
+    var hasData = loadFromLocalStorage();
     buildSectionToggles();
     buildTechPicker();
+    if (hasData) {
+      selectedTechs.forEach(function (tech) {
+        document.querySelectorAll(".tech-chip").forEach(function (c) {
+          if (c.textContent.includes(tech)) c.classList.add("selected");
+        });
+      });
+    }
     buildBadgePicker();
     setupDropZone();
     updateSectionCount();
+    updateTechCount();
+    if (hasData) {
+      document.querySelectorAll(".textInput").forEach(function (el) {
+        el.dispatchEvent(new Event("input"));
+      });
+      updateStructurePreview();
+    }
     scheduleRender();
   }
 
@@ -240,6 +350,7 @@
         var secEl = document.getElementById(s.el);
         if (secEl) secEl.classList.toggle("hidden", !e.target.checked);
         updateSectionCount();
+        scheduleSave();
         scheduleRender();
       });
       var secEl = document.getElementById(s.el);
@@ -826,6 +937,7 @@
   function scheduleRender() {
     clearTimeout(renderTimer);
     renderTimer = setTimeout(render, 120);
+    scheduleSave();
   }
   window.scheduleRender = scheduleRender;
 
@@ -1183,6 +1295,11 @@
     counts.forEach((count) => count.textContent = '0')
     buildSectionToggles();
     updateSectionCount();
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+    } catch (e) {
+      console.error("Failed to clear saved data on reset:", e);
+    }
     scheduleRender();
     toast("✓ Reset complete!");
   }
