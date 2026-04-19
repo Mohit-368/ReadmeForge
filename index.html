@@ -270,7 +270,10 @@
                 <label data-i18n="installCommandsLabel">INSTALL COMMANDS (one per line)</label>
                 <textarea id="installCmds" style="min-height: 100px" oninput="scheduleRender()"
                   data-i18n-placeholder="installCmds"
+                <label>INSTALL COMMANDS (one per line)</label>
+                <textarea class="textInput" id="installCmds" style="min-height: 100px" oninput="scheduleRender()"
                   placeholder="git clone https://github.com/user/repo.git&#10;cd repo&#10;pip install -r requirements.txt&#10;python manage.py migrate&#10;python manage.py runserver"></textarea>
+                <label><span class="wordCount">0</span> <span class="wordCountText">Words</span></label>
               </div>
               <div>
                 <label data-i18n="envVarsLabel">ENV VARIABLES (optional)</label>
@@ -292,7 +295,16 @@
                 <label data-i18n="runCommandLabel">RUN COMMAND / USAGE INSTRUCTIONS</label>
                 <textarea id="usageCmd" style="min-height: 80px" oninput="scheduleRender()"
                   data-i18n-placeholder="usageCmd"
+                <label>ENV VARIABLES (optional)</label>
+                <textarea class="textInput" id="envVars" style="min-height: 70px" oninput="scheduleRender()"
+placeholder="SECRET_KEY=your_secret&#10;DATABASE_URL=sqlite:///db.sqlite3&#10;DEBUG=True"></textarea>
+                <label><span class="wordCount">0</span> <span class="wordCountText">Words</span></label>
+              </div>
+              <div>
+                <label>RUN COMMAND / USAGE INSTRUCTIONS</label>
+                <textarea class="textInput" id="usageCmd" style="min-height: 80px" oninput="scheduleRender()"
                   placeholder="python manage.py runserver&#10;&#10;# Then open http://127.0.0.1:8000/"></textarea>
+                <label><span class="wordCount">0</span> <span class="wordCountText">Words</span></label>
               </div>
             </div>
           </div>
@@ -308,7 +320,10 @@
                 <label data-i18n="pasteStructureLabel">PASTE YOUR FOLDER STRUCTURE (indented with spaces)</label>
                 <textarea id="rawStructure" style="min-height: 120px" oninput="updateStructurePreview()"
                   data-i18n-placeholder="rawStructure"
+                <label>PASTE YOUR FOLDER STRUCTURE (indented with spaces)</label>
+                <textarea class="textInput" id="rawStructure" style="min-height: 120px" oninput="updateStructurePreview()"
                   placeholder="src/&#10;  api/&#10;  models/&#10;  utils/&#10;templates/&#10;static/&#10;main.py&#10;requirements.txt&#10;README.md"></textarea>
+                <label><span class="wordCount">0</span> <span class="wordCountText">Words</span></label>
               </div>
               <div>
                 <label data-i18n="visualPreviewLabel">VISUAL PREVIEW</label>
@@ -346,7 +361,9 @@
                   line)</label>
                 <textarea id="imageUrls" style="min-height: 60px" oninput="scheduleRender()"
                   data-i18n-placeholder="imageUrls"
+                <textarea class="textInput" id="imageUrls" style="min-height: 60px" oninput="scheduleRender()"
                   placeholder="Landing Page | https://i.imgur.com/abc.png&#10;Dashboard | https://i.imgur.com/xyz.png"></textarea>
+                <label><span class="wordCount">0</span> <span class="wordCountText">Words</span></label>
               </div>
             </div>
           </div>
@@ -363,7 +380,9 @@
                   line)</label>
                 <textarea id="apiDocs" style="min-height: 100px" oninput="scheduleRender()"
                   data-i18n-placeholder="apiDocs"
+                <textarea class="textInput" id="apiDocs" style="min-height: 100px" oninput="scheduleRender()"
                   placeholder="GET /api/users | Get all users&#10;POST /api/users | Create a new user&#10;GET /api/users/:id | Get user by ID&#10;PUT /api/users/:id | Update user&#10;DELETE /api/users/:id | Delete user"></textarea>
+                <label><span class="wordCount">0</span> <span class="wordCountText">Words</span></label>
               </div>
               <div>
                 <label data-i18n="apiBaseLabel">API BASE URL (optional)</label>
@@ -384,7 +403,9 @@
                   auto-generated)</label>
                 <textarea id="contribNotes" style="min-height: 70px" oninput="scheduleRender()"
                   data-i18n-placeholder="contribNotes"
+                <textarea class="textInput" id="contribNotes" style="min-height: 70px" oninput="scheduleRender()"
                   placeholder="Any specific guidelines, code style rules, branch naming conventions..."></textarea>
+                <label><span class="wordCount">0</span> <span class="wordCountText">Words</span></label>
               </div>
             </div>
           </div>
