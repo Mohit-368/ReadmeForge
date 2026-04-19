@@ -73,21 +73,22 @@
         <span class="logo-name">README<span>Forge</span></span>
       </a>
       <div class="header-center">
-        <span style="
+        <span id="sectionLabel" style="
               font-size: 11px;
               color: var(--muted);
               font-family: &quot;JetBrains Mono&quot;, monospace;
               margin-right: 4px;
-            ">sections:</span>
+            " data-i18n="sectionsLabel">sections:</span>
         <span id="sectionCount" style="font-size: 12px; font-weight: 700; color: var(--accent)">0</span>
-        <span style="
+        <span id="sectionActiveLabel" style="
               font-size: 11px;
               color: var(--muted);
               font-family: &quot;JetBrains Mono&quot;, monospace;
-            ">
+            " data-i18n="activeLabel">
           active</span>
       </div>
       <div class="header-right">
+        <select id="languageSelector" aria-label="Language selector" class="lang-select"></select>
         <!-- Source Code Link in App Header -->
         <a href="#" target="_blank" class="hbtn" style="
               text-decoration: none;
@@ -100,11 +101,11 @@
             <polyline points="16 18 22 12 16 6"></polyline>
             <polyline points="8 6 2 12 8 18"></polyline>
           </svg>
-          Source
+          <span data-i18n="topSource">Source</span>
         </a>
-        <button class="hbtn" onclick="resetAll()">↺ Reset</button>
-        <button class="hbtn" onclick="copyMarkdown()">Copy MD</button>
-        <button class="hbtn primary" id="modalPrintBtn" onclick="downloadPDF()">
+        <button class="hbtn" onclick="resetAll()" data-i18n="resetButton">↺ Reset</button>
+        <button class="hbtn" onclick="copyMarkdown()" data-i18n="copyMdBtn">Copy MD</button>
+        <button class="hbtn primary" id="modalPrintBtn" onclick="downloadPDF()" data-i18n="downloadPdfBtn">
           ⬇ Download PDF
         </button>
       </div>
@@ -115,30 +116,30 @@
       <aside class="sidebar">
         <!-- Templates -->
         <div class="sidebar-section">
-          <div class="sidebar-label">Templates</div>
+          <div class="sidebar-label" data-i18n="templatesLabel">Templates</div>
           <div class="templates-grid">
-            <button class="template-btn" onclick="applyTemplate('webapp')">
+            <button class="template-btn" data-i18n="templateWebApp" onclick="applyTemplate('webapp')">
               🌐 Web App
             </button>
-            <button class="template-btn" onclick="applyTemplate('ml')">
+            <button class="template-btn" data-i18n="templateMl" onclick="applyTemplate('ml')">
               🤖 ML / AI
             </button>
-            <button class="template-btn" onclick="applyTemplate('api')">
+            <button class="template-btn" data-i18n="templateApi" onclick="applyTemplate('api')">
               ⚡ Backend API
             </button>
-            <button class="template-btn" onclick="applyTemplate('cli')">
+            <button class="template-btn" data-i18n="templateCli" onclick="applyTemplate('cli')">
               💻 CLI Tool
             </button>
-            <button class="template-btn" onclick="applyTemplate('mobile')">
+            <button class="template-btn" data-i18n="templateMobile" onclick="applyTemplate('mobile')">
               📱 Mobile App
             </button>
-            <button class="template-btn" onclick="applyTemplate('lib')">
+            <button class="template-btn" data-i18n="templateLib" onclick="applyTemplate('lib')">
               📦 Library
             </button>
-            <button class="template-btn" onclick="applyTemplate('hackathon')">
+            <button class="template-btn" data-i18n="templateHackathon" onclick="applyTemplate('hackathon')">
               🏆 Hackathon
             </button>
-            <button class="template-btn" onclick="applyTemplate('oss')">
+            <button class="template-btn" data-i18n="templateOss" onclick="applyTemplate('oss')">
               🔓 Open Source
             </button>
           </div>
@@ -146,7 +147,7 @@
 
         <!-- Section Toggles -->
         <div class="sidebar-section" style="flex: 1">
-          <div class="sidebar-label">Sections</div>
+          <div class="sidebar-label" data-i18n="sectionsLabel">Sections</div>
           <div class="section-toggles" id="sectionToggles">
             <!-- populated by JS -->
           </div>
@@ -160,31 +161,31 @@
           <div class="editor-section" id="sec-title">
             <div class="es-header">
               <div class="es-num">1</div>
-              <div class="es-title">Project Title & Badges</div>
+              <div class="es-title" data-i18n="projectTitleBadges">Project Title & Badges</div>
             </div>
             <div class="es-body">
               <div class="two-col">
                 <div>
-                  <label>PROJECT NAME *</label>
-                  <input type="text" id="projName" placeholder="AwesomeProject" oninput="scheduleRender()" />
+                  <label data-i18n="projectNameLabel">PROJECT NAME *</label>
+                  <input type="text" id="projName" data-i18n-placeholder="projName" placeholder="AwesomeProject" oninput="scheduleRender()" />
                 </div>
                 <div>
-                  <label>TAGLINE</label>
-                  <input type="text" id="tagline" placeholder="A blazing-fast tool for..." oninput="scheduleRender()" />
+                  <label data-i18n="taglineLabel">TAGLINE</label>
+                  <input type="text" id="tagline" data-i18n-placeholder="tagline" placeholder="A blazing-fast tool for..." oninput="scheduleRender()" />
                 </div>
               </div>
               <div class="two-col">
                 <div>
-                  <label>GITHUB USER</label>
-                  <input type="text" id="ghUser" placeholder="octocat" oninput="scheduleRender()" />
+                  <label data-i18n="githubUserLabel">GITHUB USER</label>
+                  <input type="text" id="ghUser" data-i18n-placeholder="ghUser" placeholder="octocat" oninput="scheduleRender()" />
                 </div>
                 <div>
-                  <label>REPO NAME</label>
-                  <input type="text" id="repoSlug" placeholder="awesome-project" oninput="scheduleRender()" />
+                  <label data-i18n="repoNameLabel">REPO NAME</label>
+                  <input type="text" id="repoSlug" data-i18n-placeholder="repoSlug" placeholder="awesome-project" oninput="scheduleRender()" />
                 </div>
               </div>
               <div>
-                <label>AUTO BADGES — click to toggle</label>
+                <label data-i18n="autoBadgesLabel">AUTO BADGES — click to toggle</label>
                 <div class="badge-picker" id="badgePicker">
                   <!-- populated by JS -->
                 </div>
@@ -196,19 +197,20 @@
           <div class="editor-section" id="sec-description">
             <div class="es-header">
               <div class="es-num">2</div>
-              <div class="es-title">Description</div>
+              <div class="es-title" data-i18n="descriptionSection">Description</div>
             </div>
             <div class="es-body">
               <div>
-                <label>SHORT DESCRIPTION</label>
+                <label data-i18n="shortDescriptionLabel">SHORT DESCRIPTION</label>
                 <textarea class="textInput" id="description"
+                  data-i18n-placeholder="description"
                   placeholder="What does your project do? What problem does it solve?" style="min-height: 90px"
                   oninput="scheduleRender()"></textarea>
                 <label><span class="wordCount">0</span> <span class="wordCountText">Words</span></label>
               </div>
               <div>
-                <label>LIVE DEMO URL (optional)</label>
-                <input type="url" id="demoUrl" placeholder="https://yourapp.com" oninput="scheduleRender()" />
+                <label data-i18n="liveDemoLabel">LIVE DEMO URL (optional)</label>
+                <input type="url" id="demoUrl" data-i18n-placeholder="demoUrl" placeholder="https://yourapp.com" oninput="scheduleRender()" />
               </div>
             </div>
           </div>
@@ -217,13 +219,14 @@
           <div class="editor-section" id="sec-features">
             <div class="es-header">
               <div class="es-num">3</div>
-              <div class="es-title">Features</div>
+              <div class="es-title" data-i18n="featuresSection">Features</div>
             </div>
             <div class="es-body">
               <div>
-                <label>KEY FEATURES — use "### Category" for groups, "- item" for
+                <label data-i18n="keyFeaturesLabel">KEY FEATURES — use "### Category" for groups, "- item" for
                   bullets</label>
                 <textarea class="textInput" id="features" style="min-height: 130px" oninput="scheduleRender()"
+                  data-i18n-placeholder="features"
                   placeholder="### 🔐 Authentication&#10;- Email OTP verification&#10;- Secure login / logout&#10;&#10;### 📝 Posts&#10;- Create, Read, Update, Delete"></textarea>
                 <label><span class="wordCount">0</span> <span class="wordCountText">Words</span></label>
 
@@ -235,19 +238,19 @@
           <div class="editor-section" id="sec-techstack">
             <div class="es-header">
               <div class="es-num">4</div>
-              <div class="es-title">Tech Stack</div>
+              <div class="es-title" data-i18n="techStackSection">Tech Stack</div>
               <span class="es-badge" id="techCount" style="display: none">0 selected</span>
             </div>
             <div class="es-body">
               <div>
-                <label>CLICK TO SELECT YOUR STACK</label>
+                <label data-i18n="clickToSelectLabel">CLICK TO SELECT YOUR STACK</label>
                 <div class="tech-picker" id="techPicker">
                   <!-- populated by JS -->
                 </div>
               </div>
               <div>
-                <label>OR ADD CUSTOM (comma separated)</label>
-                <input type="text" id="customTech" placeholder="Celery, Redis, Nginx..." oninput="scheduleRender()" />
+                <label data-i18n="customTechLabel">OR ADD CUSTOM (comma separated)</label>
+                <input type="text" id="customTech" data-i18n-placeholder="customTech" placeholder="Celery, Redis, Nginx..." oninput="scheduleRender()" />
               </div>
             </div>
           </div>
@@ -256,20 +259,42 @@
           <div class="editor-section" id="sec-installation">
             <div class="es-header">
               <div class="es-num">5</div>
-              <div class="es-title">Installation</div>
+              <div class="es-title" data-i18n="installationSection">Installation</div>
             </div>
             <div class="es-body">
               <div>
-                <label>PREREQUISITES</label>
-                <input type="text" id="prereqs" placeholder="Python 3.10+, Node.js 18+" oninput="scheduleRender()" />
+                <label data-i18n="prereqsLabel">PREREQUISITES</label>
+                <input type="text" id="prereqs" data-i18n-placeholder="prereqs" placeholder="Python 3.10+, Node.js 18+" oninput="scheduleRender()" />
               </div>
               <div>
+                <label data-i18n="installCommandsLabel">INSTALL COMMANDS (one per line)</label>
+                <textarea id="installCmds" style="min-height: 100px" oninput="scheduleRender()"
+                  data-i18n-placeholder="installCmds"
                 <label>INSTALL COMMANDS (one per line)</label>
                 <textarea class="textInput" id="installCmds" style="min-height: 100px" oninput="scheduleRender()"
                   placeholder="git clone https://github.com/user/repo.git&#10;cd repo&#10;pip install -r requirements.txt&#10;python manage.py migrate&#10;python manage.py runserver"></textarea>
                 <label><span class="wordCount">0</span> <span class="wordCountText">Words</span></label>
               </div>
               <div>
+                <label data-i18n="envVarsLabel">ENV VARIABLES (optional)</label>
+                <textarea id="envVars" style="min-height: 70px" oninput="scheduleRender()"
+                  data-i18n-placeholder="envVars"
+                  placeholder="SECRET_KEY=your_secret&#10;DATABASE_URL=sqlite:///db.sqlite3&#10;DEBUG=True"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- 6. Usage -->
+          <div class="editor-section" id="sec-usage">
+            <div class="es-header">
+              <div class="es-num">6</div>
+              <div class="es-title" data-i18n="usageSection">Usage</div>
+            </div>
+            <div class="es-body">
+              <div>
+                <label data-i18n="runCommandLabel">RUN COMMAND / USAGE INSTRUCTIONS</label>
+                <textarea id="usageCmd" style="min-height: 80px" oninput="scheduleRender()"
+                  data-i18n-placeholder="usageCmd"
                 <label>ENV VARIABLES (optional)</label>
                 <textarea class="textInput" id="envVars" style="min-height: 70px" oninput="scheduleRender()"
 placeholder="SECRET_KEY=your_secret&#10;DATABASE_URL=sqlite:///db.sqlite3&#10;DEBUG=True"></textarea>
@@ -288,17 +313,20 @@ placeholder="SECRET_KEY=your_secret&#10;DATABASE_URL=sqlite:///db.sqlite3&#10;DE
           <div class="editor-section" id="sec-structure">
             <div class="es-header">
               <div class="es-num">7</div>
-              <div class="es-title">Project Structure Visualizer</div>
+              <div class="es-title" data-i18n="structureSection">Project Structure Visualizer</div>
             </div>
             <div class="es-body">
               <div>
+                <label data-i18n="pasteStructureLabel">PASTE YOUR FOLDER STRUCTURE (indented with spaces)</label>
+                <textarea id="rawStructure" style="min-height: 120px" oninput="updateStructurePreview()"
+                  data-i18n-placeholder="rawStructure"
                 <label>PASTE YOUR FOLDER STRUCTURE (indented with spaces)</label>
                 <textarea class="textInput" id="rawStructure" style="min-height: 120px" oninput="updateStructurePreview()"
                   placeholder="src/&#10;  api/&#10;  models/&#10;  utils/&#10;templates/&#10;static/&#10;main.py&#10;requirements.txt&#10;README.md"></textarea>
                 <label><span class="wordCount">0</span> <span class="wordCountText">Words</span></label>
               </div>
               <div>
-                <label>VISUAL PREVIEW</label>
+                <label data-i18n="visualPreviewLabel">VISUAL PREVIEW</label>
                 <div class="struct-preview" id="structPreview">
                   Paste structure above to preview...
                 </div>
@@ -310,27 +338,29 @@ placeholder="SECRET_KEY=your_secret&#10;DATABASE_URL=sqlite:///db.sqlite3&#10;DE
           <div class="editor-section" id="sec-screenshots">
             <div class="es-header">
               <div class="es-num">8</div>
-              <div class="es-title">Screenshots</div>
+              <div class="es-title" data-i18n="screenshotsSection">Screenshots</div>
             </div>
             <div class="es-body">
               <div>
-                <label>LIVE DEMO / VIDEO LINK (optional)</label>
-                <input type="url" id="videoUrl" placeholder="https://youtube.com/watch?v=..."
+                <label data-i18n="videoLinkLabel">LIVE DEMO / VIDEO LINK (optional)</label>
+                <input type="url" id="videoUrl" data-i18n-placeholder="videoUrl" placeholder="https://youtube.com/watch?v=..."
                   oninput="scheduleRender()" />
               </div>
               <div>
-                <label>DRAG &amp; DROP SCREENSHOTS</label>
+                <label data-i18n="dropScreenshotsLabel">DRAG &amp; DROP SCREENSHOTS</label>
                 <div class="drop-zone" id="dropZone">
                   <div class="drop-zone-icon">🖼️</div>
-                  <p>Drop images here or click to browse</p>
-                  <small>PNG, JPG, GIF — they'll be linked as Markdown</small>
+                  <p data-i18n="dropZoneText">Drop images here or click to browse</p>
+                  <small data-i18n="dropZoneHint">PNG, JPG, GIF — they'll be linked as Markdown</small>
                   <input type="file" id="fileInput" multiple accept="image/*" style="display: none" />
                 </div>
                 <div class="screenshot-list" id="screenshotList"></div>
               </div>
               <div>
-                <label>OR ADD IMAGE URLS (format: Label | URL, one per
+                <label data-i18n="addImageUrlsLabel">OR ADD IMAGE URLS (format: Label | URL, one per
                   line)</label>
+                <textarea id="imageUrls" style="min-height: 60px" oninput="scheduleRender()"
+                  data-i18n-placeholder="imageUrls"
                 <textarea class="textInput" id="imageUrls" style="min-height: 60px" oninput="scheduleRender()"
                   placeholder="Landing Page | https://i.imgur.com/abc.png&#10;Dashboard | https://i.imgur.com/xyz.png"></textarea>
                 <label><span class="wordCount">0</span> <span class="wordCountText">Words</span></label>
@@ -342,19 +372,21 @@ placeholder="SECRET_KEY=your_secret&#10;DATABASE_URL=sqlite:///db.sqlite3&#10;DE
           <div class="editor-section" id="sec-api">
             <div class="es-header">
               <div class="es-num">9</div>
-              <div class="es-title">API Documentation</div>
+              <div class="es-title" data-i18n="apiSection">API Documentation</div>
             </div>
             <div class="es-body">
               <div>
-                <label>API ENDPOINTS — format: METHOD /path | Description (one per
+                <label data-i18n="apiEndpointsLabel">API ENDPOINTS — format: METHOD /path | Description (one per
                   line)</label>
+                <textarea id="apiDocs" style="min-height: 100px" oninput="scheduleRender()"
+                  data-i18n-placeholder="apiDocs"
                 <textarea class="textInput" id="apiDocs" style="min-height: 100px" oninput="scheduleRender()"
                   placeholder="GET /api/users | Get all users&#10;POST /api/users | Create a new user&#10;GET /api/users/:id | Get user by ID&#10;PUT /api/users/:id | Update user&#10;DELETE /api/users/:id | Delete user"></textarea>
                 <label><span class="wordCount">0</span> <span class="wordCountText">Words</span></label>
               </div>
               <div>
-                <label>API BASE URL (optional)</label>
-                <input type="text" id="apiBase" placeholder="https://api.yourapp.com/v1" oninput="scheduleRender()" />
+                <label data-i18n="apiBaseLabel">API BASE URL (optional)</label>
+                <input type="text" id="apiBase" data-i18n-placeholder="apiBase" placeholder="https://api.yourapp.com/v1" oninput="scheduleRender()" />
               </div>
             </div>
           </div>
@@ -363,12 +395,14 @@ placeholder="SECRET_KEY=your_secret&#10;DATABASE_URL=sqlite:///db.sqlite3&#10;DE
           <div class="editor-section" id="sec-contributing">
             <div class="es-header">
               <div class="es-num">10</div>
-              <div class="es-title">Contributing</div>
+              <div class="es-title" data-i18n="contributingSection">Contributing</div>
             </div>
             <div class="es-body">
               <div>
-                <label>CUSTOM CONTRIBUTING NOTES (optional — default guide
+                <label data-i18n="customContribLabel">CUSTOM CONTRIBUTING NOTES (optional — default guide
                   auto-generated)</label>
+                <textarea id="contribNotes" style="min-height: 70px" oninput="scheduleRender()"
+                  data-i18n-placeholder="contribNotes"
                 <textarea class="textInput" id="contribNotes" style="min-height: 70px" oninput="scheduleRender()"
                   placeholder="Any specific guidelines, code style rules, branch naming conventions..."></textarea>
                 <label><span class="wordCount">0</span> <span class="wordCountText">Words</span></label>
@@ -380,12 +414,12 @@ placeholder="SECRET_KEY=your_secret&#10;DATABASE_URL=sqlite:///db.sqlite3&#10;DE
           <div class="editor-section" id="sec-author">
             <div class="es-header">
               <div class="es-num">11</div>
-              <div class="es-title">License &amp; Author</div>
+              <div class="es-title" data-i18n="authorSection">License &amp; Author</div>
             </div>
             <div class="es-body">
               <div class="two-col">
                 <div>
-                  <label>LICENSE</label>
+                  <label data-i18n="licenseLabel">LICENSE</label>
                   <select id="license" onchange="scheduleRender()">
                     <option value="MIT">MIT</option>
                     <option value="Apache-2.0">Apache 2.0</option>
@@ -398,29 +432,29 @@ placeholder="SECRET_KEY=your_secret&#10;DATABASE_URL=sqlite:///db.sqlite3&#10;DE
                   </select>
                 </div>
                 <div>
-                  <label>FULL NAME</label>
-                  <input type="text" id="authorName" placeholder="Your Name" oninput="scheduleRender()" />
+                  <label data-i18n="fullNameLabel">FULL NAME</label>
+                  <input type="text" id="authorName" data-i18n-placeholder="authorName" placeholder="Your Name" oninput="scheduleRender()" />
                 </div>
               </div>
               <div class="two-col">
                 <div>
-                  <label>GITHUB USERNAME</label>
-                  <input type="text" id="authorGh" placeholder="username" oninput="scheduleRender()" />
+                  <label data-i18n="githubUsernameLabel">GITHUB USERNAME</label>
+                  <input type="text" id="authorGh" data-i18n-placeholder="authorGh" placeholder="username" oninput="scheduleRender()" />
                 </div>
                 <div>
-                  <label>EMAIL (optional)</label>
-                  <input type="email" id="authorEmail" placeholder="you@email.com" oninput="scheduleRender()" />
+                  <label data-i18n="emailLabel">EMAIL (optional)</label>
+                  <input type="email" id="authorEmail" data-i18n-placeholder="authorEmail" placeholder="you@email.com" oninput="scheduleRender()" />
                 </div>
               </div>
               <div class="two-col">
                 <div>
-                  <label>LINKEDIN (optional)</label>
-                  <input type="url" id="authorLinkedin" placeholder="https://linkedin.com/in/you"
+                  <label data-i18n="linkedinLabel">LINKEDIN (optional)</label>
+                  <input type="url" id="authorLinkedin" data-i18n-placeholder="authorLinkedin" placeholder="https://linkedin.com/in/you"
                     oninput="scheduleRender()" />
                 </div>
                 <div>
-                  <label>PORTFOLIO (optional)</label>
-                  <input type="url" id="authorWebsite" placeholder="https://yoursite.com" oninput="scheduleRender()" />
+                  <label data-i18n="portfolioLabel">PORTFOLIO (optional)</label>
+                  <input type="url" id="authorWebsite" data-i18n-placeholder="authorWebsite" placeholder="https://yoursite.com" oninput="scheduleRender()" />
                 </div>
               </div>
             </div>
@@ -432,22 +466,18 @@ placeholder="SECRET_KEY=your_secret&#10;DATABASE_URL=sqlite:///db.sqlite3&#10;DE
       <aside class="preview">
         <div class="preview-header">
           <div class="preview-tabs">
-            <button class="ptab active" id="tabRendered" onclick="setTab('rendered')">
-              Preview (Better at full dimensions)
-            </button>
-            <button class="ptab" id="tabRaw" onclick="setTab('raw')">
-              Raw MD
-            </button>
+            <button class="ptab active" id="tabRendered" onclick="setTab('rendered')" data-i18n="previewTab">Preview (Better at full dimensions)</button>
+            <button class="ptab" id="tabRaw" onclick="setTab('raw')" data-i18n="rawTab">Raw MD</button>
           </div>
           <div class="preview-actions">
-            <button class="pbtn green" onclick="copyMarkdown()">
+            <button class="pbtn green" onclick="copyMarkdown()" data-i18n="copyButton">
               <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <rect x="9" y="9" width="13" height="13" rx="2" />
                 <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" />
               </svg>
               Copy
             </button>
-            <button class="pbtn" onclick="downloadMd()">
+            <button class="pbtn" onclick="downloadMd()" data-i18n="downloadMdButton">
               <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
                 <polyline points="7,10 12,15 17,10" />
@@ -460,8 +490,8 @@ placeholder="SECRET_KEY=your_secret&#10;DATABASE_URL=sqlite:///db.sqlite3&#10;DE
         <div class="preview-body" id="previewBody">
           <div class="empty-preview">
             <div class="icon">📄</div>
-            <h3>Live preview appears here</h3>
-            <p>Start filling in the editor →</p>
+            <h3 data-i18n="livePreviewHeading">Live preview appears here</h3>
+            <p data-i18n="startFillingText">Start filling in the editor →</p>
           </div>
         </div>
       </aside>
@@ -473,7 +503,7 @@ placeholder="SECRET_KEY=your_secret&#10;DATABASE_URL=sqlite:///db.sqlite3&#10;DE
     <div class="footer-content">
       <div class="footer-left">
         <div class="footer-logo">RF</div>
-        <p>Designed & Built by <strong>Mohit Kumar</strong></p>
+        <p><span data-i18n="designedBuilt">Designed & Built by</span> <strong>Mohit Kumar</strong></p>
       </div>
       <div class="footer-right">
         <!-- Source Code Link -->
@@ -483,9 +513,7 @@ placeholder="SECRET_KEY=your_secret&#10;DATABASE_URL=sqlite:///db.sqlite3&#10;DE
             <polyline points="16 18 22 12 16 6"></polyline>
             <polyline points="8 6 2 12 8 18"></polyline>
           </svg>
-          Source Code
-        </a>
-
+          <span data-i18n="sourceCodeFooter">Source Code</span>
         <div class="footer-divider"></div>
 
         <!-- GitHub Link -->

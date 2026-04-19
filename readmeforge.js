@@ -87,6 +87,693 @@
     sectionState[s.id] = s.default;
   });
 
+  var LANGUAGES = [
+    { code: "en", name: "English" },
+    { code: "hi", name: "हिन्दी" },
+    { code: "es", name: "Español" },
+    { code: "fr", name: "Français" },
+    { code: "zh", name: "中文" },
+  ];
+
+  var TRANSLATIONS = {
+    en: {
+      sectionsLabel: "sections:",
+      activeLabel: "active",
+      topSource: "Source",
+      resetButton: "↺ Reset",
+      copyMdBtn: "Copy MD",
+      downloadPdfBtn: "⬇ Download PDF",
+      templatesLabel: "Templates",
+      sectionsLabel: "Sections",
+      templateWebApp: "🌐 Web App",
+      templateMl: "🤖 ML / AI",
+      templateApi: "⚡ Backend API",
+      templateCli: "💻 CLI Tool",
+      templateMobile: "📱 Mobile App",
+      templateLib: "📦 Library",
+      templateHackathon: "🏆 Hackathon",
+      templateOss: "🔓 Open Source",
+      projectTitleBadges: "Project Title & Badges",
+      descriptionSection: "Description",
+      featuresSection: "Features",
+      techStackSection: "Tech Stack",
+      installationSection: "Installation",
+      usageSection: "Usage",
+      structureSection: "Project Structure Visualizer",
+      screenshotsSection: "Screenshots",
+      apiSection: "API Documentation",
+      contributingSection: "Contributing",
+      authorSection: "License & Author",
+      projectNameLabel: "PROJECT NAME *",
+      taglineLabel: "TAGLINE",
+      githubUserLabel: "GITHUB USER",
+      repoNameLabel: "REPO NAME",
+      autoBadgesLabel: "AUTO BADGES — click to toggle",
+      shortDescriptionLabel: "SHORT DESCRIPTION",
+      liveDemoLabel: "LIVE DEMO URL (optional)",
+      keyFeaturesLabel: "KEY FEATURES — use \"### Category\" for groups, \"- item\" for bullets",
+      prereqsLabel: "PREREQUISITES",
+      installCommandsLabel: "INSTALL COMMANDS (one per line)",
+      envVarsLabel: "ENV VARIABLES (optional)",
+      runCommandLabel: "RUN COMMAND / USAGE INSTRUCTIONS",
+      pasteStructureLabel: "PASTE YOUR FOLDER STRUCTURE (indented with spaces)",
+      visualPreviewLabel: "VISUAL PREVIEW",
+      dropScreenshotsLabel: "DRAG & DROP SCREENSHOTS",
+      dropZoneText: "Drop images here or click to browse",
+      dropZoneHint: "PNG, JPG, GIF — they'll be linked as Markdown",
+      addImageUrlsLabel: "OR ADD IMAGE URLS (format: Label | URL, one per line)",
+      apiEndpointsLabel: "API ENDPOINTS — format: METHOD /path | Description (one per line)",
+      apiBaseLabel: "API BASE URL (optional)",
+      customContribLabel: "CUSTOM CONTRIBUTING NOTES (optional — default guide auto-generated)",
+      licenseLabel: "LICENSE",
+      fullNameLabel: "FULL NAME",
+      githubUsernameLabel: "GITHUB USERNAME",
+      emailLabel: "EMAIL (optional)",
+      linkedinLabel: "LINKEDIN (optional)",
+      portfolioLabel: "PORTFOLIO (optional)",
+      previewTab: "Preview (Better at full dimensions)",
+      rawTab: "Raw MD",
+      copyButton: "Copy",
+      downloadMdButton: ".md",
+      livePreviewHeading: "Live preview appears here",
+      startFillingText: "Start filling in the editor →",
+      designedBuilt: "Designed & Built by",
+      sourceCodeFooter: "Source Code",
+      sectionTitle: "Project Title",
+      sectionDescription: "Description",
+      sectionFeatures: "Features",
+      sectionTechstack: "Tech Stack",
+      sectionInstallation: "Installation",
+      sectionUsage: "Usage",
+      sectionStructure: "Folder Structure",
+      sectionScreenshots: "Screenshots",
+      sectionApi: "API Docs",
+      sectionContributing: "Contributing",
+      sectionAuthor: "License & Author",
+      wordSingular: "Word",
+      wordPlural: "Words",
+    },
+    hi: {
+      sectionsLabel: "अनुभाग:",
+      activeLabel: "सक्रिय",
+      topSource: "स्रोत",
+      resetButton: "↺ रीसेट",
+      copyMdBtn: "MD कॉपी करें",
+      downloadPdfBtn: "⬇ पीडीएफ डाउनलोड करें",
+      templatesLabel: "टेम्पलेट",
+      sectionsLabel: "सेक्शन",
+      templateWebApp: "🌐 वेब ऐप",
+      templateMl: "🤖 एमएल / एआई",
+      templateApi: "⚡ बैकएंड एपीआई",
+      templateCli: "💻 सीएलआई टूल",
+      templateMobile: "📱 मोबाइल ऐप",
+      templateLib: "📦 लाइब्रेरी",
+      templateHackathon: "🏆 हैकाथॉन",
+      templateOss: "🔓 ओपन सोर्स",
+      projectTitleBadges: "प्रोजेक्ट शीर्षक और बैज",
+      descriptionSection: "विवरण",
+      featuresSection: "विशेषताएँ",
+      techStackSection: "टेक स्टैक",
+      installationSection: "इंस्टॉलेशन",
+      usageSection: "उपयोग",
+      structureSection: "प्रोजेक्ट संरचना विज़ुअलाइजर",
+      screenshotsSection: "स्क्रीनशॉट",
+      apiSection: "एपीआई दस्तावेज़",
+      contributingSection: "योगदान",
+      authorSection: "लाइसेंस और लेखक",
+      projectNameLabel: "प्रोजेक्ट का नाम *",
+      taglineLabel: "टैगलाइन",
+      githubUserLabel: "GitHub उपयोगकर्ता",
+      repoNameLabel: "रिपॉर्नाम",
+      autoBadgesLabel: "ऑटो बैज — टॉगल करने के लिए क्लिक करें",
+      shortDescriptionLabel: "संक्षिप्त विवरण",
+      liveDemoLabel: "लाइव डेमो URL (वैकल्पिक)",
+      keyFeaturesLabel: "प्रमुख विशेषताएँ — समूहों के लिए \"### श्रेणी\" का उपयोग करें, बुलेट के लिए \"- आइटम\"",
+      prereqsLabel: "पूर्वापेक्षाएँ",
+      installCommandsLabel: "इंस्टॉलेशन कमांड (प्रति पंक्ति एक)",
+      envVarsLabel: "ENV वेरिएबल (वैकल्पिक)",
+      runCommandLabel: "रन कमांड / उपयोग निर्देश",
+      pasteStructureLabel: "अपनी फोल्डर संरचना चिपकाएँ (अंतरयुक्त स्पेस के साथ)",
+      visualPreviewLabel: "दृश्य पूर्वावलोकन",
+      dropScreenshotsLabel: "स्क्रीनशॉट खींचें और ड्रॉप करें",
+      dropZoneText: "यहां छवियां ड्रॉप करें या ब्राउज़ करने के लिए क्लिक करें",
+      dropZoneHint: "PNG, JPG, GIF — इन्हें Markdown के रूप में लिंक किया जाएगा",
+      addImageUrlsLabel: "या इमेज URL जोड़ें (लेबल | URL प्रारूप, प्रति पंक्ति)",
+      apiEndpointsLabel: "API एंडपॉइंट — स्वरूप: METHOD /path | विवरण (प्रति पंक्ति)",
+      apiBaseLabel: "API बेस URL (वैकल्पिक)",
+      customContribLabel: "कस्टम योगदान नोट्स (वैकल्पिक — डिफ़ॉल्ट मार्गदर्शिका स्वचालित रूप से उत्पन्न)",
+      licenseLabel: "लाइसेंस",
+      fullNameLabel: "पूरा नाम",
+      githubUsernameLabel: "GitHub उपयोगकर्ता नाम",
+      emailLabel: "ईमेल (वैकल्पिक)",
+      linkedinLabel: "LinkedIn (वैकल्पिक)",
+      portfolioLabel: "पोर्टफोलियो (वैकल्पिक)",
+      previewTab: "पूर्वावलोकन (पूर्ण आकार पर बेहतर)",
+      rawTab: "कच्चा MD",
+      copyButton: "कॉपी",
+      downloadMdButton: ".md",
+      livePreviewHeading: "लाइव पूर्वावलोकन यहां दिखाई देगा",
+      startFillingText: "एडिटर में भरना शुरू करें →",
+      designedBuilt: "डिज़ाइन और निर्माण:",
+      sourceCodeFooter: "सोर्स कोड",
+      sectionTitle: "प्रोजेक्ट शीर्षक",
+      sectionDescription: "विवरण",
+      sectionFeatures: "विशेषताएँ",
+      sectionTechstack: "टेक स्टैक",
+      sectionInstallation: "इंस्टॉलेशन",
+      sectionUsage: "उपयोग",
+      sectionStructure: "फ़ोल्डर संरचना",
+      sectionScreenshots: "स्क्रीनशॉट",
+      sectionApi: "API दस्तावेज़",
+      sectionContributing: "योगदान",
+      sectionAuthor: "लाइसेंस और लेखक",
+      wordSingular: "शब्द",
+      wordPlural: "शब्द",
+    },
+    es: {
+      sectionsLabel: "secciones:",
+      activeLabel: "activo",
+      topSource: "Fuente",
+      resetButton: "↺ Restablecer",
+      copyMdBtn: "Copiar MD",
+      downloadPdfBtn: "⬇ Descargar PDF",
+      templatesLabel: "Plantillas",
+      sectionsLabel: "Secciones",
+      templateWebApp: "🌐 Aplicación Web",
+      templateMl: "🤖 ML / IA",
+      templateApi: "⚡ API Backend",
+      templateCli: "💻 Herramienta CLI",
+      templateMobile: "📱 App Móvil",
+      templateLib: "📦 Biblioteca",
+      templateHackathon: "🏆 Hackathon",
+      templateOss: "🔓 Código Abierto",
+      projectTitleBadges: "Título del Proyecto y Badges",
+      descriptionSection: "Descripción",
+      featuresSection: "Características",
+      techStackSection: "Tech Stack",
+      installationSection: "Instalación",
+      usageSection: "Uso",
+      structureSection: "Visualizador de Estructura",
+      screenshotsSection: "Capturas",
+      apiSection: "Documentación API",
+      contributingSection: "Contribuciones",
+      authorSection: "Licencia y Autor",
+      projectNameLabel: "NOMBRE DEL PROYECTO *",
+      taglineLabel: "LEMA",
+      githubUserLabel: "USUARIO DE GITHUB",
+      repoNameLabel: "NOMBRE DEL REPOSITORIO",
+      autoBadgesLabel: "BADGES AUTOMÁTICOS — haz clic para alternar",
+      shortDescriptionLabel: "DESCRIPCIÓN CORTA",
+      liveDemoLabel: "URL DE DEMO EN VIVO (opcional)",
+      keyFeaturesLabel: "CARACTERÍSTICAS CLAVE — usa \"### Categoría\" para grupos, \"- elemento\" para viñetas",
+      prereqsLabel: "REQUISITOS",
+      installCommandsLabel: "COMANDOS DE INSTALACIÓN (uno por línea)",
+      envVarsLabel: "VARIABLES DE ENTORNO (opcional)",
+      runCommandLabel: "COMANDO / INSTRUCCIONES DE USO",
+      pasteStructureLabel: "PEGA LA ESTRUCTURA DE TU CARPETA (con sangría con espacios)",
+      visualPreviewLabel: "PREVISUALIZACIÓN",
+      dropScreenshotsLabel: "ARRASTRA Y SUELTA CAPTURAS",
+      dropZoneText: "Suelta imágenes aquí o haz clic para buscar",
+      dropZoneHint: "PNG, JPG, GIF — se vincularán como Markdown",
+      addImageUrlsLabel: "O AGREGA URL DE IMÁGENES (Etiqueta | URL, una por línea)",
+      apiEndpointsLabel: "ENDPOINTS API — formato: METHOD /path | Descripción (uno por línea)",
+      apiBaseLabel: "URL BASE API (opcional)",
+      customContribLabel: "NOTAS DE CONTRIBUCIÓN PERSONALIZADAS (opcional — guía predeterminada generada automáticamente)",
+      licenseLabel: "LICENCIA",
+      fullNameLabel: "NOMBRE COMPLETO",
+      githubUsernameLabel: "USUARIO DE GITHUB",
+      emailLabel: "EMAIL (opcional)",
+      linkedinLabel: "LinkedIn (opcional)",
+      portfolioLabel: "PORTAFOLIO (opcional)",
+      previewTab: "Vista previa (mejor en dimensiones completas)",
+      rawTab: "MD sin procesar",
+      copyButton: "Copiar",
+      downloadMdButton: ".md",
+      livePreviewHeading: "La vista previa aparece aquí",
+      startFillingText: "Comienza a completar el editor →",
+      designedBuilt: "Diseñado y construido por",
+      sourceCodeFooter: "Código Fuente",
+      sectionTitle: "Título del proyecto",
+      sectionDescription: "Descripción",
+      sectionFeatures: "Características",
+      sectionTechstack: "Tech Stack",
+      sectionInstallation: "Instalación",
+      sectionUsage: "Uso",
+      sectionStructure: "Estructura de carpetas",
+      sectionScreenshots: "Capturas",
+      sectionApi: "API Docs",
+      sectionContributing: "Contribuciones",
+      sectionAuthor: "Licencia y Autor",
+      wordSingular: "Palabra",
+      wordPlural: "Palabras",
+    },
+    fr: {
+      sectionsLabel: "sections :",
+      activeLabel: "actif",
+      topSource: "Source",
+      resetButton: "↺ Réinitialiser",
+      copyMdBtn: "Copier MD",
+      downloadPdfBtn: "⬇ Télécharger PDF",
+      templatesLabel: "Modèles",
+      sectionsLabel: "Sections",
+      templateWebApp: "🌐 Application Web",
+      templateMl: "🤖 ML / IA",
+      templateApi: "⚡ API Backend",
+      templateCli: "💻 Outil CLI",
+      templateMobile: "📱 Application Mobile",
+      templateLib: "📦 Bibliothèque",
+      templateHackathon: "🏆 Hackathon",
+      templateOss: "🔓 Open Source",
+      projectTitleBadges: "Titre du projet et badges",
+      descriptionSection: "Description",
+      featuresSection: "Fonctionnalités",
+      techStackSection: "Pile technique",
+      installationSection: "Installation",
+      usageSection: "Utilisation",
+      structureSection: "Visualiseur de structure",
+      screenshotsSection: "Captures d'écran",
+      apiSection: "Documentation API",
+      contributingSection: "Contribution",
+      authorSection: "Licence et Auteur",
+      projectNameLabel: "NOM DU PROJET *",
+      taglineLabel: "SLOGAN",
+      githubUserLabel: "UTILISATEUR GITHUB",
+      repoNameLabel: "NOM DU RÉPO",
+      autoBadgesLabel: "BADGES AUTOMATIQUES — cliquez pour basculer",
+      shortDescriptionLabel: "DESCRIPTION COURTE",
+      liveDemoLabel: "URL DE DÉMO EN DIRECT (facultatif)",
+      keyFeaturesLabel: "FONCTIONNALITÉS CLÉS — utilisez \"### Catégorie\" pour les groupes, \"- élément\" pour les puces",
+      prereqsLabel: "PRÉREQUIS",
+      installCommandsLabel: "COMMANDES D'INSTALLATION (une par ligne)",
+      envVarsLabel: "VARIABLES D'ENVIRONNEMENT (facultatif)",
+      runCommandLabel: "COMMANDE / INSTRUCTIONS D'UTILISATION",
+      pasteStructureLabel: "COLLEZ VOTRE STRUCTURE DE DOSSIER (indentée avec des espaces)",
+      visualPreviewLabel: "APERCU VISUEL",
+      dropScreenshotsLabel: "FAIRE GLISSER ET DÉPOSER DES CAPTURES",
+      dropZoneText: "Déposez les images ici ou cliquez pour parcourir",
+      dropZoneHint: "PNG, JPG, GIF — elles seront liées en Markdown",
+      addImageUrlsLabel: "OU AJOUTEZ DES URL D'IMAGE (Étiquette | URL, une par ligne)",
+      apiEndpointsLabel: "ENDPOINTS API — format : METHOD /path | Description (une par ligne)",
+      apiBaseLabel: "URL DE BASE API (facultatif)",
+      customContribLabel: "NOTES DE CONTRIBUTION PERSONNALISÉES (facultatif — guide par défaut généré automatiquement)",
+      licenseLabel: "LICENCE",
+      fullNameLabel: "NOM COMPLET",
+      githubUsernameLabel: "NOM D'UTILISATEUR GITHUB",
+      emailLabel: "EMAIL (facultatif)",
+      linkedinLabel: "LinkedIn (facultatif)",
+      portfolioLabel: "PORTFOLIO (facultatif)",
+      previewTab: "Aperçu (mieux en dimensions complètes)",
+      rawTab: "MD brut",
+      copyButton: "Copier",
+      downloadMdButton: ".md",
+      livePreviewHeading: "L'aperçu apparaît ici",
+      startFillingText: "Commencez à remplir l'éditeur →",
+      designedBuilt: "Conçu et construit par",
+      sourceCodeFooter: "Code source",
+      sectionTitle: "Titre du projet",
+      sectionDescription: "Description",
+      sectionFeatures: "Fonctionnalités",
+      sectionTechstack: "Pile technique",
+      sectionInstallation: "Installation",
+      sectionUsage: "Utilisation",
+      sectionStructure: "Structure de dossier",
+      sectionScreenshots: "Captures d'écran",
+      sectionApi: "Docs API",
+      sectionContributing: "Contribution",
+      sectionAuthor: "Licence et Auteur",
+      wordSingular: "Mot",
+      wordPlural: "Mots",
+    },
+    zh: {
+      sectionsLabel: "部分：",
+      activeLabel: "活动",
+      topSource: "源码",
+      resetButton: "↺ 重置",
+      copyMdBtn: "复制 MD",
+      downloadPdfBtn: "⬇ 下载 PDF",
+      templatesLabel: "模板",
+      sectionsLabel: "部分",
+      templateWebApp: "🌐 网络应用",
+      templateMl: "🤖 机器学习 / AI",
+      templateApi: "⚡ 后端 API",
+      templateCli: "💻 命令行工具",
+      templateMobile: "📱 移动应用",
+      templateLib: "📦 库",
+      templateHackathon: "🏆 黑客松",
+      templateOss: "🔓 开源",
+      projectTitleBadges: "项目标题与徽章",
+      descriptionSection: "描述",
+      featuresSection: "功能",
+      techStackSection: "技术栈",
+      installationSection: "安装",
+      usageSection: "使用",
+      structureSection: "项目结构可视化",
+      screenshotsSection: "截图",
+      apiSection: "API 文档",
+      contributingSection: "贡献",
+      authorSection: "许可证与作者",
+      projectNameLabel: "项目名称 *",
+      taglineLabel: "标语",
+      githubUserLabel: "GitHub 用户",
+      repoNameLabel: "仓库名称",
+      autoBadgesLabel: "自动徽章 — 点击切换",
+      shortDescriptionLabel: "简短描述",
+      liveDemoLabel: "实时演示 URL（可选）",
+      keyFeaturesLabel: "关键功能 — 使用 \"### 类别\" 表示分组，\"- 项目\" 表示项目符号",
+      prereqsLabel: "先决条件",
+      installCommandsLabel: "安装命令（每行一个）",
+      envVarsLabel: "环境变量（可选）",
+      runCommandLabel: "运行命令 / 使用说明",
+      pasteStructureLabel: "粘贴项目文件夹结构（以空格缩进）",
+      visualPreviewLabel: "可视预览",
+      dropScreenshotsLabel: "拖放截图",
+      dropZoneText: "将图片拖到此处或点击浏览",
+      dropZoneHint: "PNG、JPG、GIF — 它们将以 Markdown 链接",
+      addImageUrlsLabel: "或添加图片 URL（格式：标签 | URL，每行一个）",
+      apiEndpointsLabel: "API 端点 — 格式：METHOD /path | 描述（每行一个）",
+      apiBaseLabel: "API 基础 URL（可选）",
+      customContribLabel: "自定义贡献说明（可选 — 默认指南自动生成）",
+      licenseLabel: "许可证",
+      fullNameLabel: "全名",
+      githubUsernameLabel: "GitHub 用户名",
+      emailLabel: "电子邮件（可选）",
+      linkedinLabel: "LinkedIn（可选）",
+      portfolioLabel: "作品集（可选）",
+      previewTab: "预览（完整尺寸下更好）",
+      rawTab: "原始 MD",
+      copyButton: "复制",
+      downloadMdButton: ".md",
+      livePreviewHeading: "实时预览将在此显示",
+      startFillingText: "开始填写编辑器 →",
+      designedBuilt: "设计与构建：",
+      sourceCodeFooter: "源码",
+      sectionTitle: "项目标题",
+      sectionDescription: "描述",
+      sectionFeatures: "功能",
+      sectionTechstack: "技术栈",
+      sectionInstallation: "安装",
+      sectionUsage: "使用",
+      sectionStructure: "文件夹结构",
+      sectionScreenshots: "截图",
+      sectionApi: "API 文档",
+      sectionContributing: "贡献",
+      sectionAuthor: "许可证与作者",
+      wordSingular: "词",
+      wordPlural: "词",
+    },
+  };
+
+  var PLACEHOLDERS = {
+    en: {
+      projName: "AwesomeProject",
+      tagline: "A blazing-fast tool for...",
+      ghUser: "octocat",
+      repoSlug: "awesome-project",
+      description: "What does your project do? What problem does it solve?",
+      demoUrl: "https://yourapp.com",
+      features:
+        "### 🔐 Authentication\n- Email OTP verification\n- Secure login / logout\n\n### 📝 Posts\n- Create, Read, Update, Delete",
+      customTech: "Celery, Redis, Nginx...",
+      prereqs: "Python 3.10+, Node.js 18+",
+      installCmds:
+        "git clone https://github.com/user/repo.git\ncd repo\npip install -r requirements.txt\npython manage.py migrate\npython manage.py runserver",
+      envVars:
+        "SECRET_KEY=your_secret\nDATABASE_URL=sqlite:///db.sqlite3\nDEBUG=True",
+      usageCmd: "python manage.py runserver\n\n# Then open http://127.0.0.1:8000/",
+      rawStructure:
+        "src/\n  api/\n  models/\n  utils/\ntemplates/\nstatic/\nmain.py\nrequirements.txt\nREADME.md",
+      videoUrl: "https://youtube.com/watch?v=...",
+      imageUrls:
+        "Landing Page | https://i.imgur.com/abc.png\nDashboard | https://i.imgur.com/xyz.png",
+      apiDocs:
+        "GET /api/users | Get all users\nPOST /api/users | Create a new user\nGET /api/users/:id | Get user by ID\nPUT /api/users/:id | Update user\nDELETE /api/users/:id | Delete user",
+      apiBase: "https://api.yourapp.com/v1",
+      contribNotes:
+        "Any specific guidelines, code style rules, branch naming conventions...",
+      authorName: "Your Name",
+      authorGh: "username",
+      authorEmail: "you@email.com",
+      authorLinkedin: "https://linkedin.com/in/you",
+      authorWebsite: "https://yoursite.com",
+    },
+    hi: {
+      projName: "शानदार-प्रोजेक्ट",
+      tagline: "एक तेज़ टूल जो...",
+      ghUser: "octocat",
+      repoSlug: "awesome-project",
+      description: "आपकी परियोजना क्या करती है? यह किस समस्या को हल करती है?",
+      demoUrl: "https://yourapp.com",
+      features:
+        "### 🔐 प्रमाणिकरण\n- ईमेल OTP सत्यापन\n- सुरक्षित लॉगिन / लॉगआउट\n\n### 📝 पोस्ट\n- बनाएं, पढ़ें, अपडेट करें, हटाएं",
+      customTech: "Celery, Redis, Nginx...",
+      prereqs: "Python 3.10+, Node.js 18+",
+      installCmds:
+        "git clone https://github.com/user/repo.git\ncd repo\npip install -r requirements.txt\npython manage.py migrate\npython manage.py runserver",
+      envVars:
+        "SECRET_KEY=your_secret\nDATABASE_URL=sqlite:///db.sqlite3\nDEBUG=True",
+      usageCmd: "python manage.py runserver\n\n# फिर http://127.0.0.1:8000/ खोलें",
+      rawStructure:
+        "src/\n  api/\n  models/\n  utils/\ntemplates/\nstatic/\nmain.py\nrequirements.txt\nREADME.md",
+      videoUrl: "https://youtube.com/watch?v=...",
+      imageUrls:
+        "लैंडिंग पेज | https://i.imgur.com/abc.png\nडैशबोर्ड | https://i.imgur.com/xyz.png",
+      apiDocs:
+        "GET /api/users | सभी उपयोगकर्ताओं को प्राप्त करें\nPOST /api/users | नया उपयोगकर्ता बनाएँ\nGET /api/users/:id | ID द्वारा उपयोगकर्ता प्राप्त करें\nPUT /api/users/:id | उपयोगकर्ता अपडेट करें\nDELETE /api/users/:id | उपयोगकर्ता हटाएँ",
+      apiBase: "https://api.yourapp.com/v1",
+      contribNotes:
+        "कोई विशेष दिशानिर्देश, कोड शैली नियम, शाखा नामकरण सम्मेलन...",
+      authorName: "आपका नाम",
+      authorGh: "username",
+      authorEmail: "you@email.com",
+      authorLinkedin: "https://linkedin.com/in/you",
+      authorWebsite: "https://yoursite.com",
+    },
+    es: {
+      projName: "ProyectoGenial",
+      tagline: "Una herramienta ultrarrápida para...",
+      ghUser: "octocat",
+      repoSlug: "awesome-project",
+      description: "¿Qué hace tu proyecto? ¿Qué problema resuelve?",
+      demoUrl: "https://yourapp.com",
+      features:
+        "### 🔐 Autenticación\n- Verificación OTP por correo electrónico\n- Inicio/cierre de sesión seguro\n\n### 📝 Publicaciones\n- Crear, Leer, Actualizar, Eliminar",
+      customTech: "Celery, Redis, Nginx...",
+      prereqs: "Python 3.10+, Node.js 18+",
+      installCmds:
+        "git clone https://github.com/user/repo.git\ncd repo\npip install -r requirements.txt\npython manage.py migrate\npython manage.py runserver",
+      envVars:
+        "SECRET_KEY=your_secret\nDATABASE_URL=sqlite:///db.sqlite3\nDEBUG=True",
+      usageCmd: "python manage.py runserver\n\n# Luego abre http://127.0.0.1:8000/",
+      rawStructure:
+        "src/\n  api/\n  models/\n  utils/\ntemplates/\nstatic/\nmain.py\nrequirements.txt\nREADME.md",
+      videoUrl: "https://youtube.com/watch?v=...",
+      imageUrls:
+        "Página de inicio | https://i.imgur.com/abc.png\nTablero | https://i.imgur.com/xyz.png",
+      apiDocs:
+        "GET /api/users | Obtener todos los usuarios\nPOST /api/users | Crear un nuevo usuario\nGET /api/users/:id | Obtener usuario por ID\nPUT /api/users/:id | Actualizar usuario\nDELETE /api/users/:id | Eliminar usuario",
+      apiBase: "https://api.yourapp.com/v1",
+      contribNotes:
+        "Cualquier pauta específica, reglas de estilo de código, convenciones de nombres de ramas...",
+      authorName: "Tu Nombre",
+      authorGh: "username",
+      authorEmail: "you@email.com",
+      authorLinkedin: "https://linkedin.com/in/you",
+      authorWebsite: "https://yoursite.com",
+    },
+    fr: {
+      projName: "SuperProjet",
+      tagline: "Un outil ultra-rapide pour...",
+      ghUser: "octocat",
+      repoSlug: "awesome-project",
+      description: "Que fait votre projet ? Quel problème résout-il ?",
+      demoUrl: "https://yourapp.com",
+      features:
+        "### 🔐 Authentification\n- Vérification OTP par e-mail\n- Connexion/déconnexion sécurisée\n\n### 📝 Publications\n- Créer, Lire, Mettre à jour, Supprimer",
+      customTech: "Celery, Redis, Nginx...",
+      prereqs: "Python 3.10+, Node.js 18+",
+      installCmds:
+        "git clone https://github.com/user/repo.git\ncd repo\npip install -r requirements.txt\npython manage.py migrate\npython manage.py runserver",
+      envVars:
+        "SECRET_KEY=your_secret\nDATABASE_URL=sqlite:///db.sqlite3\nDEBUG=True",
+      usageCmd: "python manage.py runserver\n\n# Puis ouvrez http://127.0.0.1:8000/",
+      rawStructure:
+        "src/\n  api/\n  models/\n  utils/\ntemplates/\nstatic/\nmain.py\nrequirements.txt\nREADME.md",
+      videoUrl: "https://youtube.com/watch?v=...",
+      imageUrls:
+        "Page de destination | https://i.imgur.com/abc.png\nTableau de bord | https://i.imgur.com/xyz.png",
+      apiDocs:
+        "GET /api/users | Obtenir tous les utilisateurs\nPOST /api/users | Créer un nouvel utilisateur\nGET /api/users/:id | Obtenir l'utilisateur par ID\nPUT /api/users/:id | Mettre à jour l'utilisateur\nDELETE /api/users/:id | Supprimer l'utilisateur",
+      apiBase: "https://api.yourapp.com/v1",
+      contribNotes:
+        "Toute directive spécifique, règles de style de code, conventions de nommage de branche...",
+      authorName: "Votre Nom",
+      authorGh: "username",
+      authorEmail: "you@email.com",
+      authorLinkedin: "https://linkedin.com/in/you",
+      authorWebsite: "https://yoursite.com",
+    },
+    zh: {
+      projName: "精彩项目",
+      tagline: "一个超快速的工具，用于...",
+      ghUser: "octocat",
+      repoSlug: "awesome-project",
+      description: "你的项目做什么？它解决了什么问题？",
+      demoUrl: "https://yourapp.com",
+      features:
+        "### 🔐 身份验证\n- 电子邮件 OTP 验证\n- 安全登录 / 注销\n\n### 📝 帖子\n- 创建，读取，更新，删除",
+      customTech: "Celery, Redis, Nginx...",
+      prereqs: "Python 3.10+, Node.js 18+",
+      installCmds:
+        "git clone https://github.com/user/repo.git\ncd repo\npip install -r requirements.txt\npython manage.py migrate\npython manage.py runserver",
+      envVars:
+        "SECRET_KEY=your_secret\nDATABASE_URL=sqlite:///db.sqlite3\nDEBUG=True",
+      usageCmd: "python manage.py runserver\n\n# 然后打开 http://127.0.0.1:8000/",
+      rawStructure:
+        "src/\n  api/\n  models/\n  utils/\ntemplates/\nstatic/\nmain.py\nrequirements.txt\nREADME.md",
+      videoUrl: "https://youtube.com/watch?v=...",
+      imageUrls:
+        "登录页 | https://i.imgur.com/abc.png\n仪表盘 | https://i.imgur.com/xyz.png",
+      apiDocs:
+        "GET /api/users | 获取所有用户\nPOST /api/users | 创建新用户\nGET /api/users/:id | 按 ID 获取用户\nPUT /api/users/:id | 更新用户\nDELETE /api/users/:id | 删除用户",
+      apiBase: "https://api.yourapp.com/v1",
+      contribNotes:
+        "任何特定指南、代码风格规则、分支命名约定...",
+      authorName: "你的名字",
+      authorGh: "username",
+      authorEmail: "you@email.com",
+      authorLinkedin: "https://linkedin.com/in/you",
+      authorWebsite: "https://yoursite.com",
+    },
+  };
+
+  function getSavedLanguage() {
+    return localStorage.getItem("readmeForgeLanguage") || "en";
+  }
+
+  function setSavedLanguage(lang) {
+    localStorage.setItem("readmeForgeLanguage", lang);
+  }
+
+  function getCurrentTranslations() {
+    var lang = getSavedLanguage();
+    return TRANSLATIONS[lang] || TRANSLATIONS.en;
+  }
+
+  function updateTranslatedSectionLabels() {
+    var lang = getSavedLanguage();
+    var text = TRANSLATIONS[lang] || TRANSLATIONS.en;
+    SECTIONS.forEach(function (section) {
+      switch (section.id) {
+        case "title":
+          section.label = text.sectionTitle;
+          break;
+        case "description":
+          section.label = text.sectionDescription;
+          break;
+        case "features":
+          section.label = text.sectionFeatures;
+          break;
+        case "techstack":
+          section.label = text.sectionTechstack;
+          break;
+        case "installation":
+          section.label = text.sectionInstallation;
+          break;
+        case "usage":
+          section.label = text.sectionUsage;
+          break;
+        case "structure":
+          section.label = text.sectionStructure;
+          break;
+        case "screenshots":
+          section.label = text.sectionScreenshots;
+          break;
+        case "api":
+          section.label = text.sectionApi;
+          break;
+        case "contributing":
+          section.label = text.sectionContributing;
+          break;
+        case "author":
+          section.label = text.sectionAuthor;
+          break;
+      }
+    });
+  }
+
+  function translateUI() {
+    var lang = getSavedLanguage();
+    var text = TRANSLATIONS[lang] || TRANSLATIONS.en;
+    document.querySelectorAll('[data-i18n]').forEach(function (el) {
+      var key = el.getAttribute("data-i18n");
+      if (key && text[key]) {
+        el.textContent = text[key];
+      }
+    });
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(function (el) {
+      var key = el.getAttribute("data-i18n-placeholder");
+      if (key && PLACEHOLDERS[lang] && PLACEHOLDERS[lang][key] !== undefined) {
+        el.placeholder = PLACEHOLDERS[lang][key];
+      }
+    });
+    updateTranslatedSectionLabels();
+    buildSectionToggles();
+    updateSectionCount();
+    translateStaticPlaceholders();
+    var selector = document.getElementById("languageSelector");
+    if (selector) selector.value = lang;
+    updateStructurePreview();
+  }
+
+  function translateStaticPlaceholders() {
+    var structPreview = document.getElementById("structPreview");
+    if (structPreview && !document.getElementById("rawStructure").value.trim()) {
+      structPreview.textContent = TRANSLATIONS[getSavedLanguage()].structurePreview || "Paste structure above to preview...";
+    }
+  }
+
+  function buildLanguageSelector() {
+    var selector = document.getElementById("languageSelector");
+    if (!selector) return;
+    selector.innerHTML = "";
+    LANGUAGES.forEach(function (lang) {
+      var option = document.createElement("option");
+      option.value = lang.code;
+      option.textContent = lang.name;
+      selector.appendChild(option);
+    });
+    selector.value = getSavedLanguage();
+    selector.addEventListener("change", function () {
+      setSavedLanguage(this.value);
+      translateUI();
+      scheduleRender();
+    });
+  }
+
+  function getWordLabel(count) {
+    var text = TRANSLATIONS[getSavedLanguage()] || TRANSLATIONS.en;
+    return count === 1 ? text.wordSingular : text.wordPlural;
+  }
+
+  function updateSectionCount() {
+    var n = Object.values(sectionState).filter(Boolean).length;
+    document.getElementById("sectionCount").textContent = n;
+  }
+
+  function enableWordCount(inputEl, countEl, wordCountText) {
+    inputEl.addEventListener("input", () => {
+      const text = inputEl.value.trim();
+
+      let words = text ? text.split(/\s+/) : [];
+
+      // Filter out unwanted tokens
+      words = words.filter(word => word !== "###" && word !== "-");
+
+      countEl.textContent = words.length;
+      wordCountText.textContent = getWordLabel(words.length);
+    });
+  }
+
   // ── Tech chips ────────────────────────────────────────────────
   var TECHS = [
     { label: "Python", emoji: "🐍" },
@@ -299,11 +986,6 @@
       el.style.display = "";
       el.textContent = n + " selected";
     } else el.style.display = "none";
-  }
-
-  function updateSectionCount() {
-    var n = Object.values(sectionState).filter(Boolean).length;
-    document.getElementById("sectionCount").textContent = n;
   }
 
   // ── Templates ─────────────────────────────────────────────────
@@ -1207,23 +1889,6 @@
     if (el) el.value = val;
   }
 
-  function enableWordCount(inputEl, countEl, wordCountText) {
-    inputEl.addEventListener("input", () => {
-      const text = inputEl.value.trim();
-
-      let words = text ? text.split(/\s+/) : [];
-
-      // Filter out unwanted tokens
-      words = words.filter(word => word !== "###" && word !== "-");
-
-      countEl.textContent = words.length;
-      if (words.length === 1) {
-        wordCountText.textContent = "Word";
-      } else {
-        wordCountText.textContent = "Words";
-      }
-    });
-  }
 
 
   init();
