@@ -823,7 +823,7 @@
   }
 
   // ── README Quality Score ──────────────────────────────────────
-  var qualityPanelOpen = true;
+  var qualityPanelOpen = false;
 
   function calculateQuality() {
     var score = 0;
