@@ -933,6 +933,236 @@
     return md;
   }
 
+  // ── README Quality Score ──────────────────────────────────────
+  var qualityPanelOpen = false;
+
+  function calculateQuality() {
+    var score = 0;
+    var suggestions = [];
+
+    // Project name (10 pts)
+    var name = v("projName");
+    if (name) {
+      score += 10;
+    } else {
+      suggestions.push({ icon: "📌", text: "Add a project name to identify your project." });
+    }
+
+    // Tagline (5 pts)
+    var tagline = v("tagline");
+    if (tagline) {
+      score += 5;
+    } else {
+      suggestions.push({ icon: "💬", text: "Add a tagline — a one-line summary of what your project does." });
+    }
+
+    // GitHub user + repo (5 pts)
+    var ghUser = v("ghUser") || v("authorGh");
+    var repoSlug = v("repoSlug");
+    if (ghUser && repoSlug) {
+      score += 5;
+    } else {
+      suggestions.push({ icon: "🔗", text: "Fill in your GitHub username and repository name for accurate badge links." });
+    }
+
+    // Description (15 pts — tiered by word count)
+    var desc = v("description");
+    var descWords = desc ? desc.trim().split(/\s+/).filter(function(w) { return w.length > 0; }).length : 0;
+    if (descWords >= 30) {
+      score += 15;
+    } else if (descWords >= 15) {
+      score += 8;
+      suggestions.push({ icon: "📋", text: "Expand your description to at least 30 words for a better explanation of your project." });
+    } else if (descWords > 0) {
+      score += 3;
+      suggestions.push({ icon: "📋", text: "Your description is very short. Aim for at least 30 words to clearly explain your project." });
+    } else {
+      suggestions.push({ icon: "📋", text: "Add a description explaining what your project does and the problem it solves." });
+    }
+
+    // Features (15 pts)
+    var features = v("features");
+    if (sectionState["features"] && features && features.trim().length > 20) {
+      score += 15;
+    } else if (sectionState["features"] && features && features.trim().length > 0) {
+      score += 7;
+      suggestions.push({ icon: "✨", text: "Expand the Features section with more detail — group features with ### headings and bullet points." });
+    } else {
+      suggestions.push({ icon: "✨", text: "Enable and fill in the Features section to highlight what makes your project stand out." });
+    }
+
+    // Tech stack (10 pts)
+    var customTech = v("customTech");
+    var totalTechs = selectedTechs.size + (customTech ? customTech.split(",").filter(function(t) { return t.trim(); }).length : 0);
+    if (totalTechs >= 3) {
+      score += 10;
+    } else if (totalTechs >= 1) {
+      score += 5;
+      suggestions.push({ icon: "🛠️", text: "Select at least 3 technologies in the Tech Stack section for a complete picture." });
+    } else {
+      suggestions.push({ icon: "🛠️", text: "Select your tech stack — let readers know what technologies power your project." });
+    }
+
+    // Installation commands (10 pts)
+    var installCmds = v("installCmds");
+    if (sectionState["installation"] && installCmds && installCmds.trim().length > 0) {
+      score += 10;
+    } else if (sectionState["installation"]) {
+      score += 4;
+      suggestions.push({ icon: "🚀", text: "Add installation commands so others can easily set up your project." });
+    } else {
+      suggestions.push({ icon: "🚀", text: "Enable the Installation section and add setup commands for your project." });
+    }
+
+    // Usage (5 pts)
+    var usageCmd = v("usageCmd");
+    if (sectionState["usage"] && usageCmd && usageCmd.trim().length > 0) {
+      score += 5;
+    } else {
+      suggestions.push({ icon: "💻", text: "Add usage instructions or a run command to the Usage section." });
+    }
+
+    // Author info (5 pts)
+    var authorName = v("authorName");
+    var authorGh = v("authorGh");
+    if (sectionState["author"] && (authorName || authorGh)) {
+      score += 5;
+    } else {
+      suggestions.push({ icon: "👤", text: "Fill in author details (name or GitHub username) in the License & Author section." });
+    }
+
+    // Screenshots / demo (5 pts)
+    var videoUrl = v("videoUrl");
+    var imageUrls = v("imageUrls");
+    if (sectionState["screenshots"] && (screenshots.length > 0 || videoUrl || imageUrls.trim())) {
+      score += 5;
+    } else {
+      suggestions.push({ icon: "🖼️", text: "Add screenshots or a demo video/link to give readers a visual preview." });
+    }
+
+    // Live demo URL (5 pts)
+    var demoUrl = v("demoUrl");
+    if (demoUrl && demoUrl.trim()) {
+      score += 5;
+    } else {
+      suggestions.push({ icon: "🔗", text: "Add a live demo URL if your project is deployed online." });
+    }
+
+    // Contributing section active (5 pts)
+    if (sectionState["contributing"]) {
+      score += 5;
+    } else {
+      suggestions.push({ icon: "🤝", text: "Enable the Contributing section to invite community contributions." });
+    }
+
+    // License active (5 pts)
+    var license = document.getElementById("license").value;
+    if (sectionState["author"] && license !== "none") {
+      score += 5;
+    } else if (license === "none") {
+      suggestions.push({ icon: "📄", text: "Choose a license to clarify how others can use your project." });
+    }
+
+    return { score: Math.min(score, 100), suggestions: suggestions };
+  }
+
+  function updateQualityPanel(quality) {
+    var panel = document.getElementById("qualityPanel");
+    var badge = document.getElementById("qualityScoreBadge");
+    var label = document.getElementById("qualityLabel");
+    var ringFill = document.getElementById("qualityRingFill");
+    var ringNum = document.getElementById("qualityRingNum");
+    var scoreMain = document.getElementById("qualityScoreMain");
+    var scoreSub = document.getElementById("qualityScoreSub");
+    var barFill = document.getElementById("qualityBarFill");
+    var suggestionsEl = document.getElementById("qualitySuggestions");
+
+    if (!panel) return;
+
+    var score = quality.score;
+    var maxPercentage = 100; // stroke-dasharray uses a 0–100 percentage scale
+    var fillAmount = score;
+
+    // Color tier
+    var color, labelText, subText;
+    if (score >= 80) {
+      color = "#10b981"; // green
+      labelText = "Excellent";
+      subText = "Your README is comprehensive and well-structured!";
+    } else if (score >= 55) {
+      color = "#f59e0b"; // yellow
+      labelText = "Good";
+      subText = "A few improvements will make your README stand out.";
+    } else if (score >= 30) {
+      color = "#f97316"; // orange
+      labelText = "Needs Work";
+      subText = "Add more details to make your README more helpful.";
+    } else {
+      color = "#f43f5e"; // red
+      labelText = "Incomplete";
+      subText = "Fill in the key sections to get started.";
+    }
+
+    // Show panel
+    if (currentMd.trim()) {
+      panel.style.display = "";
+    } else {
+      panel.style.display = "none";
+      return;
+    }
+
+    badge.textContent = score;
+    badge.style.background = color + "33";
+    badge.style.borderColor = color + "66";
+    badge.style.color = color;
+
+    label.textContent = labelText;
+    label.style.color = color;
+
+    ringFill.setAttribute("stroke-dasharray", fillAmount + " " + (maxPercentage - fillAmount));
+    ringFill.style.stroke = color;
+
+    ringNum.textContent = score;
+    ringNum.style.color = color;
+
+    scoreMain.textContent = score + " / 100";
+    scoreMain.style.color = color;
+
+    scoreSub.textContent = subText;
+
+    barFill.style.width = score + "%";
+    barFill.style.background = color;
+
+    // Suggestions
+    suggestionsEl.innerHTML = "";
+    if (quality.suggestions.length === 0) {
+      var perfect = document.createElement("div");
+      perfect.className = "quality-suggestion quality-suggestion--good";
+      perfect.innerHTML = '<span class="qs-icon">🎉</span><span class="qs-text">All key sections are complete — great job!</span>';
+      suggestionsEl.appendChild(perfect);
+    } else {
+      var heading = document.createElement("div");
+      heading.className = "quality-suggestions-heading";
+      heading.textContent = "Suggestions to improve";
+      suggestionsEl.appendChild(heading);
+      quality.suggestions.forEach(function(s) {
+        var item = document.createElement("div");
+        item.className = "quality-suggestion";
+        item.innerHTML = '<span class="qs-icon">' + s.icon + '</span><span class="qs-text">' + s.text + '</span>';
+        suggestionsEl.appendChild(item);
+      });
+    }
+  }
+
+  function toggleQualityPanel() {
+    qualityPanelOpen = !qualityPanelOpen;
+    var body = document.getElementById("qualityPanelBody");
+    var chevron = document.getElementById("qualityChevron");
+    if (body) body.style.display = qualityPanelOpen ? "" : "none";
+    if (chevron) chevron.style.transform = qualityPanelOpen ? "" : "rotate(-90deg)";
+  }
+  window.toggleQualityPanel = toggleQualityPanel;
+
   // ── Render ────────────────────────────────────────────────────
   function scheduleRender() {
     clearTimeout(renderTimer);
@@ -947,6 +1177,7 @@
     if (!currentMd.trim()) {
       body.innerHTML =
         '<div class="empty-preview"><div class="icon">📄</div><h3>Live preview appears here</h3><p>Start filling in the editor →</p></div>';
+      updateQualityPanel({ score: 0, suggestions: [] });
       return;
     }
     if (currentTab === "rendered") {
@@ -955,6 +1186,7 @@
     } else {
       body.innerHTML = '<div class="raw-view">' + esc(currentMd) + "</div>";
     }
+    updateQualityPanel(calculateQuality());
   }
 
   function setTab(tab) {

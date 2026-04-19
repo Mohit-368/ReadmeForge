@@ -459,6 +459,45 @@ placeholder="SECRET_KEY=your_secret&#10;DATABASE_URL=sqlite:///db.sqlite3&#10;DE
             </button>
           </div>
         </div>
+        <!-- ── QUALITY SCORE PANEL ── -->
+        <div class="quality-panel" id="qualityPanel" style="display:none">
+          <div class="quality-panel-header" id="qualityPanelToggle" onclick="toggleQualityPanel()">
+            <div class="quality-panel-left">
+              <span class="quality-panel-icon">📊</span>
+              <span class="quality-panel-title">README Quality Score</span>
+              <span class="quality-score-badge" id="qualityScoreBadge">0</span>
+            </div>
+            <div class="quality-panel-right">
+              <span class="quality-label" id="qualityLabel">—</span>
+              <svg class="quality-chevron" id="qualityChevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transform: rotate(-90deg)">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </div>
+          </div>
+          <div class="quality-panel-body" id="qualityPanelBody" style="display:none">
+            <div class="quality-score-row">
+              <div class="quality-ring-wrap">
+                <svg class="quality-ring" viewBox="0 0 36 36">
+                  <circle class="quality-ring-bg" cx="18" cy="18" r="15.9" />
+                  <circle class="quality-ring-fill" id="qualityRingFill" cx="18" cy="18" r="15.9"
+                    stroke-dasharray="0 100" />
+                </svg>
+                <span class="quality-ring-num" id="qualityRingNum">0</span>
+              </div>
+              <div class="quality-score-details">
+                <div class="quality-score-main" id="qualityScoreMain">0 / 100</div>
+                <div class="quality-score-sub" id="qualityScoreSub">Fill in sections to improve your score</div>
+                <div class="quality-bar-wrap">
+                  <div class="quality-bar-track">
+                    <div class="quality-bar-fill" id="qualityBarFill" style="width:0%"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="quality-suggestions" id="qualitySuggestions"></div>
+          </div>
+        </div>
+
         <div class="preview-body" id="previewBody">
           <div class="empty-preview">
             <div class="icon">📄</div>

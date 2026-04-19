@@ -124,24 +124,3 @@ jobs:
             } else {
               console.log("✅ PR description looks good");
             }
-```
-
----
-
-**What this workflow does automatically on every PR:**
-
-| Check | What it validates |
-|-------|------------------|
-| HTML validation | Checks index.html for errors using HTMLHint |
-| Required files | Confirms all core files are present |
-| CSS validation | Checks readmeforge.css for errors |
-| PR description | Rejects PRs with empty or very short descriptions |
-
----
-
-**Once this is set up, every PR will show this on GitHub:**
-```
-✅ Validate HTML — passed
-✅ Check Required Files — passed
-✅ Validate CSS — passed
-✅ Check PR Has Description — passed
