@@ -1,8 +1,53 @@
+/**
+ * 📄 readmeforge.js
+ * ===============================================================
+ * Main script for the README Forge - an interactive README generator.
+ *
+ * 🎯 PURPOSE:
+ * This file provides all the client-side logic for generating
+ * professional README.md files through an intuitive web interface.
+ * Users can customize sections, add tech stacks, upload screenshots,
+ * and preview the final Markdown in real-time.
+ *
+ * 🔧 RESPONSIBILITIES:
+ * - Manage application state (sections, tech stack, badges, screenshots)
+ * - Handle all user interactions (inputs, toggles, file uploads, template selection)
+ * - Generate dynamically constructed Markdown content based on user input
+ * - Render Markdown preview as styled HTML for real-time visualization
+ * - Handle export operations (copy to clipboard, download as .md, print to PDF)
+ * - Manage event listeners and UI updates
+ *
+ * 📦 ARCHITECTURE:
+ * The code is organized into logical sections (marked with ── separators):
+ * 1. STATE - Global variables and initial data structures
+ * 2. SECTIONS & CONFIGS - SECTIONS array, TECHS array, BADGES array, TEMPLATES
+ * 3. INITIALIZATION - init() to set up the app on page load
+ * 4. UI BUILDERS - Functions to dynamically create UI elements
+ * 5. TEMPLATES - Logic to apply pre-configured project templates
+ * 6. STRUCTURE VISUALIZER - Tree structure display converter
+ * 7. SCREENSHOT MANAGEMENT - File upload and screenshot handling
+ * 8. MARKDOWN GENERATION - Core logic for generating README markdown
+ * 9. RENDERING - Preview rendering and tab switching
+ * 10. MARKDOWN UTILITIES - Badge rendering, markdown-to-HTML conversion
+ * 11. EXPORT - Functionality for copying, downloading, and printing
+ * 12. HELPERS - Utility functions used throughout the code
+ *
+ * ⚠️ TECHNICAL NOTES:
+ * - Pure vanilla JavaScript (no frameworks like React or Vue)
+ * - DOM-driven architecture (no virtual DOM)
+ * - Uses event listeners for interactivity
+ * - Debounced rendering with scheduleRender() for performance
+ */
+
 (function () {
-  // ── State ─────────────────────────────────────────────────────
+  // ── State ──
+  // currentMd holds the last generated markdown text for preview and export.
   var currentMd = "";
+  // currentTab controls whether the preview is rendered HTML or raw markdown.
   var currentTab = "rendered";
+  // screenshots stores image uploads for the Screenshots section.
   var screenshots = [];
+  // renderTimer is used for debounced preview rendering.
   var renderTimer = null;
   var saveTimer = null;
   var autoSaveTimer = null;
@@ -100,15 +145,19 @@
   }
   window.clearSavedData = clearSavedData;
 
+  // Query inputs used by the word count feature on text areas.
   const inputs = document.querySelectorAll(".textInput");
   const counts = document.querySelectorAll(".wordCount");
   const wordCountText = document.querySelectorAll(".wordCountText");
 
+  // Enable live word count updates for each text input.
   inputs.forEach((input, index) => {
+    // Connect the input field with its count display and label.
     enableWordCount(input, counts[index], wordCountText[index]);
   });
 
-  // ── Section definitions ───────────────────────────────────────
+  // Section definitions describe each README section, its label, icon, editor element,
+  // and whether it starts enabled by default.
   var SECTIONS = [
     {
       id: "title",
@@ -177,12 +226,14 @@
     },
   ];
 
+  // sectionState tracks which README sections are currently enabled.
   var sectionState = {};
   SECTIONS.forEach(function (s) {
     sectionState[s.id] = s.default;
   });
 
-  // ── Tech chips ────────────────────────────────────────────────
+  // ── Tech chips ──
+  // TECHS contains all technology chips that can be selected by the user.
   var TECHS = [
     { label: "Python", emoji: "🐍" },
     { label: "JavaScript", emoji: "🟨" },
@@ -218,9 +269,11 @@
     { label: "Linux", emoji: "🐧" },
   ];
 
+  // selectedTechs stores the user-selected tech chips for README output.
   var selectedTechs = new Set();
 
-  // ── Badge chips ───────────────────────────────────────────────
+  // ── Badge chips ──
+  // BADGES contains all available README badge options.
   var BADGES = [
     { id: "license", label: "License" },
     { id: "stars", label: "⭐ Stars" },
@@ -231,9 +284,12 @@
     { id: "coverage", label: "Coverage" },
     { id: "version", label: "Version" },
   ];
+
+  // selectedBadges tracks which badge options are currently active.
   var selectedBadges = new Set(["license", "stars", "prs"]);
 
-  // ── Templates ─────────────────────────────────────────────────
+  // ── Templates ──
+  // TEMPLATES stores predefined project templates for quick form filling.
   var TEMPLATES = {
     webapp: {
       name: "My Web App",
@@ -301,7 +357,14 @@
     },
   };
 
-  // ── Init ──────────────────────────────────────────────────────
+  // ── INITIALIZATION ──
+  /**
+   * Initializes the entire application on page load.
+   * Sets up all UI components, event listeners, and renders the initial state.
+   *
+   * @function init
+   * @returns {void}
+   */
   function init() {
     var hasData = loadFromLocalStorage();
     buildSectionToggles();
@@ -326,10 +389,19 @@
     scheduleRender();
   }
 
-  // ── Build UI components ───────────────────────────────────────
+  // ── UI BUILDERS ───────────────────────────────────────────────
+  /**
+   * Builds and renders all section toggle switches in the UI.
+   * Each section can be toggled on/off, updating both the state and the DOM.
+   * Hidden sections are not included in the generated Markdown.
+   *
+   * @function buildSectionToggles
+   * @returns {void}
+   */
   function buildSectionToggles() {
     var el = document.getElementById("sectionToggles");
-    el.innerHTML = "";
+    el.innerHTML = "";  // Clear previous toggles
+    // Create one toggle switch for each section and attach interaction logic.
     SECTIONS.forEach(function (s) {
       var on = sectionState[s.id];
       var div = document.createElement("div");
@@ -344,144 +416,249 @@
         '<label class="toggle-switch"><input type="checkbox"' +
         (on ? " checked" : "") +
         '><span class="tslider"></span></label>';
+      
+      // Add change event listener to update state and UI
       div.querySelector("input").addEventListener("change", function (e) {
-        sectionState[s.id] = e.target.checked;
-        div.classList.toggle("active", e.target.checked);
+        sectionState[s.id] = e.target.checked;  // Update state
+        div.classList.toggle("active", e.target.checked);  // Toggle active class
+        
+        // Show/hide the corresponding section in the editor
         var secEl = document.getElementById(s.el);
         if (secEl) secEl.classList.toggle("hidden", !e.target.checked);
         updateSectionCount();
         scheduleSave();
         scheduleRender();
       });
+      
+      // Hide the section editor if this section is disabled
       var secEl = document.getElementById(s.el);
       if (secEl && !on) secEl.classList.add("hidden");
+      
       el.appendChild(div);
     });
   }
 
+  /**
+   * Builds and renders all technology selection chips.
+   * Each tech chip is a clickable button that toggles selection.
+   * Selected technologies are stored in the selectedTechs Set.
+   *
+   * @function buildTechPicker
+   * @returns {void}
+   */
   function buildTechPicker() {
     var el = document.getElementById("techPicker");
-    el.innerHTML = "";
+    el.innerHTML = "";  // Clear previous chips
+    
+    // Create a chip button for each technology
     TECHS.forEach(function (t) {
       var btn = document.createElement("button");
       btn.className = "tech-chip";
       btn.innerHTML = '<span class="emoji">' + t.emoji + "</span>" + t.label;
+      
+      // Toggle selection when clicked
       btn.onclick = function () {
         if (selectedTechs.has(t.label)) {
+          // Deselect if already selected
           selectedTechs.delete(t.label);
           btn.classList.remove("selected");
         } else {
+          // Select if not already selected
           selectedTechs.add(t.label);
           btn.classList.add("selected");
         }
-        updateTechCount();
-        scheduleRender();
+        updateTechCount();  // Update display of selected count
+        scheduleRender();   // Update preview
       };
       el.appendChild(btn);
     });
   }
 
+  /**
+   * Builds and renders all badge selection chips.
+   * Badges appear in the README as shields.io badges (stars, forks, license, etc.).
+   * Selected badges are stored in the selectedBadges Set.
+   *
+   * @function buildBadgePicker
+   * @returns {void}
+   */
   function buildBadgePicker() {
     var el = document.getElementById("badgePicker");
-    el.innerHTML = "";
+    el.innerHTML = "";  // Clear previous chips
+    
+    // Create a chip button for each badge option
     BADGES.forEach(function (b) {
       var btn = document.createElement("button");
       btn.className =
-        "badge-chip" + (selectedBadges.has(b.id) ? " selected" : "");
+        "badge-chip" + (selectedBadges.has(b.id) ? " selected" : "");  // Mark as selected if in Set
       btn.textContent = b.label;
+      
+      // Toggle selection when clicked
       btn.onclick = function () {
         if (selectedBadges.has(b.id)) {
+          // Deselect if already selected
           selectedBadges.delete(b.id);
           btn.classList.remove("selected");
         } else {
+          // Select if not already selected
           selectedBadges.add(b.id);
           btn.classList.add("selected");
         }
-        scheduleRender();
+        scheduleRender();  // Update preview to show/hide badges
       };
       el.appendChild(btn);
     });
   }
 
+  /**
+   * Updates the technology count display badge.
+   * Shows the number of selected technologies, or hides if zero are selected.
+   *
+   * @function updateTechCount
+   * @returns {void}
+   */
   function updateTechCount() {
     var el = document.getElementById("techCount");
-    var n = selectedTechs.size;
+    var n = selectedTechs.size;  // Get the count of selected technologies
+    
     if (n > 0) {
-      el.style.display = "";
-      el.textContent = n + " selected";
-    } else el.style.display = "none";
+      el.style.display = "";           // Show the badge
+      el.textContent = n + " selected";  // Display count
+    } else {
+      el.style.display = "none";       // Hide if no techs selected
+    }
   }
 
+  /**
+   * Updates the section count display.
+   * Shows the number of currently enabled sections.
+   *
+   * @function updateSectionCount
+   * @returns {void}
+   */
   function updateSectionCount() {
+    // Count how many sections are enabled (value is true)
     var n = Object.values(sectionState).filter(Boolean).length;
-    document.getElementById("sectionCount").textContent = n;
+    document.getElementById("sectionCount").textContent = n;  // Update display
   }
 
-  // ── Templates ─────────────────────────────────────────────────
+
+  // ── TEMPLATES ─────────────────────────────────────────────────
+  /**
+   * Applies a pre-configured project template to the form.
+   * Populates fields with template values and selects appropriate technologies.
+   *
+   * @function applyTemplate
+   * @param {string} key - The template key (e.g., 'webapp', 'ml', 'api', 'cli')
+   * @returns {void}
+   */
   function applyTemplate(key) {
     var t = TEMPLATES[key];
-    if (!t) return;
+    if (!t) return;  // Exit if template not found
+    
+    // Remove selected state from all template buttons
     document.querySelectorAll(".template-btn").forEach(function (b) {
       b.classList.remove("selected");
     });
+    // Highlight the clicked template button so users see which template is active.
     event.target.classList.add("selected");
+    
+    // Fill form fields with template values
     setVal("projName", t.name);
     setVal("tagline", t.tag);
     setVal("description", t.desc);
     setVal("features", t.features);
+    
+    // Clear current technology selection and reset UI
     selectedTechs.clear();
     document.querySelectorAll(".tech-chip").forEach(function (c) {
       c.classList.remove("selected");
     });
+    
+    // Select all technologies from the template
     t.techs.forEach(function (tech) {
       selectedTechs.add(tech);
+      // Highlight corresponding tech chips in the UI
       document.querySelectorAll(".tech-chip").forEach(function (c) {
         if (c.querySelector(".emoji") && c.textContent.includes(tech))
           c.classList.add("selected");
       });
     });
-    updateTechCount();
-    scheduleRender();
-    toast("✓ Template applied!");
+    
+    updateTechCount();  // Update tech count display
+    scheduleRender();   // Trigger preview update
+    toast("✓ Template applied!");  // Show success message
   }
-  window.applyTemplate = applyTemplate;
+  window.applyTemplate = applyTemplate;  // Expose globally for HTML onclick handlers
 
-  // ── Structure Visualizer ──────────────────────────────────────
+  // ── STRUCTURE VISUALIZER ──────────────────────────────────────
+  /**
+   * Converts a simple text-based folder structure into a visually formatted tree.
+   * Supports indentation (via spaces) and converts to tree symbols (├─, └─, │).
+   *
+   * @function convertStructure
+   * @param {string} raw - Raw text structure with indentation (2 spaces per level)
+   * @returns {string} - Formatted tree structure with box-drawing characters
+   *
+   * EXAMPLE INPUT:
+   *   src/
+   *     components/
+   *       Button.js
+   *     index.js
+   *
+   * EXAMPLE OUTPUT:
+   *   📦 MyProject
+   *    ┣ 📂 src
+   *    ┃  ┣ 📂 components
+   *    ┃  ┃  ┗ 📜 Button.js
+   *    ┗ 📜 index.js
+   */
   function convertStructure(raw) {
-    if (!raw.trim()) return "";
+    if (!raw.trim()) return "";  // Return empty if no input
+    
     var lines = raw.split("\n");
     var result = [];
     var projectName = v("projName") || "project";
-    result.push("📦 " + projectName);
+    result.push("📦 " + projectName);  // Add project name as root
 
+    // Helper function to determine nesting depth based on leading spaces
+    // Each 2 spaces = 1 level deep
     function getDepth(line) {
       var m = line.match(/^(\s*)/);
       return m ? Math.floor(m[1].length / 2) : 0;
     }
 
+    // Process each line
     for (var i = 0; i < lines.length; i++) {
       var line = lines[i].trimEnd();
-      if (!line.trim()) continue;
-      var depth = getDepth(line);
+      if (!line.trim()) continue;  // Skip empty lines
+      
+      var depth = getDepth(line);  // How deep is this item?
       var name = line.trim();
-      var isDir = name.endsWith("/");
-      var cleanName = name.replace(/\/$/, "");
+      var isDir = name.endsWith("/");  // Is it a directory (ends with /)?
+      var cleanName = name.replace(/\/$/, "");  // Remove trailing slash
+      
+      // Check if this is the last item at this depth (determines symbol)
       var isLast = true;
       for (var j = i + 1; j < lines.length; j++) {
         if (lines[j].trim() && getDepth(lines[j]) === depth) {
-          isLast = false;
+          isLast = false;  // Found a sibling below
           break;
         }
-        if (lines[j].trim() && getDepth(lines[j]) < depth) break;
+        if (lines[j].trim() && getDepth(lines[j]) < depth) break;  // Went back up a level
       }
+      
+      // Build the prefix (vertical lines and indentation)
       var prefix = "";
       for (var d = 0; d < depth; d++) {
+        // Check if parent at this level is the last child
         var parentIsLast = true;
         for (var k = i - 1; k >= 0; k--) {
           if (lines[k].trim() && getDepth(lines[k]) === d) {
+            // Found parent at level d, check if it's last
             for (var l = i + 1; l < lines.length; l++) {
               if (lines[l].trim() && getDepth(lines[l]) === d) {
-                parentIsLast = false;
+                parentIsLast = false;  // Parent has siblings
                 break;
               }
               if (lines[l].trim() && getDepth(lines[l]) < d) break;
@@ -489,67 +666,122 @@
             break;
           }
         }
+        // Add vertical line (│) or space depending on parent's status
         prefix += parentIsLast ? "   " : " ┃ ";
       }
+      
+      // Choose the connector symbol: ┗ for last, ┣ for others
       var symbol = isLast ? " ┗ " : " ┣ ";
+      // Choose the icon: folder or file
       var icon = isDir ? "📂 " : "📜 ";
       result.push(prefix + symbol + icon + cleanName);
     }
     return result.join("\n");
   }
 
+  /**
+   * Updates the structure preview when the user types in the raw structure input.
+   * Calls convertStructure() to format the input and displays it in preview element.
+   *
+   * @function updateStructurePreview
+   * @returns {void}
+   */
   function updateStructurePreview() {
-    var raw = v("rawStructure");
-    var preview = convertStructure(raw);
+    var raw = v("rawStructure");  // Get raw input from textarea
+    var preview = convertStructure(raw);  // Convert to formatted tree
+    // Display preview or placeholder message
     document.getElementById("structPreview").textContent =
       preview || "Paste structure above to preview...";
-    scheduleRender();
+    scheduleRender();  // Update the main preview
   }
-  window.updateStructurePreview = updateStructurePreview;
+  window.updateStructurePreview = updateStructurePreview;  // Expose globally for HTML
 
-  // ── Screenshot Drop Zone ──────────────────────────────────────
+  // ── SCREENSHOT MANAGEMENT ────────────────────────────────────────
+  /**
+   * Sets up file drop zone for screenshot uploads.
+   * Allows users to click or drag-and-drop image files to upload.
+   * Only image files are processed.
+   *
+   * @function setupDropZone
+   * @returns {void}
+   */
   function setupDropZone() {
-    var dz = document.getElementById("dropZone");
-    var fi = document.getElementById("fileInput");
+    var dz = document.getElementById("dropZone");  // Drop zone container
+    var fi = document.getElementById("fileInput");  // Hidden file input
+    
+    // Click drop zone to open file picker
     dz.addEventListener("click", function () {
       fi.click();
     });
+    
+    // Show visual feedback when dragging files over drop zone
     dz.addEventListener("dragover", function (e) {
-      e.preventDefault();
-      dz.classList.add("dragover");
+      e.preventDefault();  // Allow drop
+      dz.classList.add("dragover");  // Highlight drop zone
     });
+    
+    // Remove highlight when user drags away
     dz.addEventListener("dragleave", function () {
       dz.classList.remove("dragover");
     });
+    
+    // Handle dropped files
     dz.addEventListener("drop", function (e) {
-      e.preventDefault();
-      dz.classList.remove("dragover");
-      handleFiles(e.dataTransfer.files);
+      e.preventDefault();  // Prevent browser default behavior
+      dz.classList.remove("dragover");  // Remove highlight
+      handleFiles(e.dataTransfer.files);  // Process dropped files
     });
+    
+    // Handle files selected from file picker
     fi.addEventListener("change", function () {
       handleFiles(fi.files);
     });
   }
 
+  /**
+   * Processes uploaded files and converts images to data URLs.
+   * Only image files are accepted; other file types are ignored.
+   * Stores screenshots in the screenshots array.
+   *
+   * @function handleFiles
+   * @param {FileList} files - Files from file input or drop event
+   * @returns {void}
+   */
   function handleFiles(files) {
+    // Process each file
     Array.from(files).forEach(function (file) {
+      // Skip non-image files
       if (!file.type.startsWith("image/")) return;
+      
+      // Create FileReader to convert file to data URL
       var reader = new FileReader();
       reader.onload = function (e) {
+        // Store screenshot with name and base64 data URL
         screenshots.push({ name: file.name, dataUrl: e.target.result });
-        renderScreenshotList();
-        scheduleRender();
+        renderScreenshotList();  // Update screenshot list UI
+        scheduleRender();        // Update preview
       };
+      // Convert file to data URL (base64)
       reader.readAsDataURL(file);
     });
   }
 
+  /**
+   * Renders the list of uploaded screenshots in the UI.
+   * Shows thumbnail preview, file name, and delete button for each screenshot.
+   *
+   * @function renderScreenshotList
+   * @returns {void}
+   */
   function renderScreenshotList() {
     var el = document.getElementById("screenshotList");
-    el.innerHTML = "";
+    el.innerHTML = "";  // Clear previous list
+    
+    // Create a card for each screenshot
     screenshots.forEach(function (ss, idx) {
       var div = document.createElement("div");
       div.className = "screenshot-item";
+      // Build HTML with image preview, name, and delete button
       div.innerHTML =
         '<img src="' +
         ss.dataUrl +
@@ -564,13 +796,37 @@
     });
   }
 
+  /**
+   * Removes a screenshot from the list by its index.
+   * Updates the UI and preview after removal.
+   *
+   * @function removeScreenshot
+   * @param {number} idx - Index of the screenshot to remove
+   * @returns {void}
+   */
   window.removeScreenshot = function (idx) {
-    screenshots.splice(idx, 1);
-    renderScreenshotList();
-    scheduleRender();
+    screenshots.splice(idx, 1);  // Remove screenshot from array
+    renderScreenshotList();      // Update UI
+    scheduleRender();            // Update preview
   };
 
-  // ── Generate Markdown ─────────────────────────────────────────
+  // ── MARKDOWN GENERATION ───────────────────────────────────────
+  /**
+   * Generates the complete README markdown based on current form state.
+   * Builds sections dynamically based on which sections are enabled.
+   * Includes title, description, features, tech stack, installation, usage,
+   * project structure, screenshots, API docs, contributing, and author info.
+   *
+   * @function generateMarkdown
+   * @returns {string} - Complete README markdown content
+   *
+   * LOGIC:
+   * 1. Collects all form input values
+   * 2. Iterates through each section
+   * 3. For enabled sections, builds appropriate markdown
+   * 4. Formats lists, tables, badges, and links as needed
+   * 5. Returns complete markdown string
+   */
   function generateMarkdown() {
     var name = v("projName") || "My Project";
     var tagline = v("tagline");
@@ -602,7 +858,7 @@
       return sectionState[id];
     };
 
-    // 1. Title & Badges
+    // ─ SECTION 1: Title, Badges & Table of Contents ─
     if (on("title")) {
       md += "# " + name + "\n\n";
       if (tagline) md += "> **" + tagline + "**\n\n";
@@ -687,7 +943,7 @@
       md += "\n---\n\n";
     }
 
-    // 2. Description
+    // ─ SECTION 2: Description ─
     if (on("description")) {
       md += "## 📌 Description\n\n";
       md += (desc || "_Add a description of your project here._") + "\n\n";
@@ -696,7 +952,7 @@
       md += "---\n\n";
     }
 
-    // 3. Features
+    // ─ SECTION 3: Features ─
     if (on("features") && features) {
       md += "## ✨ Features\n\n";
       features.split("\n").forEach(function (line) {
@@ -708,7 +964,7 @@
       md += "\n---\n\n";
     }
 
-    // 4. Tech Stack
+    // ─ SECTION 4: Tech Stack (organized by layer) ─
     if (on("techstack")) {
       var allTech = Array.from(selectedTechs);
       if (customTech)
@@ -777,7 +1033,7 @@
       }
     }
 
-    // 5. Installation
+    // ─ SECTION 5: Installation & Prerequisites ─
     if (on("installation")) {
       md += "## 🚀 Installation\n\n";
       if (prereqs) md += "**Prerequisites:** " + prereqs + "\n\n";
@@ -801,7 +1057,7 @@
       md += "---\n\n";
     }
 
-    // 6. Usage
+    // ─ SECTION 6: Usage ─
     if (on("usage")) {
       md +=
         "## 💻 Usage\n\n```bash\n" +
@@ -809,7 +1065,7 @@
         "\n```\n\n---\n\n";
     }
 
-    // 7. Structure
+    // ─ SECTION 7: Project Structure ─
     if (on("structure") && rawStruct.trim()) {
       md +=
         "## 📁 Project Structure\n\n```\n" +
@@ -817,7 +1073,7 @@
         "\n```\n\n---\n\n";
     }
 
-    // 8. Screenshots
+    // ─ SECTION 8: Screenshots & Demo ─
     if (on("screenshots")) {
       var hasContent = videoUrl || screenshots.length || imageUrls.trim();
       if (hasContent) {
@@ -854,7 +1110,7 @@
       }
     }
 
-    // 9. API Docs
+    // ─ SECTION 9: API Reference ─
     if (on("api") && apiDocs.trim()) {
       md += "## ⚡ API Reference\n\n";
       if (apiBase) md += "**Base URL:** `" + apiBase + "`\n\n";
@@ -884,7 +1140,7 @@
       md += "\n---\n\n";
     }
 
-    // 10. Contributing
+    // ─ SECTION 10: Contributing Guidelines ─
     if (on("contributing")) {
       md += "## 🤝 Contributing\n\nContributions are always welcome!\n\n";
       md += "1. Fork the repository\n";
@@ -898,7 +1154,7 @@
       md += "---\n\n";
     }
 
-    // 11. License & Author
+    // ─ SECTION 11: License & Author ─
     if (on("author")) {
       if (license !== "none")
         md +=
@@ -1169,37 +1425,60 @@
     renderTimer = setTimeout(render, 120);
     scheduleSave();
   }
-  window.scheduleRender = scheduleRender;
+  window.scheduleRender = scheduleRender;  // Expose globally for HTML
 
+  /**
+   * Renders the current markdown to the preview panel.
+   * Displays either formatted HTML preview or raw markdown depending on currentTab.
+   * Shows empty state if no content generated.
+   *
+   * @function render
+   * @returns {void}
+   */
   function render() {
-    currentMd = generateMarkdown();
+    currentMd = generateMarkdown();  // Generate markdown from current state
     var body = document.getElementById("previewBody");
+    
+    // Show empty state if no content
     if (!currentMd.trim()) {
       body.innerHTML =
         '<div class="empty-preview"><div class="icon">📄</div><h3>Live preview appears here</h3><p>Start filling in the editor →</p></div>';
       updateQualityPanel({ score: 0, suggestions: [] });
       return;
     }
+    
+    // Render appropriate view based on tab selection
     if (currentTab === "rendered") {
+      // Display as formatted HTML (GitHub-style preview)
       body.innerHTML =
         '<div class="gh-preview">' + md2html(currentMd) + "</div>";
     } else {
+      // Display raw markdown (escaped for viewing)
       body.innerHTML = '<div class="raw-view">' + esc(currentMd) + "</div>";
     }
     updateQualityPanel(calculateQuality());
   }
 
+  /**
+   * Switches between rendered and raw markdown views.
+   * Updates the active tab indicator and re-renders the preview.
+   *
+   * @function setTab
+   * @param {string} tab - Tab to switch to: 'rendered' or 'raw'
+   * @returns {void}
+   */
   function setTab(tab) {
-    currentTab = tab;
+    currentTab = tab;  // Update current tab state
+    // Update tab button styling
     document
       .getElementById("tabRendered")
       .classList.toggle("active", tab === "rendered");
     document.getElementById("tabRaw").classList.toggle("active", tab === "raw");
-    render();
+    render();  // Re-render preview for selected tab
   }
-  window.setTab = setTab;
+  window.setTab = setTab;  // Expose globally for HTML onclick handlers
 
-  // ── Badge renderer ────────────────────────────────────────────
+  // ── MARKDOWN UTILITIES ────────────────────────────────────────
   var BADGE_COLORS = {
     brightgreen: "#22c55e",
     green: "#22c55e",
@@ -1215,6 +1494,20 @@
     ff69b4: "#ec4899",
   };
 
+  /**
+   * Parses shields.io URLs and renders them as styled badge HTML.
+   * Extracts color, left text, and right text from shields.io URL format.
+   * Handles both shields.io format and custom badges.
+   *
+   * @function shieldToBadge
+   * @param {string} label - Display label for the badge
+   * @param {string} url - shields.io URL or badge image URL
+   * @returns {string} - HTML span with styled badge
+   *
+   * URL FORMAT EXAMPLES:
+   * - https://img.shields.io/badge/license-MIT-green
+   * - https://img.shields.io/github/stars/user/repo?style=social
+   */
   function shieldToBadge(label, url) {
     var isShield = url.indexOf("shields.io") !== -1;
     if (!isShield)
@@ -1223,46 +1516,56 @@
         label +
         "</span>"
       );
-    var color = "#555",
-      left = label || "",
-      right = "",
-      m;
+    // Initialize badge parts - extracted from URL or defaults
+    var color = "#555",  // Default color (dark gray)
+      left = label || "",   // Left text (label part)
+      right = "",           // Right text (value part)
+      m;                    // Regex match variable
+    // Parse shields.io badge URL format: /badge/LEFT-RIGHT-COLOR
     m = url.match(/\/badge\/([^?]+)/);
     if (m) {
       var parts = m[1].split("-");
       if (parts.length >= 3) {
-        right = parts[parts.length - 2];
-        var col = parts[parts.length - 1].split("?")[0];
-        color = BADGE_COLORS[col] || "#" + col;
+        // Format: label-label-value-color (3+ parts)
+        right = parts[parts.length - 2];  // Value (second to last)
+        var col = parts[parts.length - 1].split("?")[0];  // Color (last)
+        color = BADGE_COLORS[col] || "#" + col;  // Map to hex or use as-is
         left = parts
-          .slice(0, parts.length - 2)
+          .slice(0, parts.length - 2)  // Everything except value and color
           .join(" ")
-          .replace(/_/g, " ");
+          .replace(/_/g, " ");  // Replace underscores with spaces
       } else if (parts.length === 2) {
-        right = parts[1].split("?")[0];
-        color = "#22c55e";
-        left = parts[0].replace(/_/g, " ");
+        // Format: label-value
+        right = parts[1].split("?")[0];  // Value
+        color = "#22c55e";  // Green
+        left = parts[0].replace(/_/g, " ");  // Label
       } else {
+        // Format: single-part
         left = parts[0].replace(/_/g, " ");
-        color = "#3b82f6";
+        color = "#3b82f6";  // Blue
       }
     }
+    // Handle GitHub API badges (they need special parsing)
     if (!m) {
       if (url.indexOf("/github/stars") !== -1) {
+        // GitHub stars badge
         left = "Stars";
         right = "★";
-        color = "#f59e0b";
+        color = "#f59e0b";  // Amber
       } else if (url.indexOf("/github/forks") !== -1) {
+        // GitHub forks badge
         left = "Forks";
         right = "⑂";
-        color = "#8b5cf6";
+        color = "#8b5cf6";  // Purple
       } else if (url.indexOf("/github/issues") !== -1) {
+        // GitHub issues badge
         left = "Issues";
         right = "●";
-        color = "#ef4444";
+        color = "#ef4444";  // Red
       } else {
+        // Unknown badge format
         left = label;
-        color = "#3b82f6";
+        color = "#3b82f6";  // Blue
       }
     }
     left = decodeURIComponent(left).replace(/\+/g, " ");
@@ -1282,7 +1585,25 @@
     );
   }
 
-  // ── Markdown to HTML ──────────────────────────────────────────
+  /**
+   * Converts Markdown syntax to HTML.
+   * Supports: headings, bold, italic, code, links, images, tables,
+   * blockquotes, lists, and GitHub-style shields.io badges.
+   *
+   * @function md2html
+   * @param {string} md - Markdown text to convert
+   * @returns {string} - HTML string
+   *
+   * FEATURES:
+   * - Headings (h1, h2, h3)
+   * - Bold (**), Italic (*), Code backticks (`)
+   * - Links [text](url) and images ![alt](url)
+   * - Tables (GitHub-flavored markdown)
+   * - Lists (unordered and ordered)
+   * - Blockquotes (>
+   * - Horizontal rules (---)
+   * - Special handling for shields.io badges
+   */
   function md2html(md) {
     var h = md;
     h = h.replace(/```(\w*)\n([\s\S]*?)```/g, function (_, lang, code) {
@@ -1362,6 +1683,17 @@
     return h;
   }
 
+  /**
+   * Escapes HTML special characters to prevent XSS and formatting issues.
+   * Converts &, <, > to HTML entities.
+   *
+   * @function esc
+   * @param {*} s - String to escape
+   * @returns {string} - Escaped HTML string
+   *
+   * PURPOSE: Used when displaying raw markdown code to prevent
+   * the browser from interpreting HTML tags
+   */
   function esc(s) {
     return String(s)
       .replace(/&/g, "&amp;")
@@ -1369,45 +1701,73 @@
       .replace(/>/g, "&gt;");
   }
 
-  // ── Export ────────────────────────────────────────────────────
+  // ── EXPORT UTILITIES ──────────────────────────────────────────
+  /**
+   * Copies the generated markdown to the user's clipboard.
+   * Uses modern Clipboard API if available, falls back to older method.
+   * Shows toast notification on success or failure.
+   *
+   * @function copyMarkdown
+   * @returns {void}
+   */
   function copyMarkdown() {
     if (!currentMd) {
       toast("Generate content first!");
       return;
     }
+    
+    // Try modern Clipboard API first
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard
         .writeText(currentMd)
         .then(function () {
           toast("✓ Copied to clipboard!");
         })
-        .catch(fbCopy);
+        .catch(fbCopy);  // Fall back on error
     } else {
+      // Fall back to older method
       fbCopy();
     }
+    
+    // Fallback copy method for older browsers
     function fbCopy() {
+      // Create temporary textarea (off-screen)
       var ta = document.createElement("textarea");
       ta.value = currentMd;
       ta.style.cssText = "position:absolute;left:-9999px";
       document.body.appendChild(ta);
-      ta.select();
+      ta.select();  // Select all text
       try {
-        document.execCommand("copy");
+        document.execCommand("copy");  // Copy to clipboard
         toast("✓ Copied!");
       } catch (e) {
         toast("Copy failed");
       }
-      document.body.removeChild(ta);
+      document.body.removeChild(ta);  // Clean up
     }
   }
-  window.copyMarkdown = copyMarkdown;
+  window.copyMarkdown = copyMarkdown;  // Expose globally for HTML
 
+  /**
+   * Closes the download/export modal overlay.
+   *
+   * @function closeDownloadModal
+   * @returns {void}
+   */
   function closeDownloadModal() {
     var overlay = document.getElementById("downloadModalOverlay");
-    if (overlay) overlay.classList.add("hidden");
+    if (overlay) overlay.classList.add("hidden");  // Hide modal
   }
-  window.closeDownloadModal = closeDownloadModal;
+  window.closeDownloadModal = closeDownloadModal;  // Expose globally for HTML
 
+  /**
+   * Opens the browser's print dialog to save markdown as PDF.
+   * Creates a hidden iframe with styled HTML content and triggers print.
+   * The user can select "Save as PDF" from the print dialog.
+   *
+   * @function downloadPDF
+   * @returns {void}
+   */
   function downloadPDF() {
     if (!currentMd) {
       toast("Nothing to download yet!");
@@ -1416,18 +1776,21 @@
 
     toast("Opening print dialog...");
 
+    // Create hidden iframe for print rendering
     var printIframe = document.createElement('iframe');
     printIframe.style.position = 'fixed';
-    printIframe.style.top = '-9999px';
+    printIframe.style.top = '-9999px';  // Move off-screen
     printIframe.style.left = '-9999px';
     printIframe.style.width = '0';
     printIframe.style.height = '0';
     printIframe.style.border = '0';
     document.body.appendChild(printIframe);
 
+    // Write styled HTML to iframe
     var doc = printIframe.contentWindow.document;
-    var htmlContent = md2html(currentMd);
+    var htmlContent = md2html(currentMd);  // Convert markdown to HTML
 
+    // Write complete HTML document with print styling
     doc.write(`
         <!DOCTYPE html>
         <html>
@@ -1436,8 +1799,8 @@
           <link rel="stylesheet" href="readmeforge.css">
           <style>
             :root {
-              --bg: #ffffff;
-              --text: #000000;
+              --bg: #ffffff;          /* Light background for print */
+              --text: #000000;        /* Black text for print */
               --border: #e2e8f0;
               --surface: #ffffff;
             }
@@ -1452,8 +1815,8 @@
               margin: 0 auto; 
             }
             @media print {
-              body { padding: 0 !important; }
-              .gh-preview { width: 100%; }
+              body { padding: 0 !important; }   /* Remove padding when printing */
+              .gh-preview { width: 100%; }      /* Full width on paper */
             }
           </style>
         </head>
@@ -1462,9 +1825,11 @@
             ${htmlContent}
           </div>
           <script>
+            // Auto-open print dialog and cleanup after done
             window.onload = function() {
               setTimeout(function() {
-                window.print();
+                window.print();  // Open browser print dialog
+                // Remove iframe after print (whether user prints or cancels)
                 setTimeout(function() {
                   window.frameElement.parentNode.removeChild(window.frameElement);
                 }, 1000);
@@ -1474,28 +1839,47 @@
         </body>
         </html>
       `);
-    doc.close();
+    doc.close();  // Finish writing to document
   }
-  window.downloadPDF = downloadPDF;
+  window.downloadPDF = downloadPDF;  // Expose globally for HTML
 
+  /**
+   * Downloads the generated markdown as a README.md file.
+   * Creates a blob from the markdown text and triggers browser download.
+   *
+   * @function downloadMd
+   * @returns {void}
+   */
   function downloadMd() {
     if (!currentMd) {
       toast("Nothing to download yet!");
       return;
     }
+    
+    // Create a blob from the markdown content
     var blob = new Blob([currentMd], { type: "text/markdown" });
+    // Create a temporary download link
     var a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
-    a.download = "README.md";
+    a.download = "README.md";  // Set download filename
     document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+    a.click();  // Trigger download
+    document.body.removeChild(a);  // Clean up
     toast("✓ README.md downloaded!");
   }
-  window.downloadMd = downloadMd;
+  window.downloadMd = downloadMd;  // Expose globally for HTML
 
 
+  /**
+   * Resets all form fields and application state to defaults.
+   * Clears all user input, selections, and uploaded files.
+   * Re-initializes UI components to show default state.
+   *
+   * @function resetAll
+   * @returns {void}
+   */
   function resetAll() {
+    // Clear all text inputs, email inputs, URLs, and textareas
     document
       .querySelectorAll(
         "input[type=text],input[type=email],input[type=url],textarea",
@@ -1503,28 +1887,49 @@
       .forEach(function (el) {
         el.value = "";
       });
+    
+    // Reset license to default
     document.getElementById("license").value = "MIT";
+    
+    // Clear all selections and reset to defaults
     selectedTechs.clear();
     selectedBadges.clear();
+    // Re-add default badges
     selectedBadges.add("license");
     selectedBadges.add("stars");
     selectedBadges.add("prs");
+    
+    // Clear screenshots
     screenshots = [];
     document.getElementById("screenshotList").innerHTML = "";
+    
+    // Reset structure preview
     document.getElementById("structPreview").textContent =
       "Paste structure above to preview...";
+    
+    // Deselect all tech chips ui
     document.querySelectorAll(".tech-chip").forEach(function (c) {
       c.classList.remove("selected");
     });
+    
+    // Deselect all template buttons
     document.querySelectorAll(".template-btn").forEach(function (c) {
       c.classList.remove("selected");
     });
+    
+    // Rebuild UI components with reset state
     buildBadgePicker();
     updateTechCount();
+    
+    // Reset all sections to their default enabled/disabled state
     SECTIONS.forEach(function (s) {
       sectionState[s.id] = s.default;
     });
+    
+    // Reset word count displays
     counts.forEach((count) => count.textContent = '0')
+    
+    // Rebuild section toggles UI
     buildSectionToggles();
     updateSectionCount();
     try {
@@ -1535,37 +1940,81 @@
     scheduleRender();
     toast("✓ Reset complete!");
   }
-  window.resetAll = resetAll;
+  window.resetAll = resetAll;  // Expose globally for HTML
 
-  // ── Helpers ───────────────────────────────────────────────────
+  // ── HELPERS ───────────────────────────────────────────────────
+  /**
+   * Shows a temporary notification toast message.
+   * Displays for 2.5 seconds then fades out.
+   * Used for user feedback (success, error, info messages).
+   *
+   * @function toast
+   * @param {string} msg - Message to display
+   * @returns {void}
+   */
   function toast(msg) {
-    var t = document.getElementById("toast");
-    t.textContent = msg;
-    t.classList.add("show");
+    var t = document.getElementById("toast");  // Get toast element
+    t.textContent = msg;  // Set message
+    t.classList.add("show");  // Show toast
+    // Hide after 2.5 seconds
     setTimeout(function () {
       t.classList.remove("show");
     }, 2500);
   }
 
+  /**
+   * Gets the trimmed value from a form element by ID.
+   * Returns empty string if element not found.
+   *
+   * @function v
+   * @param {string} id - Element ID
+   * @returns {string} - Trimmed value or empty string
+   */
   function v(id) {
     var el = document.getElementById(id);
     return el ? el.value.trim() : "";
   }
+  
+  /**
+   * Sets the value of a form element by ID.
+   * Does nothing if element not found.
+   *
+   * @function setVal
+   * @param {string} id - Element ID
+   * @param {string} val - Value to set
+   * @returns {void}
+   */
   function setVal(id, val) {
     var el = document.getElementById(id);
     if (el) el.value = val;
   }
 
+  /**
+   * Enables real-time word counting on a text input element.
+   * Updates a counter display as user types.
+   * Filters out special markdown tokens (### and -) to show actual word count.
+   * Handles singular/plural display ("Word" vs "Words").
+   *
+   * @function enableWordCount
+   * @param {HTMLElement} inputEl - Text input or textarea element
+   * @param {HTMLElement} countEl - Element to display word count number
+   * @param {HTMLElement} wordCountText - Element to display "Word" or "Words"
+   * @returns {void}
+   */
   function enableWordCount(inputEl, countEl, wordCountText) {
     inputEl.addEventListener("input", () => {
       const text = inputEl.value.trim();
 
+      // Split text by whitespace to get word array
       let words = text ? text.split(/\s+/) : [];
 
-      // Filter out unwanted tokens
+      // Filter out markdown syntax tokens (### for headings, - for lists)
       words = words.filter(word => word !== "###" && word !== "-");
 
+      // Update counter display
       countEl.textContent = words.length;
+      
+      // Update label (singular/plural)
       if (words.length === 1) {
         wordCountText.textContent = "Word";
       } else {
