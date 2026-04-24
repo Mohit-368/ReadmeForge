@@ -1098,6 +1098,25 @@ select option {
   gap: 8px;
 }
 
+.preview-zoom-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.zoom-indicator {
+  min-width: 56px;
+  text-align: center;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted2);
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: 8px;
+  padding: 8px 10px;
+}
+
 .pbtn {
   padding: 8px 14px;
   border-radius: 8px;
@@ -1132,11 +1151,25 @@ select option {
   color: #10b981;
 }
 
+.pbtn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+}
+
 .preview-body {
+  --preview-zoom: 1;
   flex: 1;
-  overflow-y: auto;
+  overflow: auto;
   padding: 24px;
   min-height: 0;
+}
+
+.preview-zoom-wrap {
+  width: calc(100% / var(--preview-zoom));
+  transform: scale(var(--preview-zoom));
+  transform-origin: top left;
+  transition: transform 0.2s ease;
 }
 
 /* GitHub-style rendered preview */
@@ -1821,10 +1854,16 @@ body.light-mode .gh-preview {
   .preview-actions {
     width: 100%;
     justify-content: space-between;
+    flex-wrap: wrap;
   }
 
   .preview-actions .pbtn {
     flex: 1;
+    justify-content: center;
+  }
+
+  .preview-zoom-controls {
+    width: 100%;
     justify-content: center;
   }
 }
@@ -1885,9 +1924,6 @@ body.light-mode .gh-preview {
   overflow-y: auto;
   padding: 24px;
   background: var(--bg);
-}
-  border-radius: 50%;
-  animation: spin 0.7s linear infinite;
 }
 
 @keyframes spin {
@@ -2134,6 +2170,11 @@ body.light-mode .gh-preview {
   .preview-actions {
     flex-direction: column;
     width: 100%;
+  }
+
+  .preview-zoom-controls {
+    width: 100%;
+    justify-content: center;
   }
 
   .preview-actions .pbtn {

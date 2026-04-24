@@ -445,6 +445,12 @@ placeholder="SECRET_KEY=your_secret&#10;DATABASE_URL=sqlite:///db.sqlite3&#10;DE
             </button>
           </div>
           <div class="preview-actions">
+            <div class="preview-zoom-controls">
+              <button class="pbtn" id="zoomOutBtn" onclick="zoomOut()" title="Zoom out (Ctrl/Cmd + -)">−</button>
+              <span class="zoom-indicator" id="zoomLevel">100%</span>
+              <button class="pbtn" id="zoomInBtn" onclick="zoomIn()" title="Zoom in (Ctrl/Cmd + +)">+</button>
+              <button class="pbtn" onclick="resetPreviewZoom()" title="Reset zoom (Ctrl/Cmd + 0)">Reset</button>
+            </div>
             <button class="pbtn green" onclick="copyMarkdown()">
               <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <rect x="9" y="9" width="13" height="13" rx="2" />
