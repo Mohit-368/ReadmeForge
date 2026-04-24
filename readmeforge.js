@@ -1,4 +1,4 @@
-/**
+/**const { getRecentTemplates, addToRecentTemplates, clearRecentTemplates } = await import('./utils/templateHistory.js');
  * 📄 readmeforge.js
  * ===============================================================
  * Main script for the README Forge - an interactive README generator.
@@ -401,7 +401,27 @@
   function buildSectionToggles() {
     var el = document.getElementById("sectionToggles");
     el.innerHTML = "";  // Clear previous toggles
-    // Create one toggle switch for each section and attach interaction logic.
+    // Recently Used Templates
+var recentTemplates = getRecentTemplates();
+if (recentTemplates.length > 0) {
+  var recentDiv = document.createElement("div");
+  recentDiv.className = "recent-templates";
+  recentDiv.innerHTML = '<div style="font-size:12px;color:var(--text-muted);margin-bottom:6px;">🕐 Recently Used</div>';
+  recentTemplates.forEach(function(t) {
+    var btn = document.createElement("button");
+    btn.className = "template-btn";
+    btn.textContent = t.name;
+    btn.onclick = function() { applyTemplate(t.id); };
+    recentDiv.appendChild(btn);
+  });
+  var clearBtn = document.createElement("button");
+  clearBtn.textContent = "Clear History";
+  clearBtn.style = "font-size:11px;color:var(--text-muted);background:none;border:none;cursor:pointer;margin-top:4px;";
+  clearBtn.onclick = function() { clearRecentTemplates(); buildSectionToggles(); };
+  recentDiv.appendChild(clearBtn);
+  el.insertBefore(recentDiv, el.firstChild);
+}
+    
     SECTIONS.forEach(function (s) {
       var on = sectionState[s.id];
       var div = document.createElement("div");
@@ -587,6 +607,7 @@
     
     updateTechCount();  // Update tech count display
     scheduleRender();   // Trigger preview update
+    addToRecentTemplates({ id: key, name: t.name });
     toast("✓ Template applied!");  // Show success message
   }
   window.applyTemplate = applyTemplate;  // Expose globally for HTML onclick handlers
