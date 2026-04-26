@@ -1715,36 +1715,53 @@
       toast("Generate content first!");
       return;
     }
-    
-    // Try modern Clipboard API first
+
+    // Try modern Clipboard API first (works in Chrome, Edge, Safari)
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard
         .writeText(currentMd)
         .then(function () {
           toast("✓ Copied to clipboard!");
         })
-        .catch(fbCopy);  // Fall back on error
+        .catch(function () {
+          // Firefox may deny clipboard permission without user gesture
+          // Fall back to execCommand which works with user gesture context
+          fbCopy();
+        });
     } else {
-      // Fall back to older method
+      // Fall back to older method for browsers without Clipboard API
       fbCopy();
     }
-    
-    // Fallback copy method for older browsers
+
+    // Fallback copy method using execCommand (broad browser support)
     function fbCopy() {
-      // Create temporary textarea (off-screen)
+      // Create temporary textarea (off-screen but in DOM)
       var ta = document.createElement("textarea");
       ta.value = currentMd;
-      ta.style.cssText = "position:absolute;left:-9999px";
+      ta.style.cssText = "position:fixed;left:-9999px;top:0;opacity:0;";
+      ta.setAttribute("aria-hidden", "true");
       document.body.appendChild(ta);
-      ta.select();  // Select all text
+
+      // Select the text content
+      ta.focus();
+      ta.select();
+      ta.setSelectionRange(0, currentMd.length);
+
       try {
-        document.execCommand("copy");  // Copy to clipboard
-        toast("✓ Copied!");
+        // Execute copy command within user gesture context
+        var success = document.execCommand("copy");
+        if (success) {
+          toast("✓ Copied to clipboard!");
+        } else {
+          toast("Copy failed. Please copy manually (Ctrl+C / Cmd+C).");
+        }
       } catch (e) {
-        toast("Copy failed");
+        toast("Copy failed. Please copy manually (Ctrl+C / Cmd+C).");
+      } finally {
+        document.body.removeChild(ta);  // Clean up
       }
-      document.body.removeChild(ta);  // Clean up
     }
+  }
   }
   window.copyMarkdown = copyMarkdown;  // Expose globally for HTML
 
