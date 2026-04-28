@@ -1,4 +1,4 @@
-/**const { getRecentTemplates, addToRecentTemplates, clearRecentTemplates } = await import('./utils/templateHistory.js');
+ const { getRecentTemplates, addToRecentTemplates, clearRecentTemplates } = require('./utils/templateHistory.js');
  * 📄 readmeforge.js
  * ===============================================================
  * Main script for the README Forge - an interactive README generator.
