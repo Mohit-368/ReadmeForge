@@ -1895,69 +1895,92 @@
    * @function resetAll
    * @returns {void}
    */
+
   function resetAll() {
-    // Clear all text inputs, email inputs, URLs, and textareas
-    document
-      .querySelectorAll(
-        "input[type=text],input[type=email],input[type=url],textarea",
-      )
-      .forEach(function (el) {
-        el.value = "";
-      });
-    
-    // Reset license to default
-    document.getElementById("license").value = "MIT";
-    
-    // Clear all selections and reset to defaults
-    selectedTechs.clear();
+  // Clear all text inputs, email inputs, URLs, and textareas
+  document
+    .querySelectorAll(
+      "input[type=text], input[type=email], input[type=url], textarea"
+    )
+    .forEach(function (el) {
+      el.value = "";
+    });
+
+  // Reset license to default
+  var licenseEl = document.getElementById("license");
+  if (licenseEl) licenseEl.value = "MIT";
+
+  // Clear all selections
+  if (selectedTechs) selectedTechs.clear();
+  if (selectedBadges) {
     selectedBadges.clear();
     // Re-add default badges
     selectedBadges.add("license");
     selectedBadges.add("stars");
     selectedBadges.add("prs");
-    
-    // Clear screenshots
-    screenshots = [];
-    document.getElementById("screenshotList").innerHTML = "";
-    
-    // Reset structure preview
-    document.getElementById("structPreview").textContent =
-      "Paste structure above to preview...";
-    
-    // Deselect all tech chips ui
-    document.querySelectorAll(".tech-chip").forEach(function (c) {
-      c.classList.remove("selected");
-    });
-    
-    // Deselect all template buttons
-    document.querySelectorAll(".template-btn").forEach(function (c) {
-      c.classList.remove("selected");
-    });
-    
-    // Rebuild UI components with reset state
-    buildBadgePicker();
-    updateTechCount();
-    
-    // Reset all sections to their default enabled/disabled state
+  }
+
+  // Clear screenshots safely
+  if (typeof screenshots !== "undefined") screenshots = [];
+  var screenshotList = document.getElementById("screenshotList");
+  if (screenshotList) screenshotList.innerHTML = "";
+
+  // Reset structure preview
+  var structPreview = document.getElementById("structPreview");
+  if (structPreview) {
+    structPreview.textContent = "Paste structure above to preview...";
+  }
+
+  // Deselect all tech chips
+  document.querySelectorAll(".tech-chip").forEach(function (c) {
+    c.classList.remove("selected");
+  });
+
+  // Deselect all template buttons
+  document.querySelectorAll(".template-btn").forEach(function (c) {
+    c.classList.remove("selected");
+  });
+
+  // Rebuild UI components
+  if (typeof buildBadgePicker === "function") buildBadgePicker();
+  if (typeof updateTechCount === "function") updateTechCount();
+
+  // Reset section states
+  if (typeof SECTIONS !== "undefined" && sectionState) {
     SECTIONS.forEach(function (s) {
       sectionState[s.id] = s.default;
     });
-    
-    // Reset word count displays
-    counts.forEach((count) => count.textContent = '0')
-    
-    // Rebuild section toggles UI
-    buildSectionToggles();
-    updateSectionCount();
-    try {
-      localStorage.removeItem(STORAGE_KEY);
-    } catch (e) {
-      console.error("Failed to clear saved data on reset:", e);
-    }
-    scheduleRender();
-    toast("✓ Reset complete!");
   }
-  window.resetAll = resetAll;  // Expose globally for HTML
+
+  // Reset word count safely
+  if (typeof counts !== "undefined" && counts.length) {
+    counts.forEach(function (c) {
+      c.textContent = "0";
+    });
+  }
+
+  // Rebuild sections UI
+  if (typeof buildSectionToggles === "function") buildSectionToggles();
+  if (typeof updateSectionCount === "function") updateSectionCount();
+
+  // Clear localStorage safely
+  try {
+    localStorage.removeItem(STORAGE_KEY);
+  } catch (e) {
+    console.error("Failed to clear saved data on reset:", e);
+  }
+
+  // Scroll to top for better UX
+  window.scrollTo({ top: 0, behavior: "smooth" });
+
+  // Re-render preview
+  if (typeof scheduleRender === "function") scheduleRender();
+
+  // Toast feedback
+  if (typeof toast === "function") {
+    toast("All fields reset successfully!");
+  }
+}
 
   // ── HELPERS ───────────────────────────────────────────────────
   /**
