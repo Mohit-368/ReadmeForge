@@ -1593,6 +1593,43 @@ select option {
   line-height: 1.5;
 }
 
+/* ── COLLAPSIBLE SECTIONS ── */
+.collapse-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--muted);
+  font-size: 12px;
+  margin-left: auto;         /* pushes arrow to the right */
+  padding: 4px 8px;
+  transition: transform 0.25s ease, color 0.2s;
+  line-height: 1;
+}
+
+.collapse-btn:hover {
+  color: var(--accent);
+}
+
+.editor-section.collapsed .collapse-btn {
+  transform: rotate(-90deg);
+}
+
+/* Hide the body when collapsed */
+.editor-section.collapsed .es-body {
+  display: none;
+}
+
+/* Small dot indicator — shows when collapsed + has content */
+.has-content-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: var(--accent);
+  display: inline-block;
+  margin-left: 8px;
+  flex-shrink: 0;
+}
+
 /* =======================================================
    FOOTER SECTION
 ======================================================= */
