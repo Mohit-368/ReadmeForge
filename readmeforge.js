@@ -1502,6 +1502,19 @@ document.getElementById("addCustomSectionBtn").addEventListener("click", functio
   });
 
   scheduleRender();
+  setTimeout(function () {
+  var headings = document.getElementsByTagName("h2");
+
+  for (var i = 0; i < headings.length; i++) {
+    if (headings[i].textContent.indexOf("Custom Sections") !== -1) {
+      headings[i].scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+      break;
+    }
+  }
+}, 500);
 });
   // ── MARKDOWN UTILITIES ────────────────────────────────────────
   var BADGE_COLORS = {
