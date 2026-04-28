@@ -387,6 +387,7 @@
       updateStructurePreview();
     }
     scheduleRender();
+    loadCollapsedState();
   }
 
   // ── UI BUILDERS ───────────────────────────────────────────────
@@ -1424,6 +1425,7 @@
     clearTimeout(renderTimer);
     renderTimer = setTimeout(render, 120);
     scheduleSave();
+    updateAllContentDots();
   }
   window.scheduleRender = scheduleRender;  // Expose globally for HTML
 
@@ -1958,7 +1960,8 @@
     toast("✓ Reset complete!");
   }
   window.resetAll = resetAll;  // Expose globally for HTML
-
+  window.toggleSection = toggleSection;
+  
   // ── HELPERS ───────────────────────────────────────────────────
   /**
    * Shows a temporary notification toast message.
@@ -2018,6 +2021,53 @@
    * @param {HTMLElement} wordCountText - Element to display "Word" or "Words"
    * @returns {void}
    */
+   function loadCollapsedState() {
+    var saved = localStorage.getItem('rf_collapsed_sections');
+    if (!saved) return;
+    var collapsedMap = JSON.parse(saved);
+    Object.keys(collapsedMap).forEach(function(sectionId) {
+      if (collapsedMap[sectionId]) {
+        var section = document.getElementById(sectionId);
+        if (section) section.classList.add('collapsed');
+      }
+    });
+  }
+
+  function toggleSection(sectionId) {
+    var section = document.getElementById(sectionId);
+    if (!section) return;
+    section.classList.toggle('collapsed');
+
+    var collapsedMap = {};
+    document.querySelectorAll('.editor-section').forEach(function(sec) {
+      collapsedMap[sec.id] = sec.classList.contains('collapsed');
+    });
+    localStorage.setItem('rf_collapsed_sections', JSON.stringify(collapsedMap));
+
+    updateContentDot(section);
+  }
+
+  function updateContentDot(section) {
+    var header = section.querySelector('.es-header');
+    var inputs = section.querySelectorAll('input, textarea, select');
+    var hasContent = Array.from(inputs).some(function(el) {
+      return el.value && el.value.trim() !== '';
+    });
+
+    var existingDot = header.querySelector('.has-content-dot');
+    if (existingDot) existingDot.remove();
+
+    if (section.classList.contains('collapsed') && hasContent) {
+      var dot = document.createElement('span');
+      dot.className = 'has-content-dot';
+      dot.title = 'This section has content';
+      header.appendChild(dot);
+    }
+  }
+
+  function updateAllContentDots() {
+    document.querySelectorAll('.editor-section').forEach(updateContentDot);
+  }
   function enableWordCount(inputEl, countEl, wordCountText) {
     inputEl.addEventListener("input", () => {
       const text = inputEl.value.trim();
