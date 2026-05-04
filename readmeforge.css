@@ -497,6 +497,56 @@ body::after {
   /* Leaves room for the top header so it fits exactly in viewport */
   height: calc(100vh - 64px);
 }
+/* ── RESIZABLE DIVIDER ── */
+.resize-divider {
+  width: 6px;
+  flex-shrink: 0;
+  background: var(--border);
+  cursor: col-resize;
+  position: relative;
+  z-index: 100;
+  transition: background 0.2s ease;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.resize-divider::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 2px;
+  height: 40px;
+  background: var(--border2);
+  border-radius: 2px;
+  transition: background 0.2s ease, height 0.2s ease;
+}
+
+.resize-divider:hover,
+.resize-divider.dragging {
+  background: var(--accent);
+}
+
+.resize-divider:hover::after,
+.resize-divider.dragging::after {
+  background: var(--accent);
+  height: 60px;
+}
+
+/* Prevent text selection while dragging */
+body.resizing {
+  cursor: col-resize !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+}
+
+/* Hide divider on mobile (stacked layout) */
+@media (max-width: 1024px) {
+  .resize-divider {
+    display: none;
+  }
+}
 
 .sidebar {
   width: 280px;
@@ -2206,4 +2256,14 @@ select option {
   .scroll-action {
     display: none !important;
   }
+}
+.resize-divider {
+  width: 6px;
+  background: #2a2f3a;
+  cursor: col-resize;
+  transition: background 0.2s ease;
+}
+
+.resize-divider:hover {
+  background: #4da3ff;
 }

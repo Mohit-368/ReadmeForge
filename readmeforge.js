@@ -2091,3 +2091,154 @@ document.getElementById("addCustomSectionBtn").addEventListener("click", functio
 
     alert("Custom section added!");
 });
+// ── RESIZABLE SPLIT VIEW ──────────────────────────────────────
+(function () {
+  var STORAGE_KEY_SPLIT = "readmeforge-split-ratio";
+  var MIN_PERCENT = 20; // minimum width % for each panel
+
+  var divider  = document.getElementById("resizeDivider");
+  var main     = document.querySelector(".main");
+  var sidebar  = document.querySelector(".sidebar");
+  var editor   = document.querySelector(".editor");
+  var preview  = document.querySelector(".preview");
+
+  if (!divider || !main || !editor || !preview) return;
+
+  // ── Apply a ratio (0–1 representing editor's share of flex space) ──
+  function applyRatio(ratio) {
+    // Clamp so neither panel goes below MIN_PERCENT
+    var min = MIN_PERCENT / 100;
+    var max = 1 - min;
+    ratio = Math.min(Math.max(ratio, min), max);
+
+    // sidebar has a fixed pixel width — exclude it from flex math
+    var sidebarW = sidebar ? sidebar.offsetWidth : 0;
+    var totalW   = main.offsetWidth - sidebarW - divider.offsetWidth;
+
+    var editorPx  = Math.round(totalW * ratio);
+    var previewPx = totalW - editorPx;
+
+    editor.style.flex  = "none";
+    editor.style.width = editorPx + "px";
+
+    preview.style.flex  = "none";
+    preview.style.width = previewPx + "px";
+  }
+
+  // ── Restore saved ratio or default to 50/50 ──
+  function loadRatio() {
+    try {
+      var saved = localStorage.getItem(STORAGE_KEY_SPLIT);
+      return saved !== null ? parseFloat(saved) : 0.5;
+    } catch (e) {
+      return 0.5;
+    }
+  }
+
+  function saveRatio(ratio) {
+    try {
+      localStorage.setItem(STORAGE_KEY_SPLIT, String(ratio));
+    } catch (e) { /* silent */ }
+  }
+
+  // ── Drag state ──
+  var isDragging  = false;
+  var startX      = 0;
+  var startRatio  = 0.5;
+
+  function getRatioFromPointer(clientX) {
+    var sidebarW  = sidebar ? sidebar.offsetWidth : 0;
+    var dividerW  = divider.offsetWidth;
+    var totalW    = main.offsetWidth - sidebarW - dividerW;
+    var offsetX   = clientX - main.getBoundingClientRect().left - sidebarW;
+    return offsetX / totalW;
+  }
+
+  function onDragStart(clientX) {
+    isDragging = true;
+    startX     = clientX;
+    startRatio = loadRatio();
+
+    divider.classList.add("dragging");
+    document.body.classList.add("resizing");
+  }
+
+  function onDragMove(clientX) {
+    if (!isDragging) return;
+    var ratio = getRatioFromPointer(clientX);
+    applyRatio(ratio);
+  }
+
+  function onDragEnd(clientX) {
+    if (!isDragging) return;
+    isDragging = false;
+
+    var ratio = getRatioFromPointer(clientX);
+    var min   = MIN_PERCENT / 100;
+    var max   = 1 - min;
+    ratio     = Math.min(Math.max(ratio, min), max);
+
+    saveRatio(ratio);
+    divider.classList.remove("dragging");
+    document.body.classList.remove("resizing");
+  }
+
+  // ── Mouse events ──
+  function onMouseDown(e) {
+    if (e.button !== 0) return; // left click only
+    e.preventDefault();
+    onDragStart(e.clientX);
+  }
+
+  function onMouseMove(e) {
+    onDragMove(e.clientX);
+  }
+
+  function onMouseUp(e) {
+    onDragEnd(e.clientX);
+  }
+
+  // ── Touch events ──
+  function onTouchStart(e) {
+    if (e.touches.length !== 1) return;
+    e.preventDefault();
+    onDragStart(e.touches[0].clientX);
+  }
+
+  function onTouchMove(e) {
+    if (!isDragging || e.touches.length !== 1) return;
+    e.preventDefault();
+    onDragMove(e.touches[0].clientX);
+  }
+
+  function onTouchEnd(e) {
+    var clientX = e.changedTouches.length
+      ? e.changedTouches[0].clientX
+      : startX;
+    onDragEnd(clientX);
+  }
+
+  // ── Attach events to divider ──
+  divider.addEventListener("mousedown",  onMouseDown);
+  divider.addEventListener("touchstart", onTouchStart, { passive: false });
+
+  // ── Attach move/up globally (so drag works even if cursor leaves divider) ──
+  document.addEventListener("mousemove", onMouseMove);
+  document.addEventListener("mouseup",   onMouseUp);
+  document.addEventListener("touchmove", onTouchMove, { passive: false });
+  document.addEventListener("touchend",  onTouchEnd);
+
+  // ── Handle window resize: re-apply stored ratio ──
+  var resizeObserver = new ResizeObserver(function () {
+    if (!isDragging) {
+      applyRatio(loadRatio());
+    }
+  });
+  resizeObserver.observe(main);
+
+  // ── Initial render ──
+  // Wait one frame so sidebar renders its fixed width first
+  requestAnimationFrame(function () {
+    applyRatio(loadRatio());
+  });
+})();
