@@ -47,6 +47,7 @@
   var currentTab = "rendered";
   // screenshots stores image uploads for the Screenshots section.
   var screenshots = [];
+  var customSections = [];
   // renderTimer is used for debounced preview rendering.
   var renderTimer = null;
   var saveTimer = null;
@@ -1185,7 +1186,17 @@
         (authorGh || ghUser) +
         ")\n";
     }
+    // Custom Sections
+if (customSections.length > 0) {
+  md += "## 🧩 Custom Sections\n\n";
 
+  customSections.forEach(function (sec) {
+    md += "### " + sec.title + "\n\n";
+    md += sec.content + "\n\n";
+  });
+
+  md += "---\n\n";
+}
     return md;
   }
 
@@ -1477,7 +1488,34 @@
     render();  // Re-render preview for selected tab
   }
   window.setTab = setTab;  // Expose globally for HTML onclick handlers
+ // ADD CUSTOM SECTION
+document.getElementById("addCustomSectionBtn").addEventListener("click", function () {
 
+  var title = prompt("Enter section title:");
+  var content = prompt("Enter section content:");
+
+  if (!title || !content) return;
+
+  customSections.push({
+    title: title,
+    content: content
+  });
+
+  scheduleRender();
+  setTimeout(function () {
+  var headings = document.getElementsByTagName("h2");
+
+  for (var i = 0; i < headings.length; i++) {
+    if (headings[i].textContent.indexOf("Custom Sections") !== -1) {
+      headings[i].scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+      break;
+    }
+  }
+}, 500);
+});
   // ── MARKDOWN UTILITIES ────────────────────────────────────────
   var BADGE_COLORS = {
     brightgreen: "#22c55e",
@@ -2108,3 +2146,13 @@
 
   init();
 })();
+document.getElementById("addCustomSectionBtn").addEventListener("click", function () {
+    var title = prompt("Enter section title");
+    var content = prompt("Enter section content");
+
+    if (!title || !content) return;
+
+    customSections.push({ title: title, content: content });
+
+    alert("Custom section added!");
+});
