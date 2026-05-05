@@ -13,6 +13,56 @@
     href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap"
     rel="stylesheet" />
   <link rel="stylesheet" href="readmeforge.css" />
+  <style>
+    /*  Preview-header content from overflowing ── */
+    .preview-header {
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: stretch !important;
+      gap: 6px !important;
+      padding: 6px 10px !important;
+      flex-wrap: nowrap !important;
+      overflow: hidden !important;
+    }
+ 
+    .preview-tabs {
+      display: flex !important;
+      flex-wrap: wrap !important;
+      gap: 4px !important;
+      min-width: 0 !important;
+    }
+ 
+    .preview-actions {
+      display: flex !important;
+      flex-wrap: wrap !important;
+      gap: 8px !important;
+      min-width: 0 !important;
+      align-items: center !important;
+      flex-wrap: wrap;
+    }
+ 
+    .pbtn {
+      white-space: nowrap !important;
+      font-size: 13px !important;
+      padding: 7px 14px !important;
+      flex-shrink: 0 !important;
+      flex: 1;                
+      min-width: 140px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+
+      
+    }
+ 
+    .ptab {
+      white-space: nowrap !important;
+      font-size: 13px !important;
+      padding: 7px 14px !important;
+    }
+
+  </style>
 </head>
 
 <body>
@@ -24,7 +74,7 @@
         README
         <!-- SVG 4-Pointed Sparkle Star -->
         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 2L14.4 9.6L22 12L14.4 14.4L12 22L9.6 14.4L2 12L9.6 9.6L12 2Z" fill="white" />
+          <path d="M12 2L14.4 9.6L22 12L14.4 14.4L12 22L9.6 14.4L2 12L9.6 9.6L12 2Z" fill="currentColor" />
         </svg>
         FORGE
       </div>
@@ -89,6 +139,7 @@
         <span id="autoSaveStatus" class="autosave-status">✓ Auto-saved</span>
       </div>
       <div class="header-right">
+
         <!-- Source Code Link in App Header -->
         <a href="#" target="_blank" class="hbtn" style="
               text-decoration: none;
@@ -104,8 +155,13 @@
           Source
         </a>
         <button class="hbtn" onclick="clearSavedData()">🗑 Clear Saved</button>
-        <button class="hbtn" onclick="resetAll()">↺ Reset</button>
-        <button class="hbtn" onclick="copyMarkdown()" title="Copy Markdown (Ctrl+Shift+C)">Copy MD</button>
+
+        <button class="hbtn" onclick="resetAll()">↺ Reset All Fields</button>
+        <button class="hbtn" onclick="copyMarkdown()" title="Copy Markdown (Ctrl+Shift+C)">Copy Markdown</button>
+        <button class="theme-toggle" id="themeToggle" title="Toggle dark/light mode">
+          <span id="themeIcon">🌙</span>
+        </button>
+
         <button class="hbtn primary" id="modalPrintBtn" onclick="downloadPDF()">
           ⬇ Download PDF
         </button>
@@ -447,7 +503,7 @@ placeholder="SECRET_KEY=your_secret&#10;DATABASE_URL=sqlite:///db.sqlite3&#10;DE
                 <rect x="9" y="9" width="13" height="13" rx="2" />
                 <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" />
               </svg>
-              Copy
+              Copy Markdown
             </button>
             <button class="pbtn" onclick="downloadMd()">
               <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -455,7 +511,7 @@ placeholder="SECRET_KEY=your_secret&#10;DATABASE_URL=sqlite:///db.sqlite3&#10;DE
                 <polyline points="7,10 12,15 17,10" />
                 <line x1="12" y1="15" x2="12" y2="3" />
               </svg>
-              .md
+              Download Markdown file 
             </button>
             <button class="pbtn print" id="printPreviewBtn" onclick="printPreview()">
               <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -463,7 +519,7 @@ placeholder="SECRET_KEY=your_secret&#10;DATABASE_URL=sqlite:///db.sqlite3&#10;DE
                 <path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2" />
                 <rect x="6" y="14" width="12" height="8" />
               </svg>
-              Print Preview
+            Print Preview
             </button>
           </div>
         </div>

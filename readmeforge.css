@@ -1,5 +1,5 @@
 :root {
-  /* App Variables */
+  /* Dark Mode (Default) */
   --bg: #05070e;
   --surface: #0a0f1a;
   --surface2: #111827;
@@ -14,6 +14,29 @@
   --text: #f8fafc;
   --muted: #94a3b8;
   --muted2: #cbd5e1;
+  --header-bg: rgba(5, 7, 14, 0.85);
+  --code-text: #bae6fd;
+  --hero-chip-bg: rgba(255, 255, 255, 0.05);
+  --hero-chip-bg-hover: rgba(255, 255, 255, 0.1);
+  --hero-chip-border: rgba(255, 255, 255, 0.1);
+  --hero-chip-border-hover: rgba(255, 255, 255, 0.2);
+  --hero-logo-shadow: rgba(255, 255, 255, 0.3);
+  --hero-logo-glow: rgba(255, 255, 255, 0.5);
+  --hero-cta-bg: linear-gradient(90deg,
+      rgba(10, 15, 26, 0.8) 0%,
+      rgba(99, 102, 241, 0.3) 100%);
+  --hero-cta-text: #ffffff;
+  --hero-cta-border: rgba(255, 255, 255, 0.1);
+  --spinner-track: rgba(255, 255, 255, 0.3);
+  --spinner-head: #ffffff;
+  --gh-preview-bg: #0b1220;
+  --gh-preview-text: #e5edf6;
+  --gh-preview-border: #263245;
+  --gh-preview-soft-bg: #111b2e;
+  --gh-preview-inline-code: #fbbf24;
+  --gh-preview-link: #7dd3fc;
+  --gh-preview-quote: #9fb0c8;
+  --gh-preview-shadow: 0 10px 40px rgba(0, 0, 0, 0.45);
 
   /* Hero Variables */
   --hero-bg: #02040a;
@@ -21,6 +44,70 @@
   --grad-cyan: #22d3ee;
   --grad-blue: #6366f1;
   --grad-purple: #c084fc;
+}
+
+/* Light Mode */
+body.light-mode {
+  --bg: #f8f9fa;
+  --surface: #ffffff;
+  --surface2: #f3f4f6;
+  --surface3: #e5e7eb;
+  --border: #e5e7eb;
+  --border2: #d1d5db;
+  --accent: #0284c7;
+  --accent2: #6366f1;
+  --green: #059669;
+  --yellow: #d97706;
+  --red: #dc2626;
+  --text: #111827;
+  --muted: #6b7280;
+  --muted2: #374151;
+  --header-bg: rgba(248, 249, 250, 0.92);
+  --code-text: #0f172a;
+  --hero-chip-bg: rgba(15, 23, 42, 0.06);
+  --hero-chip-bg-hover: rgba(15, 23, 42, 0.1);
+  --hero-chip-border: rgba(15, 23, 42, 0.14);
+  --hero-chip-border-hover: rgba(2, 132, 199, 0.35);
+  --hero-logo-shadow: rgba(15, 23, 42, 0.18);
+  --hero-logo-glow: rgba(2, 132, 199, 0.25);
+  --hero-cta-bg: linear-gradient(90deg,
+      rgba(255, 255, 255, 0.96) 0%,
+      rgba(219, 234, 254, 0.92) 100%);
+  --hero-cta-text: #0f172a;
+  --hero-cta-border: rgba(2, 132, 199, 0.28);
+  --spinner-track: rgba(15, 23, 42, 0.25);
+  --spinner-head: #0284c7;
+  --gh-preview-bg: #ffffff;
+  --gh-preview-text: #24292f;
+  --gh-preview-border: #d0d7de;
+  --gh-preview-soft-bg: #f6f8fa;
+  --gh-preview-inline-code: #e36209;
+  --gh-preview-link: #0969da;
+  --gh-preview-quote: #57606a;
+  --gh-preview-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+
+  /* Hero Variables for Light Mode */
+  --hero-bg: #ffffff;
+  --hero-text: #111827;
+  --grad-cyan: #0891b2;
+  --grad-blue: #3b82f6;
+  --grad-purple: #7c3aed;
+}
+
+body.light-mode::before {
+  background-image:
+    radial-gradient(circle at 20% 20%,
+      rgba(2, 132, 199, 0.08) 0%,
+      transparent 50%),
+    radial-gradient(circle at 80% 80%,
+      rgba(99, 102, 241, 0.08) 0%,
+      transparent 50%);
+}
+
+body.light-mode::after {
+  background-image:
+    linear-gradient(rgba(0, 0, 0, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.04) 1px, transparent 1px);
 }
 
 * {
@@ -123,14 +210,14 @@ body::after {
   font-weight: 700;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: #fff;
-  text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+  color: var(--hero-text);
+  text-shadow: 0 0 20px var(--hero-logo-shadow);
 }
 
 .hero-logo svg {
   width: 18px;
   height: 18px;
-  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.5));
+  filter: drop-shadow(0 0 8px var(--hero-logo-glow));
 }
 
 .hero-source-link {
@@ -143,17 +230,17 @@ body::after {
   font-size: 12px;
   font-weight: 600;
   transition: all 0.3s ease;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--hero-chip-bg);
   padding: 8px 16px;
   border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--hero-chip-border);
   backdrop-filter: blur(10px);
 }
 
 .hero-source-link:hover {
   color: var(--text);
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.2);
+  background: var(--hero-chip-bg-hover);
+  border-color: var(--hero-chip-border-hover);
   transform: translateY(-2px);
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
@@ -188,9 +275,15 @@ body::after {
   filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.5));
 }
 
+body.light-mode .hero-title {
+  background: none;
+  color: #0f172a;
+  -webkit-text-fill-color: currentColor;
+}
+
 .scroll-action {
   position: absolute;
-  bottom: 50px;
+  bottom: 36px;
   z-index: 50;
   display: flex;
   justify-content: center;
@@ -198,11 +291,9 @@ body::after {
 }
 
 .scroll-btn {
-  background: linear-gradient(90deg,
-      rgba(10, 15, 26, 0.8) 0%,
-      rgba(99, 102, 241, 0.3) 100%);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: #ffffff;
+  background: var(--hero-cta-bg);
+  border: 1px solid var(--hero-cta-border);
+  color: var(--hero-cta-text);
   padding: 16px 36px;
   border-radius: 50px;
   font-family: "Inter", sans-serif;
@@ -396,7 +487,7 @@ body::after {
 .header {
   position: relative;
   z-index: 200;
-  background: rgba(5, 7, 14, 0.85);
+  background: var(--header-bg);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
   border-bottom: 1px solid var(--border);
@@ -487,6 +578,34 @@ body::after {
 .hbtn.primary:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 25px rgba(56, 189, 248, 0.5);
+}
+
+/* ── Dark Mode Toggle ── */
+.theme-toggle {
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 16px;
+  border: 1px solid var(--border2);
+  background: var(--surface2);
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+}
+
+.theme-toggle:hover {
+  background: var(--surface3);
+  border-color: var(--accent);
+  transform: scale(1.05) rotate(15deg);
+}
+
+.theme-toggle:active {
+  transform: scale(0.95);
 }
 
 /* ── MAIN LAYOUT ── */
@@ -883,7 +1002,7 @@ select option {
   padding: 16px;
   font-family: "JetBrains Mono", monospace;
   font-size: 12px;
-  color: #bae6fd;
+  color: var(--code-text);
   line-height: 1.8;
   margin-top: 8px;
   white-space: pre;
@@ -1079,20 +1198,20 @@ select option {
 
 /* GitHub-style rendered preview */
 .gh-preview {
-  background: #ffffff;
+  background: var(--gh-preview-bg);
   border-radius: 12px;
   padding: 32px 40px;
-  color: #24292f;
+  color: var(--gh-preview-text);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   font-size: 15px;
   line-height: 1.7;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  box-shadow: var(--gh-preview-shadow);
 }
 
 .gh-preview h1 {
   font-size: 28px;
   font-weight: 700;
-  border-bottom: 1px solid #d0d7de;
+  border-bottom: 1px solid var(--gh-preview-border);
   padding-bottom: 10px;
   margin-bottom: 16px;
 }
@@ -1100,7 +1219,7 @@ select option {
 .gh-preview h2 {
   font-size: 20px;
   font-weight: 600;
-  border-bottom: 1px solid #d0d7de;
+  border-bottom: 1px solid var(--gh-preview-border);
   padding-bottom: 7px;
   margin: 24px 0 12px;
 }
@@ -1116,18 +1235,18 @@ select option {
 }
 
 .gh-preview code {
-  background: #f6f8fa;
-  border: 1px solid #d0d7de;
+  background: var(--gh-preview-soft-bg);
+  border: 1px solid var(--gh-preview-border);
   padding: 3px 6px;
   border-radius: 6px;
   font-family: "JetBrains Mono", monospace;
   font-size: 13px;
-  color: #e36209;
+  color: var(--gh-preview-inline-code);
 }
 
 .gh-preview pre {
-  background: #f6f8fa;
-  border: 1px solid #d0d7de;
+  background: var(--gh-preview-soft-bg);
+  border: 1px solid var(--gh-preview-border);
   border-radius: 8px;
   padding: 16px;
   overflow-x: auto;
@@ -1138,7 +1257,7 @@ select option {
   background: none;
   border: none;
   padding: 0;
-  color: #24292f;
+  color: var(--gh-preview-text);
   font-size: 13px;
 }
 
@@ -1153,7 +1272,7 @@ select option {
 }
 
 .gh-preview a {
-  color: #0969da;
+  color: var(--gh-preview-link);
   text-decoration: none;
 }
 
@@ -1163,7 +1282,7 @@ select option {
 
 .gh-preview hr {
   border: none;
-  border-top: 1px solid #d0d7de;
+  border-top: 1px solid var(--gh-preview-border);
   margin: 24px 0;
 }
 
@@ -1176,13 +1295,13 @@ select option {
 
 .gh-preview th,
 .gh-preview td {
-  border: 1px solid #d0d7de;
+  border: 1px solid var(--gh-preview-border);
   padding: 8px 14px;
   text-align: left;
 }
 
 .gh-preview th {
-  background: #f6f8fa;
+  background: var(--gh-preview-soft-bg);
   font-weight: 600;
 }
 
@@ -1192,9 +1311,9 @@ select option {
 }
 
 .gh-preview blockquote {
-  border-left: 4px solid #d0d7de;
+  border-left: 4px solid var(--gh-preview-border);
   padding-left: 16px;
-  color: #57606a;
+  color: var(--gh-preview-quote);
   margin: 16px 0;
 }
 
@@ -1234,7 +1353,7 @@ select option {
   font-family: "JetBrains Mono", monospace;
   font-size: 12px;
   line-height: 1.85;
-  color: #bae6fd;
+  color: var(--code-text);
   white-space: pre-wrap;
   word-break: break-word;
   box-shadow: inset 0 2px 15px rgba(0, 0, 0, 0.3);
@@ -1621,8 +1740,8 @@ select option {
   display: inline-block;
   width: 14px;
   height: 14px;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-top-color: #fff;
+  border: 2px solid var(--spinner-track);
+  border-top-color: var(--spinner-head);
   border-radius: 50%;
   animation: spin 0.7s linear infinite;
 }
@@ -1862,7 +1981,6 @@ select option {
 
 /* =======================================================
    RESPONSIVENESS (MOBILE & TABLET)
-======================================================= */
 @media (max-width: 1024px) {
   .main {
     flex-direction: column;

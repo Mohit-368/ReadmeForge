@@ -2039,13 +2039,81 @@
       }
     });
   }
-  
+
   document.addEventListener('keydown', function(e) {
     if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'C') {
       e.preventDefault();
       copyMarkdown();
     }
   });
+
+
+  // ── DARK MODE TOGGLE ──
+  /**
+   * Initialize dark mode from localStorage preference
+   * @function initializeDarkMode
+   * @returns {void}
+   */
+  function initializeDarkMode() {
+    var savedTheme = localStorage.getItem("readmeforge-theme");
+    var prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    var isDarkMode = savedTheme ? savedTheme === "dark" : prefersDark;
+    
+    // Apply saved preference or system preference
+    if (isDarkMode) {
+      document.body.classList.remove("light-mode");
+      updateThemeIcon("dark");
+    } else {
+      document.body.classList.add("light-mode");
+      updateThemeIcon("light");
+    }
+    
+    // Setup theme toggle button listener
+    var themeToggle = document.getElementById("themeToggle");
+    if (themeToggle) {
+      themeToggle.addEventListener("click", function() {
+        toggleDarkMode();
+      });
+    }
+  }
+
+  /**
+   * Toggle between dark and light mode
+   * @function toggleDarkMode
+   * @returns {void}
+   */
+  function toggleDarkMode() {
+    var isDarkMode = !document.body.classList.contains("light-mode");
+    
+    if (isDarkMode) {
+      // Switch to light mode
+      document.body.classList.add("light-mode");
+      localStorage.setItem("readmeforge-theme", "light");
+      updateThemeIcon("light");
+    } else {
+      // Switch to dark mode
+      document.body.classList.remove("light-mode");
+      localStorage.setItem("readmeforge-theme", "dark");
+      updateThemeIcon("dark");
+    }
+  }
+
+  /**
+   * Update the theme toggle button icon
+   * @function updateThemeIcon
+   * @param {string} mode - "dark" or "light"
+   * @returns {void}
+   */
+  function updateThemeIcon(mode) {
+    var themeIcon = document.getElementById("themeIcon");
+    if (themeIcon) {
+      themeIcon.textContent = mode === "dark" ? "🌙" : "☀️";
+    }
+  }
+
+  // Initialize dark mode on page load
+  initializeDarkMode();
+
 
   init();
 })();
