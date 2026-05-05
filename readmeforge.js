@@ -2040,6 +2040,14 @@
     });
   }
 
+  document.addEventListener('keydown', function(e) {
+    if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'C') {
+      e.preventDefault();
+      copyMarkdown();
+    }
+  });
+
+
   // ── DARK MODE TOGGLE ──
   /**
    * Initialize dark mode from localStorage preference
@@ -2105,6 +2113,7 @@
 
   // Initialize dark mode on page load
   initializeDarkMode();
+
 
   init();
 })();
