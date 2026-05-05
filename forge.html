@@ -1,0 +1,632 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>
+    READMEForge — Generate Professional GitHub READMEs in 30 Seconds
+  </title>
+  <link rel="icon" type="image/png" href="public/favicon.png">
+
+  <!-- Combined Fonts: Space Grotesk, JetBrains Mono, and Inter for the Hero -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="readmeforge.css" />
+  <style>
+    /*  Preview-header content from overflowing ── */
+    .preview-header {
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: stretch !important;
+      gap: 6px !important;
+      padding: 6px 10px !important;
+      flex-wrap: nowrap !important;
+      overflow: hidden !important;
+    }
+
+    .preview-tabs {
+      display: flex !important;
+      flex-wrap: wrap !important;
+      gap: 4px !important;
+      min-width: 0 !important;
+    }
+
+    .preview-actions {
+      display: flex !important;
+      flex-wrap: wrap !important;
+      gap: 8px !important;
+      min-width: 0 !important;
+      align-items: center !important;
+      flex-wrap: wrap;
+    }
+
+    .pbtn {
+      white-space: nowrap !important;
+      font-size: 13px !important;
+      padding: 7px 14px !important;
+      flex-shrink: 0 !important;
+      flex: 1;
+      min-width: 140px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+
+
+    }
+
+    .ptab {
+      white-space: nowrap !important;
+      font-size: 13px !important;
+      padding: 7px 14px !important;
+    }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body class="editor-page">
+  <!-- LOADER -->
+  <div class="loader-wrapper" id="loader">
+    <div class="loader-content">
+      <img src="public/favicon.png" alt="Loading..." class="loader-icon">
+      <div class="loader-bar">
+        <div class="loader-progress"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAVBAR -->
+  <nav class="navbar scrolled" id="navbar"
+    style="position: sticky; top: 0; z-index: 1000; background: var(--header-bg); backdrop-filter: blur(10px);">
+    <div class="hero-logo"
+      style="cursor: pointer; font-family: 'Space Grotesk', sans-serif; font-weight: 700; letter-spacing: 2px;"
+      onclick="location.href='index.html'">
+      README <span style="color: var(--accent);">✦</span> FORGE
+    </div>
+    <div class="nav-links" id="navLinks">
+      <a href="index.html" class="nav-link" style="font-family: 'Space Grotesk', sans-serif; font-weight: 600;">Home</a>
+      <a href="forge.html" class="nav-link"
+        style="font-family: 'Space Grotesk', sans-serif; font-weight: 600;">Builder</a>
+      <div class="theme-toggle">
+        <label class="theme-switch">
+          <input type="checkbox" id="themeToggle" aria-label="Toggle dark/light theme">
+          <span class="slider"></span>
+        </label>
+      </div>
+      <a href="https://github.com/Mohit-368/ReadmeForge" target="_blank" rel="noopener noreferrer" class="hbtn"
+        style="border: 1px solid var(--border2); border-radius: 20px; padding: 8px 20px; font-size: 13px; display: flex; align-items: center; gap: 8px;">
+        <i data-lucide="code" style="width: 14px;"></i> Source Code
+      </a>
+    </div>
+    <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle mobile menu">
+      <i data-lucide="menu"></i>
+    </button>
+  </nav>
+  <!-- ── APP WORKSPACE ── -->
+  <div id="app-builder" style="padding-top: 20px;">
+    <!-- ── HEADER ── -->
+    <header class="header">
+      <div class="header-left-group" style="display: flex; align-items: center; gap: 15px;">
+        <div class="header-center">
+          <span
+            style="font-size: 11px; color: var(--muted); font-family: 'JetBrains Mono', monospace; margin-right: 4px;">sections:</span>
+          <span id="sectionCount" style="font-size: 12px; font-weight: 700; color: var(--accent)">0</span>
+          <span style="font-size: 11px; color: var(--muted); font-family: 'JetBrains Mono', monospace;"> active</span>
+          <span id="autoSaveStatus" class="autosave-status">✓ Auto-saved</span>
+        </div>
+      </div>
+      <div class="header-right">
+        <button class="hbtn" onclick="clearSavedData()"><i data-lucide="trash-2" style="width:14px;"></i> Clear</button>
+        <button class="hbtn" onclick="resetAll()"><i data-lucide="refresh-cw" style="width:14px;"></i> Reset</button>
+        <button class="hbtn" onclick="copyMarkdown()"><i data-lucide="copy" style="width:14px;"></i> Copy MD</button>
+        <button class="hbtn" onclick="saveToGist()"><i data-lucide="github" style="width:14px;"></i> Gist</button>
+        <button class="hbtn primary" id="modalPrintBtn" onclick="downloadPDF()">
+          <i data-lucide="file-text" style="width:14px;"></i> Download PDF
+        </button>
+      </div>
+    </header>
+
+    <div class="main">
+      <!-- ── SIDEBAR ── -->
+      <aside class="sidebar">
+        <!-- Quick Actions & Stats -->
+        <div class="sidebar-section">
+          <div class="sidebar-label">Quick Actions</div>
+          <div class="quick-actions-list">
+            <button class="qa-btn" onclick="copyMarkdown()">
+              <i data-lucide="copy" style="width:14px;"></i> Copy Markdown
+            </button>
+            <button class="qa-btn" onclick="copyHTML()">
+              <i data-lucide="code" style="width:14px;"></i> Copy HTML
+            </button>
+            <button class="qa-btn" onclick="downloadReadme()">
+              <i data-lucide="download" style="width:14px;"></i> Download README
+            </button>
+            <button class="qa-btn" onclick="window.print()">
+              <i data-lucide="printer" style="width:14px;"></i> Print Preview
+            </button>
+          </div>
+          <div class="sidebar-stats">
+            <div class="stat-item">
+              <i data-lucide="file-text" style="width:14px;"></i>
+              <span>Words: <strong id="totalWords">0</strong></span>
+            </div>
+            <div class="stat-item">
+              <i data-lucide="clock" style="width:14px;"></i>
+              <span>Read Time: <strong id="readTime">0 min</strong></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── QUALITY SCORE PANEL ── -->
+        <div class="quality-panel sidebar-quality collapsed" id="qualityPanel">
+          <div class="quality-panel-header" id="qualityPanelToggle" onclick="toggleQualityPanel()">
+            <div class="quality-panel-left">
+              <span class="quality-panel-icon"><i data-lucide="bar-chart-3"
+                  style="width:18px; color:var(--accent)"></i></span>
+              <span class="quality-panel-title">Quality Score</span>
+              <span class="quality-score-badge" id="qualityScoreBadge">0</span>
+            </div>
+            <div class="quality-panel-right">
+              <span class="quality-label" id="qualityLabel">—</span>
+              <svg class="quality-chevron" id="qualityChevron" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" style="transform: rotate(-90deg)">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </div>
+          </div>
+          <div class="quality-panel-body" id="qualityPanelBody">
+            <div class="quality-score-row">
+              <div class="quality-ring-wrap">
+                <svg class="quality-ring" viewBox="0 0 36 36">
+                  <circle class="quality-ring-bg" cx="18" cy="18" r="15.9" />
+                  <circle class="quality-ring-fill" id="qualityRingFill" cx="18" cy="18" r="15.9"
+                    stroke-dasharray="0 100" />
+                </svg>
+                <span class="quality-ring-num" id="qualityRingNum">0</span>
+              </div>
+              <div class="quality-score-details">
+                <div class="quality-score-main" id="qualityScoreMain">0 / 100</div>
+                <div class="quality-score-sub" id="qualityScoreSub">Fill in sections to improve your score</div>
+                <div class="quality-bar-wrap">
+                  <div class="quality-bar-track">
+                    <div class="quality-bar-fill" id="qualityBarFill" style="width:0%"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="quality-suggestions" id="qualitySuggestions"></div>
+          </div>
+        </div>
+
+        <!-- Templates -->
+        <div class="sidebar-section">
+          <div class="sidebar-label">Templates</div>
+          <div class="templates-grid">
+            <button class="template-btn" data-template="webapp" onclick="applyTemplate('webapp')">
+              <i data-lucide="globe" style="width:14px;"></i> Web App
+            </button>
+            <button class="template-btn" data-template="ml" onclick="applyTemplate('ml')">
+              <i data-lucide="brain" style="width:14px;"></i> ML / AI
+            </button>
+            <button class="template-btn" data-template="api" onclick="applyTemplate('api')">
+              <i data-lucide="zap" style="width:14px;"></i> Backend API
+            </button>
+            <button class="template-btn" data-template="cli" onclick="applyTemplate('cli')">
+              <i data-lucide="terminal" style="width:14px;"></i> CLI Tool
+            </button>
+            <button class="template-btn" data-template="mobile" onclick="applyTemplate('mobile')">
+              <i data-lucide="smartphone" style="width:14px;"></i> Mobile App
+            </button>
+            <button class="template-btn" data-template="lib" onclick="applyTemplate('lib')">
+              <i data-lucide="package" style="width:14px;"></i> Library
+            </button>
+            <button class="template-btn" data-template="hackathon" onclick="applyTemplate('hackathon')">
+              <i data-lucide="trophy" style="width:14px;"></i> Hackathon
+            </button>
+            <button class="template-btn" data-template="oss" onclick="applyTemplate('oss')">
+              <i data-lucide="unlock" style="width:14px;"></i> Open Source
+            </button>
+          </div>
+        </div>
+
+        <!-- Section Toggles -->
+        <div class="sidebar-section" style="flex: 1">
+          <div class="sidebar-label">
+            Sections
+            <button class="hbtn" style="font-size: 9px; padding: 2px 6px; margin-left: auto;"
+              onclick="toggleAllSections()">Toggle All</button>
+          </div>
+          <div class="section-toggles" id="sectionToggles">
+            <!-- populated by JS -->
+          </div>
+        </div>
+      </aside>
+
+      <!-- ── EDITOR ── -->
+      <div class="editor">
+        <div class="editor-inner" id="editorInner" style="display: flex; flex-direction: column; gap: 24px;">
+          <!-- 1. Project Title & Badges -->
+          <div class="editor-section" id="sec-title">
+            <div class="es-header">
+              <div class="es-num">1</div>
+              <div class="es-title">Project Title & Badges</div>
+            </div>
+            <div class="es-body">
+              <div class="two-col">
+                <div>
+                  <label>PROJECT NAME *</label>
+                  <input type="text" id="projName" placeholder="AwesomeProject" oninput="scheduleRender()" />
+                </div>
+                <div>
+                  <label>TAGLINE</label>
+                  <input type="text" id="tagline" placeholder="A blazing-fast tool for..." oninput="scheduleRender()" />
+                </div>
+              </div>
+              <div class="two-col">
+                <div>
+                  <label>GITHUB USER</label>
+                  <input type="text" id="ghUser" placeholder="octocat" oninput="scheduleRender()" />
+                </div>
+                <div>
+                  <label>REPO NAME</label>
+                  <input type="text" id="repoSlug" placeholder="awesome-project" oninput="scheduleRender()" />
+                </div>
+              </div>
+              <div>
+                <label>AUTO BADGES — click to toggle</label>
+                <div class="badge-picker" id="badgePicker">
+                  <!-- populated by JS -->
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. Description -->
+          <div class="editor-section" id="sec-description">
+            <div class="es-header">
+              <div class="es-num">2</div>
+              <div class="es-title">Description</div>
+            </div>
+            <div class="es-body">
+              <div>
+                <label>SHORT DESCRIPTION</label>
+                <textarea class="textInput" id="description"
+                  placeholder="What does your project do? What problem does it solve?" style="min-height: 90px"
+                  oninput="scheduleRender()"></textarea>
+                <label><span class="wordCount">0</span> <span class="wordCountText">Words</span></label>
+              </div>
+              <div>
+                <label>LIVE DEMO URL (optional)</label>
+                <input type="url" id="demoUrl" placeholder="https://yourapp.com" oninput="scheduleRender()" />
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. Features -->
+          <div class="editor-section" id="sec-features">
+            <div class="es-header">
+              <div class="es-num">3</div>
+              <div class="es-title">Features</div>
+            </div>
+            <div class="es-body">
+              <div>
+                <label>KEY FEATURES — use "### Category" for groups, "- item" for
+                  bullets</label>
+                <textarea class="textInput" id="features" style="min-height: 130px" oninput="scheduleRender()"
+                  placeholder="### 🔐 Authentication&#10;- Email OTP verification&#10;- Secure login / logout&#10;&#10;### 📝 Posts&#10;- Create, Read, Update, Delete"></textarea>
+                <label><span class="wordCount">0</span> <span class="wordCountText">Words</span></label>
+
+              </div>
+            </div>
+          </div>
+
+          <!-- 4. Tech Stack -->
+          <div class="editor-section" id="sec-techstack">
+            <div class="es-header">
+              <div class="es-num">4</div>
+              <div class="es-title">Tech Stack</div>
+              <span class="es-badge" id="techCount" style="display: none">0 selected</span>
+            </div>
+            <div class="es-body">
+              <div>
+                <label>CLICK TO SELECT YOUR STACK</label>
+                <div class="tech-picker" id="techPicker">
+                  <!-- populated by JS -->
+                </div>
+              </div>
+              <div>
+                <label>OR ADD CUSTOM (comma separated)</label>
+                <input type="text" id="customTech" placeholder="Celery, Redis, Nginx..." oninput="scheduleRender()" />
+              </div>
+            </div>
+          </div>
+
+          <!-- 5. Installation -->
+          <div class="editor-section" id="sec-installation">
+            <div class="es-header">
+              <div class="es-num">5</div>
+              <div class="es-title">Installation</div>
+            </div>
+            <div class="es-body">
+              <div>
+                <label>PREREQUISITES</label>
+                <input type="text" id="prereqs" placeholder="Python 3.10+, Node.js 18+" oninput="scheduleRender()" />
+              </div>
+              <div>
+                <label>INSTALL COMMANDS (one per line)</label>
+                <textarea class="textInput" id="installCmds" style="min-height: 100px" oninput="scheduleRender()"
+                  placeholder="git clone https://github.com/user/repo.git&#10;cd repo&#10;pip install -r requirements.txt&#10;python manage.py migrate&#10;python manage.py runserver"></textarea>
+                <label><span class="wordCount">0</span> <span class="wordCountText">Words</span></label>
+              </div>
+              <div>
+                <label>ENV VARIABLES (optional)</label>
+                <textarea class="textInput" id="envVars" style="min-height: 70px" oninput="scheduleRender()"
+                  placeholder="SECRET_KEY=your_secret&#10;DATABASE_URL=sqlite:///db.sqlite3&#10;DEBUG=True"></textarea>
+                <label><span class="wordCount">0</span> <span class="wordCountText">Words</span></label>
+              </div>
+            </div>
+          </div>
+
+          <!-- 6. Usage -->
+          <div class="editor-section" id="sec-usage">
+            <div class="es-header">
+              <div class="es-num">6</div>
+              <div class="es-title">Usage</div>
+            </div>
+            <div class="es-body">
+              <div>
+                <label>RUN COMMAND / USAGE INSTRUCTIONS</label>
+                <textarea class="textInput" id="usageCmd" style="min-height: 80px" oninput="scheduleRender()"
+                  placeholder="python manage.py runserver&#10;&#10;# Then open http://127.0.0.1:8000/"></textarea>
+                <label><span class="wordCount">0</span> <span class="wordCountText">Words</span></label>
+              </div>
+            </div>
+          </div>
+
+          <!-- 7. Project Structure -->
+          <div class="editor-section" id="sec-structure">
+            <div class="es-header">
+              <div class="es-num">7</div>
+              <div class="es-title">Project Structure Visualizer</div>
+            </div>
+            <div class="es-body">
+              <div>
+                <label>PASTE YOUR FOLDER STRUCTURE (indented with spaces)</label>
+                <textarea class="textInput" id="rawStructure" style="min-height: 120px"
+                  oninput="updateStructurePreview()"
+                  placeholder="src/&#10;  api/&#10;  models/&#10;  utils/&#10;templates/&#10;static/&#10;main.py&#10;requirements.txt&#10;README.md"></textarea>
+                <label><span class="wordCount">0</span> <span class="wordCountText">Words</span></label>
+              </div>
+              <div>
+                <label>VISUAL PREVIEW</label>
+                <div class="struct-preview" id="structPreview">
+                  Paste structure above to preview...
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 8. Screenshots -->
+          <div class="editor-section" id="sec-screenshots">
+            <div class="es-header">
+              <div class="es-num">8</div>
+              <div class="es-title">Screenshots</div>
+            </div>
+            <div class="es-body">
+              <div>
+                <label>LIVE DEMO / VIDEO LINK (optional)</label>
+                <input type="url" id="videoUrl" placeholder="https://youtube.com/watch?v=..."
+                  oninput="scheduleRender()" />
+              </div>
+              <div>
+                <label>DRAG &amp; DROP SCREENSHOTS</label>
+                <div class="drop-zone" id="dropZone">
+                  <div class="drop-zone-icon"><i data-lucide="image" style="width:32px;height:32px;"></i></div>
+                  <p>Drop images here or click to browse</p>
+                  <small>PNG, JPG, GIF — they'll be linked as Markdown</small>
+                  <input type="file" id="fileInput" multiple accept="image/*" style="display: none" />
+                </div>
+                <div class="screenshot-list" id="screenshotList"></div>
+              </div>
+              <div>
+                <label>OR ADD IMAGE URLS (format: Label | URL, one per
+                  line)</label>
+                <textarea class="textInput" id="imageUrls" style="min-height: 60px" oninput="scheduleRender()"
+                  placeholder="Landing Page | https://i.imgur.com/abc.png&#10;Dashboard | https://i.imgur.com/xyz.png"></textarea>
+                <label><span class="wordCount">0</span> <span class="wordCountText">Words</span></label>
+              </div>
+            </div>
+          </div>
+
+          <!-- 9. API Docs -->
+          <div class="editor-section" id="sec-api">
+            <div class="es-header">
+              <div class="es-num">9</div>
+              <div class="es-title">API Documentation</div>
+            </div>
+            <div class="es-body">
+              <div>
+                <label>API ENDPOINTS — format: METHOD /path | Description (one per
+                  line)</label>
+                <textarea class="textInput" id="apiDocs" style="min-height: 100px" oninput="scheduleRender()"
+                  placeholder="GET /api/users | Get all users&#10;POST /api/users | Create a new user&#10;GET /api/users/:id | Get user by ID&#10;PUT /api/users/:id | Update user&#10;DELETE /api/users/:id | Delete user"></textarea>
+                <label><span class="wordCount">0</span> <span class="wordCountText">Words</span></label>
+              </div>
+              <div>
+                <label>API BASE URL (optional)</label>
+                <input type="text" id="apiBase" placeholder="https://api.yourapp.com/v1" oninput="scheduleRender()" />
+              </div>
+            </div>
+          </div>
+
+          <!-- 10. Contributing -->
+          <div class="editor-section" id="sec-contributing">
+            <div class="es-header">
+              <div class="es-num">10</div>
+              <div class="es-title">Contributing</div>
+            </div>
+            <div class="es-body">
+              <div>
+                <label>CUSTOM CONTRIBUTING NOTES (optional — default guide
+                  auto-generated)</label>
+                <textarea class="textInput" id="contribNotes" style="min-height: 70px" oninput="scheduleRender()"
+                  placeholder="Any specific guidelines, code style rules, branch naming conventions..."></textarea>
+                <label><span class="wordCount">0</span> <span class="wordCountText">Words</span></label>
+              </div>
+            </div>
+          </div>
+
+          <!-- 11. License & Author -->
+          <div class="editor-section" id="sec-author">
+            <div class="es-header">
+              <div class="es-num">11</div>
+              <div class="es-title">License &amp; Author</div>
+            </div>
+            <div class="es-body">
+              <div class="two-col">
+                <div>
+                  <label>LICENSE</label>
+                  <select id="license" onchange="scheduleRender()" aria-label="Select license type">
+                    <option value="MIT">MIT</option>
+                    <option value="Apache-2.0">Apache 2.0</option>
+                    <option value="GPL-3.0">GPL 3.0</option>
+                    <option value="BSD-3-Clause">BSD 3-Clause</option>
+                    <option value="ISC">ISC</option>
+                    <option value="Unlicense">Unlicense</option>
+                    <option value="AGPL-3.0">AGPL 3.0</option>
+                    <option value="none">No License</option>
+                  </select>
+                </div>
+                <div>
+                  <label>FULL NAME</label>
+                  <input type="text" id="authorName" placeholder="Your Name" oninput="scheduleRender()" />
+                </div>
+              </div>
+              <div class="two-col">
+                <div>
+                  <label>GITHUB USERNAME</label>
+                  <input type="text" id="authorGh" placeholder="username" oninput="scheduleRender()" />
+                </div>
+                <div>
+                  <label>EMAIL (optional)</label>
+                  <input type="email" id="authorEmail" placeholder="you@email.com" oninput="scheduleRender()" />
+                </div>
+              </div>
+              <div class="two-col">
+                <div>
+                  <label>LINKEDIN (optional)</label>
+                  <input type="url" id="authorLinkedin" placeholder="https://linkedin.com/in/you"
+                    oninput="scheduleRender()" />
+                </div>
+                <div>
+                  <label>PORTFOLIO (optional)</label>
+                  <input type="url" id="authorWebsite" placeholder="https://yoursite.com" oninput="scheduleRender()" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── PREVIEW ── -->
+      <aside class="preview">
+        <div class="preview-header">
+          <div class="preview-tabs">
+            <button class="ptab active" id="tabRendered" onclick="setTab('rendered')">
+              Preview (Better at full dimensions)
+            </button>
+            <button class="ptab" id="tabRaw" onclick="setTab('raw')">
+              Raw Markdown
+            </button>
+          </div>
+        <div class="preview-body" id="previewBody">
+          <div class="empty-preview">
+            <div class="icon">📄</div>
+            <h3>Live preview appears here</h3>
+            <p>Start filling in the editor →</p>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-brand">
+        <img src="public/favicon.png" alt="RF" style="width: 30px; height: 30px;">
+        <span>README FORGE</span>
+      </div>
+      <div class="footer-nav">
+        <a href="index.html">Home</a>
+        <a href="forge.html">Builder</a>
+        <a href="index.html#features">Features</a>
+        <a href="https://github.com/Mohit-368/ReadmeForge" target="_blank" rel="noopener noreferrer">Main Repo</a>
+      </div>
+      <div class="footer-social">
+        <a href="https://github.com/Mohit-368" target="_blank" rel="noopener noreferrer" title="GitHub"><i data-lucide="github"></i></a>
+        <a href="https://www.linkedin.com/in/mohitkumar368/" target="_blank" rel="noopener noreferrer" title="LinkedIn"><i
+            data-lucide="linkedin"></i></a>
+      </div>
+      <div class="footer-copyright">
+        &copy; 2026 READMEForge. Built with passion for developers.
+      </div>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    lucide.createIcons();
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        document.getElementById('loader').classList.add('hidden');
+      }, 500);
+    });
+  </script>
+
+  <!-- ── DOWNLOAD PREVIEW MODAL ── -->
+  <div id="downloadModalOverlay" class="modal-overlay hidden">
+    <div class="modal">
+      <header class="modal-header">
+        <h2 class="modal-title">README Preview</h2>
+        <button class="modal-close" onclick="closeDownloadModal()">✕</button>
+      </header>
+      <div class="modal-body" id="modalPreviewBody">
+        <!-- Content injected via JS -->
+      </div>
+      <footer class="modal-footer">
+        <button class="hbtn" onclick="closeDownloadModal()">Cancel</button>
+        <button class="hbtn primary">⬇ Print to PDF</button>
+      </footer>
+    </div>
+  </div>
+
+  <script src="readmeforge.js"></script>
+  <script>
+    // Loader logic
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        const loader = document.getElementById('loader');
+        if (loader) loader.classList.add('hidden');
+      }, 800);
+    });
+
+    // Navbar scroll effect
+    window.addEventListener('scroll', () => {
+      const nav = document.getElementById('navbar');
+      if (nav) {
+        if (window.scrollY > 50) {
+          nav.classList.add('scrolled');
+        } else {
+          nav.classList.remove('scrolled');
+        }
+      }
+    });
+  </script>
+</body>
+
+</html>

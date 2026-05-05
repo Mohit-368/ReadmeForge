@@ -60,11 +60,12 @@ You only need:
 - Follow the branch naming convention below
 
 ### Step 3 — Make Your Changes
-- Make your changes in the new branch
-- Test your changes by opening `index.html` in the browser
-- Make sure the live preview still works correctly
-- Make sure the Copy Raw button still generates valid Markdown
-- Check that your changes look good on both desktop and mobile
+- Make your changes in the new branch.
+- Test your changes by opening `index.html` (Landing Page) and `forge.html` (Editor) in the browser.
+- Ensure the navigation between pages is seamless.
+- Make sure the live preview still works correctly in the dedicated editor page.
+- Check that your changes look good on both desktop and mobile using the new responsive design system.
+- If you add new icons, use **Lucide** or appropriate **SVGs**.
 
 ### Step 4 — Commit Your Changes
 - Follow the commit message guidelines below
