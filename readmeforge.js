@@ -2039,7 +2039,13 @@
       }
     });
   }
-
+  
+  document.addEventListener('keydown', function(e) {
+    if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'C') {
+      e.preventDefault();
+      copyMarkdown();
+    }
+  });
 
   init();
 })();
