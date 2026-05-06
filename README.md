@@ -82,3 +82,4 @@ Distributed under the MIT License. See [`LICENSE`](LICENSE) for more information
 
 Made with ❤️ using plain HTML, CSS & JavaScript.  
 ⭐ Star this repo if you found it useful!
+
