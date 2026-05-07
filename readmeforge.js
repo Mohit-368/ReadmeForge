@@ -378,6 +378,12 @@
     }
     buildBadgePicker();
     setupDropZone();
+    annotateFormControls();
+    annotateButtons();
+    annotateSectionHeadings();
+    setupTemplateAccessibility();
+    setupPreviewAccessibility();
+    setupQualityPanelAccessibility();
     updateSectionCount();
     updateTechCount();
     if (hasData) {
@@ -387,6 +393,77 @@
       updateStructurePreview();
     }
     scheduleRender();
+  }
+
+  function deriveFieldLabel(el) {
+    var container = el.parentElement;
+    while (container) {
+      var labels = Array.from(container.children).filter(function (child) {
+        return child.tagName === "LABEL" && child.querySelector(".wordCount") === null;
+      });
+      if (labels.length) {
+        return labels[0].textContent.replace(/\s+/g, " ").trim();
+      }
+      container = container.parentElement;
+    }
+    return el.getAttribute("placeholder") || el.id || "Input";
+  }
+
+  function annotateFormControls() {
+    document.querySelectorAll("input, textarea, select").forEach(function (el) {
+      el.setAttribute("aria-label", deriveFieldLabel(el));
+    });
+  }
+
+  function annotateButtons() {
+    document.querySelectorAll("button").forEach(function (btn) {
+      if (btn.getAttribute("aria-label")) return;
+      var label = btn.textContent.replace(/\s+/g, " ").trim() || btn.getAttribute("title");
+      if (label) btn.setAttribute("aria-label", label);
+    });
+  }
+
+  function annotateSectionHeadings() {
+    document.querySelectorAll(".editor-section").forEach(function (section) {
+      var heading = section.querySelector(".es-title");
+      if (!heading) return;
+      var headingId = section.id + "-heading";
+      heading.id = headingId;
+      heading.setAttribute("role", "heading");
+      heading.setAttribute("aria-level", "2");
+      section.setAttribute("aria-labelledby", headingId);
+    });
+  }
+
+  function setupTemplateAccessibility() {
+    document.querySelectorAll(".template-btn").forEach(function (btn) {
+      var label = btn.textContent.replace(/\s+/g, " ").trim();
+      btn.setAttribute("aria-label", "Apply " + label + " template");
+    });
+  }
+
+  function setupPreviewAccessibility() {
+    var renderedTab = document.getElementById("tabRendered");
+    var rawTab = document.getElementById("tabRaw");
+    if (renderedTab) renderedTab.setAttribute("aria-label", "Show rendered README preview");
+    if (rawTab) rawTab.setAttribute("aria-label", "Show raw markdown preview");
+  }
+
+  function setupQualityPanelAccessibility() {
+    var toggle = document.getElementById("qualityPanelToggle");
+    var body = document.getElementById("qualityPanelBody");
+    if (!toggle || !body) return;
+    toggle.setAttribute("role", "button");
+    toggle.setAttribute("tabindex", "0");
+    toggle.setAttribute("aria-label", "Toggle README quality score panel");
+    toggle.setAttribute("aria-controls", "qualityPanelBody");
+    toggle.setAttribute("aria-expanded", qualityPanelOpen ? "true" : "false");
+    toggle.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        toggleQualityPanel();
+      }
+    });
   }
 
   // ── UI BUILDERS ───────────────────────────────────────────────
@@ -416,11 +493,16 @@
         '<label class="toggle-switch"><input type="checkbox"' +
         (on ? " checked" : "") +
         '><span class="tslider"></span></label>';
+      var toggleInput = div.querySelector("input");
+      toggleInput.setAttribute("role", "switch");
+      toggleInput.setAttribute("aria-label", "Toggle " + s.label + " section");
+      toggleInput.setAttribute("aria-checked", on ? "true" : "false");
       
       // Add change event listener to update state and UI
-      div.querySelector("input").addEventListener("change", function (e) {
+      toggleInput.addEventListener("change", function (e) {
         sectionState[s.id] = e.target.checked;  // Update state
         div.classList.toggle("active", e.target.checked);  // Toggle active class
+        e.target.setAttribute("aria-checked", e.target.checked ? "true" : "false");
         
         // Show/hide the corresponding section in the editor
         var secEl = document.getElementById(s.el);
@@ -455,6 +537,9 @@
       var btn = document.createElement("button");
       btn.className = "tech-chip";
       btn.innerHTML = '<span class="emoji">' + t.emoji + "</span>" + t.label;
+      btn.setAttribute("type", "button");
+      btn.setAttribute("aria-label", "Toggle technology " + t.label);
+      btn.setAttribute("aria-pressed", selectedTechs.has(t.label) ? "true" : "false");
       
       // Toggle selection when clicked
       btn.onclick = function () {
@@ -467,6 +552,7 @@
           selectedTechs.add(t.label);
           btn.classList.add("selected");
         }
+        btn.setAttribute("aria-pressed", selectedTechs.has(t.label) ? "true" : "false");
         updateTechCount();  // Update display of selected count
         scheduleRender();   // Update preview
       };
@@ -492,6 +578,9 @@
       btn.className =
         "badge-chip" + (selectedBadges.has(b.id) ? " selected" : "");  // Mark as selected if in Set
       btn.textContent = b.label;
+      btn.setAttribute("type", "button");
+      btn.setAttribute("aria-label", "Toggle badge " + b.label);
+      btn.setAttribute("aria-pressed", selectedBadges.has(b.id) ? "true" : "false");
       
       // Toggle selection when clicked
       btn.onclick = function () {
@@ -504,6 +593,7 @@
           selectedBadges.add(b.id);
           btn.classList.add("selected");
         }
+        btn.setAttribute("aria-pressed", selectedBadges.has(b.id) ? "true" : "false");
         scheduleRender();  // Update preview to show/hide badges
       };
       el.appendChild(btn);
@@ -708,10 +798,20 @@
   function setupDropZone() {
     var dz = document.getElementById("dropZone");  // Drop zone container
     var fi = document.getElementById("fileInput");  // Hidden file input
+    dz.setAttribute("role", "button");
+    dz.setAttribute("tabindex", "0");
+    dz.setAttribute("aria-label", "Upload screenshots by clicking or dragging image files");
+    fi.setAttribute("aria-label", "Choose screenshot image files");
     
     // Click drop zone to open file picker
     dz.addEventListener("click", function () {
       fi.click();
+    });
+    dz.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        fi.click();
+      }
     });
     
     // Show visual feedback when dragging files over drop zone
@@ -785,11 +885,15 @@
       div.innerHTML =
         '<img src="' +
         ss.dataUrl +
-        '" alt="">' +
+        '" alt="Screenshot preview for ' +
+        esc(ss.name) +
+        '">' +
         '<span class="screenshot-item-name">' +
         ss.name +
         "</span>" +
-        '<button class="screenshot-item-remove" onclick="removeScreenshot(' +
+        '<button class="screenshot-item-remove" aria-label="Remove screenshot ' +
+        esc(ss.name) +
+        '" onclick="removeScreenshot(' +
         idx +
         ')">✕</button>';
       el.appendChild(div);
@@ -1414,8 +1518,10 @@
     qualityPanelOpen = !qualityPanelOpen;
     var body = document.getElementById("qualityPanelBody");
     var chevron = document.getElementById("qualityChevron");
+    var toggle = document.getElementById("qualityPanelToggle");
     if (body) body.style.display = qualityPanelOpen ? "" : "none";
     if (chevron) chevron.style.transform = qualityPanelOpen ? "" : "rotate(-90deg)";
+    if (toggle) toggle.setAttribute("aria-expanded", qualityPanelOpen ? "true" : "false");
   }
   window.toggleQualityPanel = toggleQualityPanel;
 
@@ -1456,6 +1562,10 @@
       // Display raw markdown (escaped for viewing)
       body.innerHTML = '<div class="raw-view">' + esc(currentMd) + "</div>";
     }
+    body.setAttribute(
+      "aria-label",
+      currentTab === "rendered" ? "Live README preview panel" : "Raw markdown preview panel"
+    );
     updateQualityPanel(calculateQuality());
   }
 
@@ -1474,6 +1584,8 @@
       .getElementById("tabRendered")
       .classList.toggle("active", tab === "rendered");
     document.getElementById("tabRaw").classList.toggle("active", tab === "raw");
+    document.getElementById("tabRendered").setAttribute("aria-pressed", tab === "rendered" ? "true" : "false");
+    document.getElementById("tabRaw").setAttribute("aria-pressed", tab === "raw" ? "true" : "false");
     render();  // Re-render preview for selected tab
   }
   window.setTab = setTab;  // Expose globally for HTML onclick handlers
@@ -2063,6 +2175,12 @@
     // Setup theme toggle button listener
     var themeToggle = document.getElementById("themeToggle");
     if (themeToggle) {
+      themeToggle.setAttribute("role", "switch");
+      themeToggle.setAttribute("aria-label", "Toggle dark and light mode");
+      themeToggle.setAttribute(
+        "aria-checked",
+        document.body.classList.contains("light-mode") ? "false" : "true"
+      );
       themeToggle.addEventListener("click", function() {
         toggleDarkMode();
       });
@@ -2087,6 +2205,13 @@
       document.body.classList.remove("light-mode");
       localStorage.setItem("readmeforge-theme", "dark");
       updateThemeIcon("dark");
+    }
+    var themeToggle = document.getElementById("themeToggle");
+    if (themeToggle) {
+      themeToggle.setAttribute(
+        "aria-checked",
+        document.body.classList.contains("light-mode") ? "false" : "true"
+      );
     }
   }
 

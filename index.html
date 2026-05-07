@@ -171,8 +171,8 @@
       <aside class="sidebar">
         <!-- Templates -->
         <div class="sidebar-section">
-          <div class="sidebar-label">Templates</div>
-          <div class="templates-grid">
+          <div class="sidebar-label" id="templateSelectorLabel">Templates</div>
+          <div class="templates-grid" role="group" aria-labelledby="templateSelectorLabel">
             <button class="template-btn" onclick="applyTemplate('webapp')">
               🌐 Web App
             </button>
@@ -485,7 +485,7 @@ placeholder="SECRET_KEY=your_secret&#10;DATABASE_URL=sqlite:///db.sqlite3&#10;DE
       </div>
 
       <!-- ── PREVIEW ── -->
-      <aside class="preview">
+      <aside class="preview" aria-label="Live README preview">
         <div class="preview-header">
           <div class="preview-tabs">
             <button class="ptab active" id="tabRendered" onclick="setTab('rendered')">
@@ -560,7 +560,7 @@ placeholder="SECRET_KEY=your_secret&#10;DATABASE_URL=sqlite:///db.sqlite3&#10;DE
           </div>
         </div>
 
-        <div class="preview-body" id="previewBody">
+        <div class="preview-body" id="previewBody" role="region" aria-label="Live README preview panel" aria-live="polite" aria-atomic="true">
           <div class="empty-preview">
             <div class="icon">📄</div>
             <h3>Live preview appears here</h3>
