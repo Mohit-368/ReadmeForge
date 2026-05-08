@@ -428,8 +428,11 @@
         updateSectionCount();
         scheduleSave();
         scheduleRender();
-      });
-      
+        if (e.target.checked) {               
+          scrollToSectionInPreview(s.id);     
+         }
+        });
+        
       // Hide the section editor if this section is disabled
       var secEl = document.getElementById(s.el);
       if (secEl && !on) secEl.classList.add("hidden");
@@ -2105,6 +2108,58 @@
 
   // Initialize dark mode on page load
   initializeDarkMode();
+  // ── SMOOTH SCROLL ON TOGGLE ──
+  function scrollToSectionInPreview(sectionId) {
+    setTimeout(function() {
+      var previewBody = document.getElementById('previewBody');
+
+      var headingMap = {
+        'title':        'My Project',
+        'description':  'Description',
+        'features':     'Features',
+        'techstack':    'Tech Stack',
+        'installation': 'Installation',
+        'usage':        'Usage',
+        'structure':    'Project Structure',
+        'screenshots':  'Screenshots',
+        'api':          'API Reference',
+        'contributing': 'Contributing',
+        'author':       'Author'
+      };
+
+      var headings = previewBody.querySelectorAll('h1, h2, h3');
+      var target = null;
+
+      headings.forEach(function(h) {
+        if (sectionId === 'title') {
+          if (h.tagName === 'H1') target = h;
+          } else {
+          if (h.textContent.includes(headingMap[sectionId])) target = h;
+          }
+      });
+
+      if (target) {
+       var previewContainer = document.getElementById('previewBody');
+  
+       var containerRect = previewContainer.getBoundingClientRect();
+       var targetRect = target.getBoundingClientRect();
+
+       var scrollOffset = previewContainer.scrollTop + (targetRect.top - containerRect.top) - 100;
+  
+       previewContainer.scrollTo({
+        top: scrollOffset,
+        behavior: 'smooth'
+      });
+
+      target.classList.add('section-highlight');
+      setTimeout(function() {
+        target.classList.remove('section-highlight');
+      }, 1500);
+          }
+        }, 300);
+      }
+
+   window.scrollToSectionInPreview = scrollToSectionInPreview;
 
   init();
 })();

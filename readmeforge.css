@@ -2325,3 +2325,14 @@ select option {
     display: none !important;
   }
 }
+
+@keyframes sectionGlow {
+  0%   { background-color: transparent; }
+  30%  { background-color: rgba(56, 189, 248, 0.2); }
+  100% { background-color: transparent; }
+}
+
+.section-highlight {
+  border-radius: 4px;
+  animation: sectionGlow 1.5s ease-out forwards;
+}
