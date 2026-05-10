@@ -194,7 +194,7 @@
       el: "sec-installation",
       default: true,
     },
-    { id: "usage", label: "Usage", icon: "💻", el: "sec-usage", default: true },
+   
     {
       id: "structure",
       label: "Folder Structure",
