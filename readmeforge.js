@@ -59,7 +59,8 @@
     "projName", "tagline", "ghUser", "repoSlug", "description", "demoUrl",
     "features", "prereqs", "installCmds", "envVars", "usageCmd", "rawStructure",
     "videoUrl", "imageUrls", "apiDocs", "apiBase", "contribNotes", "authorName",
-    "authorGh", "authorEmail", "authorLinkedin", "authorWebsite", "customTech"
+    "authorGh", "authorEmail", "authorLinkedin", "authorWebsite", "customTech",
+    "supportMsg", "supportBmac", "supportKofi", "supportPatreon", "supportGhSponsors"
   ];
 
   function saveToLocalStorage() {
@@ -223,6 +224,13 @@
       icon: "👤",
       el: "sec-author",
       default: true,
+    },
+    {
+      id: "support",
+      label: "Support & Donation",
+      icon: "❤️",
+      el: "sec-support",
+      default: false,
     },
   ];
 
@@ -852,6 +860,11 @@
     var authorLi = v("authorLinkedin");
     var authorWeb = v("authorWebsite");
     var customTech = v("customTech");
+    var supportMsg = v("supportMsg");
+    var supportBmac = v("supportBmac");
+    var supportKofi = v("supportKofi");
+    var supportPatreon = v("supportPatreon");
+    var supportGhSponsors = v("supportGhSponsors");
 
     var md = "";
     var on = function (id) {
@@ -940,6 +953,7 @@
       if (on("api")) md += "- [API Reference](#-api-reference)\n";
       if (on("contributing")) md += "- [Contributing](#-contributing)\n";
       if (on("author")) md += "- [License](#-license)\n- [Author](#-author)\n";
+      if (on("support")) md += "- [Support & Donation](#️-support--donation)\n";
       md += "\n---\n\n";
     }
 
@@ -1184,6 +1198,46 @@
         "](https://github.com/" +
         (authorGh || ghUser) +
         ")\n";
+    }
+
+    // ─ SECTION 12: Support & Donation ─
+    if (on("support")) {
+      var hasSupportUrls = supportBmac || supportKofi || supportPatreon || supportGhSponsors;
+      if (supportMsg || hasSupportUrls) {
+        md += "## ❤️ Support & Donation\n\n";
+        if (supportMsg) {
+          md += supportMsg + "\n\n";
+        } else if (hasSupportUrls) {
+          md += "If you find this project helpful, please consider supporting its development:\n\n";
+        }
+
+        var supportLinks = [];
+        if (supportBmac) {
+          supportLinks.push(
+            "[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-ffdd00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://www.buymeacoffee.com/" + supportBmac + ")"
+          );
+        }
+        if (supportKofi) {
+          supportLinks.push(
+            "[![Ko-fi](https://img.shields.io/badge/Ko--fi-F16061?style=for-the-badge&logo=ko-fi&logoColor=white)](https://ko-fi.com/" + supportKofi + ")"
+          );
+        }
+        if (supportPatreon) {
+          supportLinks.push(
+            "[![Patreon](https://img.shields.io/badge/Patreon-F96854?style=for-the-badge&logo=patreon&logoColor=white)](https://patreon.com/" + supportPatreon + ")"
+          );
+        }
+        if (supportGhSponsors) {
+          supportLinks.push(
+            "[![GitHub Sponsors](https://img.shields.io/badge/sponsor-30363D?style=for-the-badge&logo=GitHub-Sponsors&logoColor=#EA4AAA)](https://github.com/sponsors/" + supportGhSponsors + ")"
+          );
+        }
+
+        if (supportLinks.length > 0) {
+          md += supportLinks.join(" ") + "\n\n";
+        }
+        md += "---\n\n";
+      }
     }
 
     return md;

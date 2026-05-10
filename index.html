@@ -24,14 +24,14 @@
       flex-wrap: nowrap !important;
       overflow: hidden !important;
     }
- 
+
     .preview-tabs {
       display: flex !important;
       flex-wrap: wrap !important;
       gap: 4px !important;
       min-width: 0 !important;
     }
- 
+
     .preview-actions {
       display: flex !important;
       flex-wrap: wrap !important;
@@ -40,28 +40,27 @@
       align-items: center !important;
       flex-wrap: wrap;
     }
- 
+
     .pbtn {
       white-space: nowrap !important;
       font-size: 13px !important;
       padding: 7px 14px !important;
       flex-shrink: 0 !important;
-      flex: 1;                
+      flex: 1;
       min-width: 140px;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 6px;
 
-      
+
     }
- 
+
     .ptab {
       white-space: nowrap !important;
       font-size: 13px !important;
       padding: 7px 14px !important;
     }
-
   </style>
 </head>
 
@@ -328,7 +327,7 @@
               <div>
                 <label>ENV VARIABLES (optional)</label>
                 <textarea class="textInput" id="envVars" style="min-height: 70px" oninput="scheduleRender()"
-placeholder="SECRET_KEY=your_secret&#10;DATABASE_URL=sqlite:///db.sqlite3&#10;DEBUG=True"></textarea>
+                  placeholder="SECRET_KEY=your_secret&#10;DATABASE_URL=sqlite:///db.sqlite3&#10;DEBUG=True"></textarea>
                 <label><span class="wordCount">0</span> <span class="wordCountText">Words</span></label>
               </div>
               <div>
@@ -349,7 +348,8 @@ placeholder="SECRET_KEY=your_secret&#10;DATABASE_URL=sqlite:///db.sqlite3&#10;DE
             <div class="es-body">
               <div>
                 <label>PASTE YOUR FOLDER STRUCTURE (indented with spaces)</label>
-                <textarea class="textInput" id="rawStructure" style="min-height: 120px" oninput="updateStructurePreview()"
+                <textarea class="textInput" id="rawStructure" style="min-height: 120px"
+                  oninput="updateStructurePreview()"
                   placeholder="src/&#10;  api/&#10;  models/&#10;  utils/&#10;templates/&#10;static/&#10;main.py&#10;requirements.txt&#10;README.md"></textarea>
                 <label><span class="wordCount">0</span> <span class="wordCountText">Words</span></label>
               </div>
@@ -481,6 +481,42 @@ placeholder="SECRET_KEY=your_secret&#10;DATABASE_URL=sqlite:///db.sqlite3&#10;DE
               </div>
             </div>
           </div>
+
+          <!-- 12. Support & Donation -->
+          <div class="editor-section" id="sec-support">
+            <div class="es-header">
+              <div class="es-num">12</div>
+              <div class="es-title">Support &amp; Donation</div>
+            </div>
+            <div class="es-body">
+              <div>
+                <label>SUPPORT MESSAGE (optional)</label>
+                <textarea class="textInput" id="supportMsg" style="min-height: 60px" oninput="scheduleRender()"
+                  placeholder="If you find this project helpful, please consider supporting its development:"></textarea>
+                <label><span class="wordCount">0</span> <span class="wordCountText">Words</span></label>
+              </div>
+              <div class="two-col">
+                <div>
+                  <label>BUY ME A COFFEE (username)</label>
+                  <input type="text" id="supportBmac" placeholder="username" oninput="scheduleRender()" />
+                </div>
+                <div>
+                  <label>KO-FI (username)</label>
+                  <input type="text" id="supportKofi" placeholder="username" oninput="scheduleRender()" />
+                </div>
+              </div>
+              <div class="two-col">
+                <div>
+                  <label>PATREON (username)</label>
+                  <input type="text" id="supportPatreon" placeholder="username" oninput="scheduleRender()" />
+                </div>
+                <div>
+                  <label>GITHUB SPONSORS (username)</label>
+                  <input type="text" id="supportGhSponsors" placeholder="username" oninput="scheduleRender()" />
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -509,7 +545,7 @@ placeholder="SECRET_KEY=your_secret&#10;DATABASE_URL=sqlite:///db.sqlite3&#10;DE
                 <polyline points="7,10 12,15 17,10" />
                 <line x1="12" y1="15" x2="12" y2="3" />
               </svg>
-              Download Markdown file 
+              Download Markdown file
             </button>
             <button class="pbtn print" id="printPreviewBtn" onclick="printPreview()">
               <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -517,7 +553,7 @@ placeholder="SECRET_KEY=your_secret&#10;DATABASE_URL=sqlite:///db.sqlite3&#10;DE
                 <path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2" />
                 <rect x="6" y="14" width="12" height="8" />
               </svg>
-            Print Preview
+              Print Preview
             </button>
           </div>
         </div>
@@ -531,7 +567,8 @@ placeholder="SECRET_KEY=your_secret&#10;DATABASE_URL=sqlite:///db.sqlite3&#10;DE
             </div>
             <div class="quality-panel-right">
               <span class="quality-label" id="qualityLabel">—</span>
-              <svg class="quality-chevron" id="qualityChevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transform: rotate(-90deg)">
+              <svg class="quality-chevron" id="qualityChevron" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" style="transform: rotate(-90deg)">
                 <polyline points="6 9 12 15 18 9"></polyline>
               </svg>
             </div>
