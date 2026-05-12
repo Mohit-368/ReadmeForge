@@ -156,6 +156,7 @@
         </a>
         <button class="hbtn" onclick="clearSavedData()">🗑 Clear Saved</button>
         <button class="hbtn" onclick="resetAll()">↺ Reset All Fields</button>
+        <button onclick="openHistoryPanel()"> 🕓 History</button>
         <button class="hbtn" onclick="copyMarkdown()">Copy Markdown</button>
         <button class="theme-toggle" id="themeToggle" title="Toggle dark/light mode">
           <span id="themeIcon">🌙</span>
@@ -570,6 +571,17 @@ placeholder="SECRET_KEY=your_secret&#10;DATABASE_URL=sqlite:///db.sqlite3&#10;DE
       </aside>
     </div>
   </div>
+
+  <!-- History Panel -->
+<div id="history-panel" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:9999;align-items:center;justify-content:center">
+  <div style="background:#1e1e2e;border-radius:12px;padding:24px;width:420px;max-width:90vw;max-height:80vh;overflow-y:auto;box-shadow:0 8px 32px rgba(0,0,0,0.5)">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <h3 style="margin:0;font-size:1.1rem">🕓 Snapshot History</h3>
+      <button onclick="closeHistoryPanel()" style="background:none;border:none;font-size:1.3rem;cursor:pointer;color:inherit">✕</button>
+    </div>
+    <ul id="history-list" style="list-style:none;padding:0;margin:0"></ul>
+  </div>
+</div>
 
   <!-- ── FOOTER ── -->
   <footer class="app-footer">

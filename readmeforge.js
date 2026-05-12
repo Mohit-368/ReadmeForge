@@ -145,6 +145,69 @@
   }
   window.clearSavedData = clearSavedData;
 
+  //  History Stack
+  var HISTORY_KEY = "readmeforge-history";
+  var MAX_HISTORY = 15;
+
+  function pushToHistory() {
+    var raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
+    try {
+      var history = JSON.parse(localStorage.getItem(HISTORY_KEY) || "[]");
+      history.unshift({ ts: Date.now(), data: raw });
+      if (history.length > MAX_HISTORY) history = history.slice(0, MAX_HISTORY);
+      localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+    } catch (e) {
+      console.error("History: failed to push snapshot:", e);
+    }
+  }
+
+  function restoreFromHistory(index) {
+    try {
+      var history = JSON.parse(localStorage.getItem(HISTORY_KEY) || "[]");
+      var snapshot = history[index];
+      if (!snapshot) return;
+      localStorage.setItem(STORAGE_KEY, snapshot.data);
+      toast("✓ Snapshot restored! Reloading...");
+      setTimeout(function () { location.reload(); }, 1000);
+    } catch (e) {
+      console.error("History: failed to restore snapshot:", e);
+    }
+  }
+  window.restoreFromHistory = restoreFromHistory;
+
+  function openHistoryPanel() {
+    var panel = document.getElementById("history-panel");
+    var list = document.getElementById("history-list");
+    if (!panel || !list) return;
+    var history = [];
+    try {
+      history = JSON.parse(localStorage.getItem(HISTORY_KEY) || "[]");
+    } catch (e) {}
+
+    list.innerHTML = "";
+    if (history.length === 0) {
+      list.innerHTML = "<li style='opacity:0.6;padding:8px 0'>No snapshots yet. One is saved automatically before each reset.</li>";
+    } else {
+      history.forEach(function (snap, i) {
+        var date = new Date(snap.ts).toLocaleString();
+        var li = document.createElement("li");
+        li.style.cssText = "display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.08)";
+        li.innerHTML = "<span style='font-size:0.85rem'>🕓 " + date + "</span>" +
+          "<button onclick='restoreFromHistory(" + i + ")' style='font-size:0.8rem;padding:4px 10px;cursor:pointer;border-radius:6px;border:none;background:#4f8ef7;color:#fff'>Restore</button>";
+        list.appendChild(li);
+      });
+    }
+    panel.style.display = "flex";
+  }
+  window.openHistoryPanel = openHistoryPanel;
+
+  function closeHistoryPanel() {
+    var panel = document.getElementById("history-panel");
+    if (panel) panel.style.display = "none";
+  }
+  window.closeHistoryPanel = closeHistoryPanel;
+
   // Query inputs used by the word count feature on text areas.
   const inputs = document.querySelectorAll(".textInput");
   const counts = document.querySelectorAll(".wordCount");
@@ -1949,11 +2012,15 @@
     // Rebuild section toggles UI
     buildSectionToggles();
     updateSectionCount();
+
+   if (!confirm("Reset all fields? A snapshot will be saved so you can restore it from History.")) return;
+    pushToHistory();
     try {
       localStorage.removeItem(STORAGE_KEY);
     } catch (e) {
       console.error("Failed to clear saved data on reset:", e);
     }
+    
     scheduleRender();
     toast("✓ Reset complete!");
   }
