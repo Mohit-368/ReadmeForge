@@ -54,6 +54,8 @@
 
   // ── localStorage Auto-Save ────────────────────────────────────
   var STORAGE_KEY = "readmeforge-data";
+  var HISTORY_KEY = "readmeforge-history";
+  var MAX_HISTORY = 15;
 
   var FIELD_IDS = [
     "projName", "tagline", "ghUser", "repoSlug", "description", "demoUrl",
@@ -64,6 +66,15 @@
   ];
 
   function saveToLocalStorage() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(captureSavedState()));
+      showAutoSavedIndicator();
+    } catch (e) {
+      console.error("Auto-save failed:", e);
+    }
+  }
+
+  function captureSavedState() {
     var data = {
       fields: {},
       license: (document.getElementById("license") || {}).value || "MIT",
@@ -75,13 +86,181 @@
       var el = document.getElementById(id);
       if (el) data.fields[id] = el.value;
     });
+    return data;
+  }
+
+  function captureFullState() {
+    var data = captureSavedState();
+    data.screenshots = screenshots.map(function (ss) {
+      return {
+        name: ss.name,
+        dataUrl: ss.dataUrl
+      };
+    });
+    return data;
+  }
+
+  function applySavedState(data) {
+    if (!data || typeof data !== "object" || !data.fields) return false;
+
+    FIELD_IDS.forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el && typeof data.fields[id] === "string") el.value = data.fields[id];
+    });
+
+    var licenseEl = document.getElementById("license");
+    if (licenseEl && data.license) licenseEl.value = data.license;
+
+    selectedTechs = Array.isArray(data.techs) ? new Set(data.techs) : new Set();
+    selectedBadges = Array.isArray(data.badges)
+      ? new Set(data.badges)
+      : new Set(["license", "stars", "prs"]);
+
+    if (data.sections && typeof data.sections === "object") {
+      Object.keys(sectionState).forEach(function (id) {
+        if (Object.prototype.hasOwnProperty.call(data.sections, id)) {
+          sectionState[id] = !!data.sections[id];
+        }
+      });
+    }
+
+    if (Array.isArray(data.screenshots)) {
+      screenshots = data.screenshots.map(function (ss) {
+        return {
+          name: ss.name,
+          dataUrl: ss.dataUrl
+        };
+      });
+      renderScreenshotList();
+    }
+
+    return true;
+  }
+
+  function readHistoryStack() {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-      showAutoSavedIndicator();
+      var raw = localStorage.getItem(HISTORY_KEY);
+      if (!raw) return [];
+      var history = JSON.parse(raw);
+      if (!Array.isArray(history)) return [];
+      return history.filter(function (entry) {
+        return entry && typeof entry === "object" && entry.timestamp && entry.state;
+      }).slice(0, MAX_HISTORY);
     } catch (e) {
-      console.error("Auto-save failed:", e);
+      console.error("Failed to read history:", e);
+      return [];
     }
   }
+
+  function writeHistoryStack(history) {
+    localStorage.setItem(HISTORY_KEY, JSON.stringify(history.slice(0, MAX_HISTORY)));
+  }
+
+  function renderHistoryPanel() {
+    var el = document.getElementById("historyList");
+    if (!el) return;
+
+    var history = readHistoryStack();
+    if (!history.length) {
+      el.innerHTML = '<div class="history-empty">No reset snapshots yet.</div>';
+      return;
+    }
+
+    el.innerHTML = history
+      .map(function (entry, index) {
+        var snapshotTime = entry.timestamp ? new Date(entry.timestamp) : null;
+        var timeLabel = snapshotTime && !isNaN(snapshotTime.getTime())
+          ? snapshotTime.toLocaleString()
+          : "Unknown time";
+        var fieldCount = entry.state && entry.state.fields
+          ? Object.keys(entry.state.fields).length
+          : 0;
+        var screenshotCount = entry.state && Array.isArray(entry.state.screenshots)
+          ? entry.state.screenshots.length
+          : 0;
+        return (
+          '<div class="history-item">' +
+          '<div class="history-item-meta">' +
+          timeLabel +
+          ' • ' +
+          fieldCount +
+          ' fields' +
+          (screenshotCount ? ' • ' + screenshotCount + ' screenshots' : '') +
+          '</div>' +
+          '<button class="hbtn history-restore-btn" onclick="restoreSnapshot(' +
+          index +
+          ')">Restore</button>' +
+          '</div>'
+        );
+      })
+      .join("");
+  }
+
+  function pushToHistory(state) {
+    var history = readHistoryStack();
+    history.unshift({
+      timestamp: new Date().toISOString(),
+      state: state
+    });
+    writeHistoryStack(history);
+    renderHistoryPanel();
+  }
+  window.pushToHistory = pushToHistory;
+
+  function openHistoryPanel() {
+    var sidebar = document.querySelector(".sidebar");
+    var panel = document.getElementById("historyPanel");
+    var button = document.getElementById("historyButton");
+    if (sidebar) sidebar.classList.add("history-open");
+    if (panel) panel.classList.remove("hidden");
+    if (button) button.classList.add("active");
+    renderHistoryPanel();
+  }
+
+  function toggleHistoryPanel() {
+    var sidebar = document.querySelector(".sidebar");
+    var panel = document.getElementById("historyPanel");
+    var button = document.getElementById("historyButton");
+    var isOpen = sidebar && sidebar.classList.contains("history-open");
+    if (isOpen) {
+      if (sidebar) sidebar.classList.remove("history-open");
+      if (panel) panel.classList.add("hidden");
+      if (button) button.classList.remove("active");
+      return;
+    }
+    openHistoryPanel();
+  }
+  window.openHistoryPanel = openHistoryPanel;
+  window.toggleHistoryPanel = toggleHistoryPanel;
+
+  function restoreSnapshot(index) {
+    var history = readHistoryStack();
+    var entry = history[index];
+    if (!entry || !entry.state) {
+      toast("Snapshot not found.");
+      return;
+    }
+
+    clearTimeout(saveTimer);
+    saveTimer = null;
+
+    pushToHistory(captureFullState());
+    applySavedState(entry.state);
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(captureSavedState()));
+    } catch (e) {
+      console.error("Failed to restore saved data:", e);
+    }
+
+    buildBadgePicker();
+    updateTechCount();
+    buildSectionToggles();
+    updateSectionCount();
+    openHistoryPanel();
+    scheduleRender();
+    toast("✓ Snapshot restored!");
+  }
+  window.restoreSnapshot = restoreSnapshot;
 
   function loadFromLocalStorage() {
     try {
@@ -95,26 +274,7 @@
         return false;
       }
 
-      FIELD_IDS.forEach(function (id) {
-        var el = document.getElementById(id);
-        if (el && typeof data.fields[id] === "string") el.value = data.fields[id];
-      });
-
-      var licenseEl = document.getElementById("license");
-      if (licenseEl && data.license) licenseEl.value = data.license;
-
-      if (Array.isArray(data.techs)) selectedTechs = new Set(data.techs);
-      if (Array.isArray(data.badges)) selectedBadges = new Set(data.badges);
-
-      if (data.sections && typeof data.sections === "object") {
-        Object.keys(data.sections).forEach(function (id) {
-          if (Object.prototype.hasOwnProperty.call(sectionState, id)) {
-            sectionState[id] = !!data.sections[id];
-          }
-        });
-      }
-
-      return true;
+      return applySavedState(data);
     } catch (e) {
       console.error("Auto-save: failed to restore data:", e);
       return false;
@@ -393,6 +553,7 @@
       });
       updateStructurePreview();
     }
+    renderHistoryPanel();
     scheduleRender();
   }
 
@@ -1949,6 +2110,15 @@
    * @returns {void}
    */
   function resetAll() {
+    if (!window.confirm("Are you sure? This will clear all your fields.")) {
+      return;
+    }
+
+    clearTimeout(saveTimer);
+    saveTimer = null;
+
+    pushToHistory(captureFullState());
+
     // Clear all text inputs, email inputs, URLs, and textareas
     document
       .querySelectorAll(
@@ -2007,6 +2177,7 @@
     } catch (e) {
       console.error("Failed to clear saved data on reset:", e);
     }
+    renderHistoryPanel();
     scheduleRender();
     toast("✓ Reset complete!");
   }

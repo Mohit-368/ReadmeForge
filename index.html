@@ -61,6 +61,41 @@
       font-size: 13px !important;
       padding: 7px 14px !important;
     }
+
+    .history-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .history-item {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: var(--surface2);
+    }
+
+    .history-item-meta {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.4;
+      font-family: "JetBrains Mono", monospace;
+    }
+
+    .history-restore-btn {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .history-empty {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+      padding: 8px 2px;
+    }
   </style>
 </head>
 
@@ -154,6 +189,7 @@
           Source
         </a>
         <button class="hbtn" onclick="clearSavedData()">🗑 Clear Saved</button>
+        <button class="hbtn" id="historyButton" onclick="toggleHistoryPanel()">🕘 History</button>
         <button class="hbtn" onclick="resetAll()">↺ Reset All Fields</button>
         <button class="hbtn" onclick="copyMarkdown()">Copy Markdown</button>
         <button class="theme-toggle" id="themeToggle" title="Toggle dark/light mode">
@@ -203,6 +239,13 @@
         <div class="sidebar-section" style="flex: 1">
           <div class="sidebar-label">Sections</div>
           <div class="section-toggles" id="sectionToggles">
+            <!-- populated by JS -->
+          </div>
+        </div>
+
+        <div class="sidebar-section history-panel hidden" id="historyPanel">
+          <div class="sidebar-label">Restore History</div>
+          <div id="historyList" class="history-list">
             <!-- populated by JS -->
           </div>
         </div>
