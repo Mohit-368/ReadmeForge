@@ -554,6 +554,8 @@
       updateStructurePreview();
     }
     renderHistoryPanel();
+    if (typeof applyPreviewZoom === "function") applyPreviewZoom();
+    if (typeof setupZoomShortcuts === "function") setupZoomShortcuts();
     scheduleRender();
   }
 
