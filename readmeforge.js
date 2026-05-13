@@ -51,6 +51,12 @@
   var renderTimer = null;
   var saveTimer = null;
   var autoSaveTimer = null;
+  var zoomSaveTimer = null;
+
+  // Preview zoom state (25% -> 200% in fixed steps)
+  var PREVIEW_ZOOM_KEY = "readmeforge-preview-zoom";
+  var ZOOM_LEVELS = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 2];
+  var currentZoom = 1;
 
   // ── localStorage Auto-Save ────────────────────────────────────
   var STORAGE_KEY = "readmeforge-data";
@@ -59,7 +65,8 @@
     "projName", "tagline", "ghUser", "repoSlug", "description", "demoUrl",
     "features", "prereqs", "installCmds", "envVars", "usageCmd", "rawStructure",
     "videoUrl", "imageUrls", "apiDocs", "apiBase", "contribNotes", "authorName",
-    "authorGh", "authorEmail", "authorLinkedin", "authorWebsite", "customTech"
+    "authorGh", "authorEmail", "authorLinkedin", "authorWebsite", "customTech",
+    "supportMsg", "supportBmac", "supportKofi", "supportPatreon", "supportGhSponsors"
   ];
 
   function saveToLocalStorage() {
@@ -207,6 +214,110 @@
     if (panel) panel.style.display = "none";
   }
   window.closeHistoryPanel = closeHistoryPanel;
+  function getNearestZoom(level) {
+    return ZOOM_LEVELS.reduce(function (closest, candidate) {
+      return Math.abs(candidate - level) < Math.abs(closest - level)
+        ? candidate
+        : closest;
+    }, ZOOM_LEVELS[0]);
+  }
+
+  function savePreviewZoom() {
+    try {
+      localStorage.setItem(PREVIEW_ZOOM_KEY, String(currentZoom));
+    } catch (e) {
+      console.error("Failed to save preview zoom:", e);
+    }
+  }
+
+  function scheduleZoomSave() {
+    clearTimeout(zoomSaveTimer);
+    zoomSaveTimer = setTimeout(savePreviewZoom, 120);
+  }
+
+  function loadPreviewZoom() {
+    try {
+      var raw = localStorage.getItem(PREVIEW_ZOOM_KEY);
+      if (!raw) return;
+      var parsed = parseFloat(raw);
+      if (!isNaN(parsed)) currentZoom = getNearestZoom(parsed);
+    } catch (e) {
+      console.error("Failed to load preview zoom:", e);
+    }
+  }
+
+  function applyPreviewZoom() {
+    var previewBody = document.getElementById("previewBody");
+    var zoomLevel = document.getElementById("zoomLevel");
+    var zoomOutBtn = document.getElementById("zoomOutBtn");
+    var zoomInBtn = document.getElementById("zoomInBtn");
+
+    if (previewBody) {
+      previewBody.style.setProperty("--preview-zoom", String(currentZoom));
+    }
+
+    if (zoomLevel) {
+      zoomLevel.textContent = Math.round(currentZoom * 100) + "%";
+    }
+
+    if (zoomOutBtn) zoomOutBtn.disabled = currentZoom <= ZOOM_LEVELS[0];
+    if (zoomInBtn) zoomInBtn.disabled = currentZoom >= ZOOM_LEVELS[ZOOM_LEVELS.length - 1];
+  }
+
+  function setZoom(level, persist) {
+    var next = getNearestZoom(level);
+    if (next === currentZoom) {
+      applyPreviewZoom();
+      return;
+    }
+    currentZoom = next;
+    applyPreviewZoom();
+    if (persist !== false) scheduleZoomSave();
+  }
+
+  function zoomIn() {
+    var next = ZOOM_LEVELS.find(function (level) {
+      return level > currentZoom;
+    });
+    if (typeof next === "number") setZoom(next);
+  }
+  window.zoomIn = zoomIn;
+
+  function zoomOut() {
+    var next = ZOOM_LEVELS.slice().reverse().find(function (level) {
+      return level < currentZoom;
+    });
+    if (typeof next === "number") setZoom(next);
+  }
+  window.zoomOut = zoomOut;
+
+  function resetPreviewZoom() {
+    setZoom(1);
+  }
+  window.resetPreviewZoom = resetPreviewZoom;
+
+  function setupZoomShortcuts() {
+    document.addEventListener("keydown", function (event) {
+      if (!(event.ctrlKey || event.metaKey)) return;
+
+      if (event.key === "+" || event.key === "=") {
+        event.preventDefault();
+        zoomIn();
+        return;
+      }
+
+      if (event.key === "-" || event.key === "_") {
+        event.preventDefault();
+        zoomOut();
+        return;
+      }
+
+      if (event.key === "0") {
+        event.preventDefault();
+        resetPreviewZoom();
+      }
+    });
+  }
 
   // Query inputs used by the word count feature on text areas.
   const inputs = document.querySelectorAll(".textInput");
@@ -257,7 +368,6 @@
       el: "sec-installation",
       default: true,
     },
-    { id: "usage", label: "Usage", icon: "💻", el: "sec-usage", default: true },
     {
       id: "structure",
       label: "Folder Structure",
@@ -286,6 +396,13 @@
       icon: "👤",
       el: "sec-author",
       default: true,
+    },
+    {
+      id: "support",
+      label: "Support & Donation",
+      icon: "❤️",
+      el: "sec-support",
+      default: false,
     },
   ];
 
@@ -430,6 +547,7 @@
    */
   function init() {
     var hasData = loadFromLocalStorage();
+    loadPreviewZoom();
     buildSectionToggles();
     buildTechPicker();
     if (hasData) {
@@ -449,6 +567,8 @@
       });
       updateStructurePreview();
     }
+    applyPreviewZoom();
+    setupZoomShortcuts();
     scheduleRender();
   }
 
@@ -915,6 +1035,11 @@
     var authorLi = v("authorLinkedin");
     var authorWeb = v("authorWebsite");
     var customTech = v("customTech");
+    var supportMsg = v("supportMsg");
+    var supportBmac = v("supportBmac");
+    var supportKofi = v("supportKofi");
+    var supportPatreon = v("supportPatreon");
+    var supportGhSponsors = v("supportGhSponsors");
 
     var md = "";
     var on = function (id) {
@@ -1003,6 +1128,7 @@
       if (on("api")) md += "- [API Reference](#-api-reference)\n";
       if (on("contributing")) md += "- [Contributing](#-contributing)\n";
       if (on("author")) md += "- [License](#-license)\n- [Author](#-author)\n";
+      if (on("support")) md += "- [Support & Donation](#️-support--donation)\n";
       md += "\n---\n\n";
     }
 
@@ -1247,6 +1373,46 @@
         "](https://github.com/" +
         (authorGh || ghUser) +
         ")\n";
+    }
+
+    // ─ SECTION 12: Support & Donation ─
+    if (on("support")) {
+      var hasSupportUrls = supportBmac || supportKofi || supportPatreon || supportGhSponsors;
+      if (supportMsg || hasSupportUrls) {
+        md += "## ❤️ Support & Donation\n\n";
+        if (supportMsg) {
+          md += supportMsg + "\n\n";
+        } else if (hasSupportUrls) {
+          md += "If you find this project helpful, please consider supporting its development:\n\n";
+        }
+
+        var supportLinks = [];
+        if (supportBmac) {
+          supportLinks.push(
+            "[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-ffdd00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://www.buymeacoffee.com/" + supportBmac + ")"
+          );
+        }
+        if (supportKofi) {
+          supportLinks.push(
+            "[![Ko-fi](https://img.shields.io/badge/Ko--fi-F16061?style=for-the-badge&logo=ko-fi&logoColor=white)](https://ko-fi.com/" + supportKofi + ")"
+          );
+        }
+        if (supportPatreon) {
+          supportLinks.push(
+            "[![Patreon](https://img.shields.io/badge/Patreon-F96854?style=for-the-badge&logo=patreon&logoColor=white)](https://patreon.com/" + supportPatreon + ")"
+          );
+        }
+        if (supportGhSponsors) {
+          supportLinks.push(
+            "[![GitHub Sponsors](https://img.shields.io/badge/sponsor-30363D?style=for-the-badge&logo=GitHub-Sponsors&logoColor=#EA4AAA)](https://github.com/sponsors/" + supportGhSponsors + ")"
+          );
+        }
+
+        if (supportLinks.length > 0) {
+          md += supportLinks.join(" ") + "\n\n";
+        }
+        md += "---\n\n";
+      }
     }
 
     return md;
@@ -1505,7 +1671,8 @@
     // Show empty state if no content
     if (!currentMd.trim()) {
       body.innerHTML =
-        '<div class="empty-preview"><div class="icon">📄</div><h3>Live preview appears here</h3><p>Start filling in the editor →</p></div>';
+        '<div class="preview-zoom-wrap"><div class="empty-preview"><div class="icon">📄</div><h3>Live preview appears here</h3><p>Start filling in the editor →</p></div></div>';
+      applyPreviewZoom();
       updateQualityPanel({ score: 0, suggestions: [] });
       return;
     }
@@ -1514,11 +1681,12 @@
     if (currentTab === "rendered") {
       // Display as formatted HTML (GitHub-style preview)
       body.innerHTML =
-        '<div class="gh-preview">' + md2html(currentMd) + "</div>";
+        '<div class="preview-zoom-wrap"><div class="gh-preview">' + md2html(currentMd) + "</div></div>";
     } else {
       // Display raw markdown (escaped for viewing)
-      body.innerHTML = '<div class="raw-view">' + esc(currentMd) + "</div>";
+      body.innerHTML = '<div class="preview-zoom-wrap"><div class="raw-view">' + esc(currentMd) + "</div></div>";
     }
+    applyPreviewZoom();
     updateQualityPanel(calculateQuality());
   }
 
@@ -2172,6 +2340,32 @@
 
   // Initialize dark mode on page load
   initializeDarkMode();
+
+  /**
+   * Initialize Back to Top functionality
+   * @function initBackToTop
+   * @returns {void}
+   */
+  function initBackToTop() {
+    var previewBody = document.getElementById("previewBody");
+    var backToTopBtn = document.getElementById("backToTopBtn");
+
+    if (previewBody && backToTopBtn) {
+      previewBody.addEventListener("scroll", function() {
+        if (previewBody.scrollTop > 200) {
+          backToTopBtn.classList.add("show");
+        } else {
+          backToTopBtn.classList.remove("show");
+        }
+      });
+
+      backToTopBtn.addEventListener("click", function() {
+        previewBody.scrollTo({ top: 0, behavior: "smooth" });
+      });
+    }
+  }
+
+  initBackToTop();
 
   init();
 })();

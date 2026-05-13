@@ -14,13 +14,27 @@
 
 ## Open Source Features
 
-<div align="center">
-  <a href="https://www.nsoc.in">
-    <img src="assets/image.webp" alt="Featured in Nexus Spring of Code" width="50"/>
-  <br/>
-    <sub><b>Featured in Nexus Spring of Code 2026 </b></sub>
-  </a>
-</div>
+<table align="center">
+<tr>
+
+<td align="center" width="300">
+<a href="https://www.nsoc.in">
+<img src="assets/image.webp" alt="Nexus Spring of Code" width="100"/>
+<br /><br />
+<sub><b>Nexus Spring of Code 2026</b></sub>
+</a>
+</td>
+
+<td align="center" width="300">
+<a href="https://gssoc.girlscript.tech/">
+<img src="assets/gssoc.png" alt="GirlScript Summer of Code" width="100"/>
+<br /><br />
+<sub><b>GirlScript Summer of Code 2026</b></sub>
+</a>
+</td>
+
+</tr>
+</table>
 
 
 ---
