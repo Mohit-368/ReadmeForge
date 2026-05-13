@@ -580,6 +580,12 @@ body.light-mode .hero-title {
   box-shadow: 0 8px 25px rgba(56, 189, 248, 0.5);
 }
 
+.hbtn.active {
+  border-color: var(--accent);
+  color: var(--accent);
+  box-shadow: inset 0 0 0 1px rgba(56, 189, 248, 0.18);
+}
+
 /* ── Dark Mode Toggle ── */
 .theme-toggle {
   padding: 8px 12px;
@@ -648,6 +654,14 @@ body.light-mode .hero-title {
 .sidebar-section {
   padding: 20px;
   border-bottom: 1px solid var(--border);
+}
+
+.sidebar-section.hidden {
+  display: none;
+}
+
+.sidebar.history-open .history-panel.hidden {
+  display: block;
 }
 
 .sidebar-label {
