@@ -1,4 +1,4 @@
-﻿
+
 /* =======================================================
    SITE NAVBAR
 ======================================================= */
@@ -10,25 +10,23 @@
   width: 100% !important;
   z-index: 99999 !important;
   background: transparent;
-  border-bottom: 1px solid transparent;
   height: 80px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 40px;
   transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-  /* Constant fade transition for the top area */
-  mask-image: linear-gradient(to bottom, black 65%, transparent 100%);
-  -webkit-mask-image: linear-gradient(to bottom, black 65%, transparent 100%);
+  mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
 }
 
 .site-nav.scrolled {
   height: 64px;
   background: var(--header-bg-glass);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   padding: 0 24px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
 }
 
 .site-nav-links {
@@ -119,7 +117,7 @@
 }
 
 /* =======================================================
-   LANDING PAGE â€” SHARED
+   LANDING PAGE - SHARED
 ======================================================= */
 .landing-container {
   max-width: 1200px;
