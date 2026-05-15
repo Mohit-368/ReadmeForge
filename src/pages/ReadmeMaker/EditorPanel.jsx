@@ -13,7 +13,7 @@ function WordCount({ text }) {
   );
 }
 
-function EditorSection({ num, title, badge, hidden, children }) {
+function EditorSection({ num, title, badge, hidden, children, onAIClick }) {
   if (hidden) return null;
   return (
     <div className="editor-section">
@@ -21,6 +21,16 @@ function EditorSection({ num, title, badge, hidden, children }) {
         <div className="es-num">{num}</div>
         <div className="es-title">{title}</div>
         {badge && <span className="es-badge">{badge}</span>}
+        {onAIClick && (
+          <button
+            className="ai-section-btn"
+            onClick={onAIClick}
+            title={`AI suggestions for ${title}`}
+            style={{ marginLeft: 'auto' }}
+          >
+            ✨ AI
+          </button>
+        )}
       </div>
       <div className="es-body">{children}</div>
     </div>
@@ -33,6 +43,7 @@ export default function EditorPanel({
   selectedTechs, toggleTech,
   selectedBadges, toggleBadge,
   screenshots, addScreenshots, removeScreenshot,
+  openAIModal
 }) {
   const fileInputRef = useRef(null);
   const dropZoneRef = useRef(null);
@@ -60,7 +71,7 @@ export default function EditorPanel({
     <div className="editor">
       <div className="editor-inner" id="editorInner">
 
-        <EditorSection num={1} title="Project Title & Badges" hidden={!sectionState.title}>
+        <EditorSection num={1} title="Project Title & Badges" hidden={!sectionState.title} onAIClick={() => openAIModal('title')}>
           <div className="two-col">
             <div>
               <label>PROJECT NAME *</label>
@@ -101,7 +112,7 @@ export default function EditorPanel({
           </div>
         </EditorSection>
 
-        <EditorSection num={2} title="Description" hidden={!sectionState.description}>
+        <EditorSection num={2} title="Description" hidden={!sectionState.description} onAIClick={() => openAIModal('description')}>
           <div>
             <label>SHORT DESCRIPTION</label>
             <textarea className="textInput" id="description" style={{ minHeight: 90 }}
@@ -116,7 +127,7 @@ export default function EditorPanel({
           </div>
         </EditorSection>
 
-        <EditorSection num={3} title="Features" hidden={!sectionState.features}>
+        <EditorSection num={3} title="Features" hidden={!sectionState.features} onAIClick={() => openAIModal('features')}>
           <div>
             <label>KEY FEATURES — use "### Category" for groups, "- item" for bullets</label>
             <textarea className="textInput" id="features" style={{ minHeight: 130 }}
@@ -151,7 +162,7 @@ export default function EditorPanel({
           </div>
         </EditorSection>
 
-        <EditorSection num={5} title="Installation" hidden={!sectionState.installation}>
+        <EditorSection num={5} title="Installation" hidden={!sectionState.installation} onAIClick={() => openAIModal('installation')}>
           <div>
             <label>PREREQUISITES</label>
             <input type="text" id="prereqs" placeholder="Python 3.10+, Node.js 18+"

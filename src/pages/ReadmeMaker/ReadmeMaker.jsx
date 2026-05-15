@@ -7,6 +7,7 @@ import { SECTIONS } from '../../utils/constants';
 import Sidebar from './Sidebar';
 import EditorPanel from './EditorPanel';
 import PreviewPanel from './PreviewPanel';
+import AISuggestionModal from './AISuggestionModal';
 import Logo from '../../components/ui/Logo';
 import SEOHead from '../../components/shared/SEOHead';
 import { useState } from 'react';
@@ -23,6 +24,12 @@ export default function ReadmeMaker() {
     screenshots, addScreenshots, removeScreenshot,
     applyTemplate, resetAll, clearSaved,
     autoSaved,
+    // AI
+    aiState,
+    openAIModal, closeAIModal, setAIScope,
+    setAILoading, setAISuggestions, setAIError,
+    acceptSuggestion, rejectSuggestion, undoSuggestion,
+    editSuggestion, toggleEditSuggestion, acceptAllSuggestions,
   } = useReadmeState();
 
   const [activeTemplate, setActiveTemplate] = useState(null);
@@ -113,6 +120,7 @@ export default function ReadmeMaker() {
             screenshots={screenshots}
             addScreenshots={addScreenshots}
             removeScreenshot={removeScreenshot}
+            openAIModal={openAIModal}
           />
           <PreviewPanel
             currentMd={currentMd}
@@ -120,9 +128,28 @@ export default function ReadmeMaker() {
             sectionState={sectionState}
             selectedTechs={selectedTechs}
             screenshots={screenshots}
+            openAIModal={openAIModal}
           />
         </div>
       </div>
+
+      <AISuggestionModal
+        aiState={aiState}
+        closeAIModal={closeAIModal}
+        setAIScope={setAIScope}
+        setAILoading={setAILoading}
+        setAISuggestions={setAISuggestions}
+        setAIError={setAIError}
+        acceptSuggestion={acceptSuggestion}
+        rejectSuggestion={rejectSuggestion}
+        undoSuggestion={undoSuggestion}
+        editSuggestion={editSuggestion}
+        toggleEditSuggestion={toggleEditSuggestion}
+        acceptAllSuggestions={acceptAllSuggestions}
+        formData={formData}
+        currentMd={currentMd}
+        updateField={updateField}
+      />
     </>
   );
 }
