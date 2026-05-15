@@ -9,10 +9,10 @@ export default function PageTransition() {
     // Start animation on route change
     setIsAnimating(true);
     
-    // Ultra-fast for Editor/HTU, regular for Home
-    const isFast = location.pathname !== '/';
-    const duration = isFast ? 500 : 1200;
-    const delay = isFast ? 50 : 300;
+    // Smoke only for Home, fast fade for others
+    const isHome = location.pathname === '/';
+    const duration = isHome ? 1200 : 300;
+    const delay = isHome ? 300 : 0;
 
     // Set CSS variables for sync
     document.documentElement.style.setProperty('--transition-duration', `${duration}ms`);
@@ -20,21 +20,25 @@ export default function PageTransition() {
 
     const timer = setTimeout(() => {
       setIsAnimating(false);
-    }, duration + 100);
+    }, duration + 50);
 
     return () => clearTimeout(timer);
   }, [location.pathname]);
 
   if (!isAnimating) return null;
 
-  const isFast = location.pathname !== '/';
+  const isHome = location.pathname === '/';
 
   return (
-    <div className={`page-swipe-overlay${isFast ? ' is-fast' : ''}`}>
-      <div className="smoke-cloud smoke-1" />
-      <div className="smoke-cloud smoke-2" />
-      <div className="smoke-cloud smoke-3" />
-      <div className="smoke-cloud smoke-4" />
+    <div className={`page-swipe-overlay${!isHome ? ' no-smoke' : ''}`}>
+      {isHome && (
+        <>
+          <div className="smoke-cloud smoke-1" />
+          <div className="smoke-cloud smoke-2" />
+          <div className="smoke-cloud smoke-3" />
+          <div className="smoke-cloud smoke-4" />
+        </>
+      )}
     </div>
   );
 }
