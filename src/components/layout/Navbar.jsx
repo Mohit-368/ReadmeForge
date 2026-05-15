@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { NavLink, Link } from 'react-router-dom';
 import { useTheme } from '../../hooks/useTheme';
 import Logo from '../ui/Logo';
@@ -6,11 +6,20 @@ import Logo from '../ui/Logo';
 export default function Navbar() {
   const { theme, toggleTheme } = useTheme();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
-    <nav className="site-nav">
+    <nav className={`site-nav${scrolled ? ' scrolled' : ''}`}>
       <Link to="/" className="logo" onClick={() => setMenuOpen(false)}>
-        <Logo size={36} />
+        <Logo size={scrolled ? 32 : 38} />
         <span className="logo-name">README<span>Forge</span></span>
       </Link>
 
