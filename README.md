@@ -1,14 +1,13 @@
-
-
-#  ReadmeForge
+# ReadmeForge
 
 **The fastest way to craft beautiful GitHub READMEs — no Markdown knowledge required.**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Made with HTML](https://img.shields.io/badge/Made%20with-HTML%2FJS%2FCSS-orange.svg)](#)
+[![Made with React](https://img.shields.io/badge/Made%20with-React%2018-61DAFB?logo=react)](https://react.dev)
+[![Vite](https://img.shields.io/badge/Build%20Tool-Vite%205-646CFF?logo=vite)](https://vitejs.dev)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
-[ Live Demo](https://makeareadme.netlify.app) · [ Report a Bug](../../issues) · [Request a Feature](../../issues)
+[Live Demo](https://makeareadme.netlify.app) · [Report a Bug](../../issues) · [Request a Feature](../../issues)
 
 ---
 
@@ -36,79 +35,99 @@
 </tr>
 </table>
 
+---
+
+## About
+
+**ReadmeForge** is a React-based web application that helps developers generate professional GitHub README files quickly — no Markdown expertise needed. Fill in your project details section by section, toggle content on or off, and watch a live preview update in real time. When done, copy the raw Markdown and paste it straight into your repo.
 
 ---
 
-##  About
+## Features
 
-**ReadmeForge** is a browser-based README generator that lets you build polished GitHub repository documentation in minutes — no Markdown expertise needed. Simply fill in your project's sections, toggle the content you want, upload screenshots, and watch a live preview update in real time. When you're done, copy the raw Markdown and paste it straight into your repo.
-
----
-
-##  Features
-
--  **Section-based builder** — Fill in structured fields for title, description, installation, usage, and more
--  **Live side-by-side preview** — See your rendered README as you type
--  **Screenshot support** — Insert images directly into your README
--  **One-click raw copy** — Grab the raw Markdown and paste it into GitHub instantly
--  **Toggle sections** — Include only what your project needs
--  **Zero dependencies** — Pure HTML, CSS, and JavaScript; runs entirely in the browser
+- **Section-based builder** — Fill in structured fields for title, description, installation, usage, and more
+- **Live side-by-side preview** — See your rendered README as you type
+- **Screenshot support** — Insert images directly into your README
+- **One-click raw copy** — Grab the raw Markdown and paste it into GitHub instantly
+- **Toggle sections** — Include only what your project needs
+- **React powered** — Fast, component-based UI built with React 18 and Vite
 
 ---
 
-##  Screenshots
+## Screenshots
+
 <img width="1918" height="1076" alt="Screenshot 2026-03-09 142503" src="https://github.com/user-attachments/assets/542aac38-9554-49ee-adec-369281ad399f" />
 
 <img width="1915" height="1077" alt="Screenshot 2026-03-09 142522" src="https://github.com/user-attachments/assets/f7f12c58-c2e8-4fb3-b30a-12835a2f62cc" />
 
+---
+
+## Tech Stack
+
+| Technology | Version | Purpose |
+|---|---|---|
+| React | 18.3.1 | Frontend UI framework |
+| React Router DOM | 6.27.0 | Client-side routing |
+| Vite | 5.4.10 | Build tool and dev server |
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 
-No installation required. ReadmeForge runs entirely in the browser.
+Make sure you have the following installed:
 
-### Usage
+- [Node.js](https://nodejs.org/) (v16 or higher)
+- npm (comes with Node.js)
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/Mohit-368/readmeforge.git
-   cd readmeforge
-   ```
+### Installation
 
-2. **Open in your browser**
-   ```bash
-   open index.html
-   # or simply double-click index.html
-   ```
+1. Clone the repository:
+```bash
+   git clone https://github.com/Mohit-368/ReadmeForge.git
+   cd ReadmeForge
+```
 
-3. **Build your README**
-   - Fill in your project's details section by section
-   - Toggle sections on/off as needed
-   - Insert screenshots where relevant
-   - Watch the live preview update in real time
+2. Install dependencies:
+```bash
+   npm install
+```
 
-4. **Export**
-   - Click **Copy Raw** to copy the generated Markdown
-   - Paste it directly into your GitHub repository's `README.md`
+3. Start the development server:
+```bash
+   npm run dev
+```
+
+4. Open your browser and visit `http://localhost:5173`
 
 ---
 
-## 🗂️ Project Structure
+## Available Scripts
 
-```
-readmeforge/
-├── index.html          # Main application entry point
-├── readmeforge.css     # Styling and layout
-├── readmeforge.js      # Core logic and preview generation
-└── README.md           # You are here
-```
+| Command | Description |
+|---|---|
+| `npm run dev` | Starts the development server at localhost:5173 |
+| `npm run build` | Builds the app for production |
+| `npm run preview` | Previews the production build locally |
 
 ---
 
-## 🤝 Contributing
+## Project Structure
+
+ReadmeForge/
+├── public/             # Static assets
+├── src/                # React source code
+│   ├── components/     # Reusable React components
+│   ├── pages/          # Page components
+│   └── main.jsx        # App entry point
+├── index.html          # HTML entry point
+├── vite.config.js      # Vite configuration
+└── package.json        # Project dependencies
+
+---
+
+## Contributing
 
 Contributions are welcome and appreciated! Here's how to get started:
 
@@ -118,11 +137,11 @@ Contributions are welcome and appreciated! Here's how to get started:
 4. Push to the branch: `git push origin feature/your-feature-name`
 5. Open a Pull Request
 
-Please make sure your PR description clearly describes the problem and solution.
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) for more details.
 
 ---
 
-## 🛣️ Roadmap
+## Roadmap
 
 - [ ] Dark mode support
 - [ ] Predefined README templates (e.g., library, CLI tool, web app)
@@ -132,13 +151,13 @@ Please make sure your PR description clearly describes the problem and solution.
 
 ---
 
-## 📄 License
+## License
 
-Distributed under the MIT License. See [`LICENSE`](LICENSE) for more information.
+Distributed under the MIT License. See [LICENSE](LICENSE) for more information.
 
 ---
 
-## 👤 Author
+## Author
 
 **Mohit-368**
 
@@ -146,9 +165,6 @@ Distributed under the MIT License. See [`LICENSE`](LICENSE) for more information
 
 ---
 
-
-
-Made with ❤️ using plain HTML, CSS & JavaScript
+Made with React and Vite
 
 ⭐ Star this repo if you found it useful!
-
