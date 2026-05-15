@@ -14,7 +14,8 @@
   --text: #F9F3EF;
   --muted: #a8b8c4;
   --muted2: #D2C1B6;
-  --header-bg: rgba(15, 34, 48, 0.7);
+  --header-bg: rgba(15, 34, 48, 0.85);
+  --header-bg-glass: rgba(15, 34, 48, 0.4);
   --code-text: #c4dce8;
   --hero-chip-bg: rgba(210, 193, 182, 0.06);
   --hero-chip-bg-hover: rgba(210, 193, 182, 0.12);
@@ -62,7 +63,8 @@ body.light-mode {
   --text: #1B3C53;
   --muted: #5a6b78;
   --muted2: #2e4352;
-  --header-bg: rgba(249, 243, 239, 0.8);
+  --header-bg: rgba(249, 243, 239, 0.9);
+  --header-bg-glass: rgba(249, 243, 239, 0.5);
   --code-text: #1B3C53;
   --hero-chip-bg: rgba(27, 60, 83, 0.06);
   --hero-chip-bg-hover: rgba(27, 60, 83, 0.1);
