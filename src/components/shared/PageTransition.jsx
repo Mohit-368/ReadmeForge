@@ -9,10 +9,10 @@ export default function PageTransition() {
     // Start animation on route change
     setIsAnimating(true);
     
-    // Duration matches CSS animation (0.8s total)
+    // Duration matches CSS animation (1.2s total)
     const timer = setTimeout(() => {
       setIsAnimating(false);
-    }, 800);
+    }, 1200);
 
     return () => clearTimeout(timer);
   }, [location.pathname]);
@@ -21,7 +21,10 @@ export default function PageTransition() {
 
   return (
     <div className="page-swipe-overlay">
-      <div className="swipe-glow" />
+      <div className="smoke-cloud smoke-1" />
+      <div className="smoke-cloud smoke-2" />
+      <div className="smoke-cloud smoke-3" />
+      <div className="smoke-cloud smoke-4" />
     </div>
   );
 }
