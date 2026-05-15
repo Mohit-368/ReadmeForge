@@ -583,8 +583,8 @@ body.light-mode .hero-title {
   justify-content: space-between;
   padding: 0 24px;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
-  mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
-  -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+  mask-image: linear-gradient(to bottom, black 65%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, black 65%, transparent 100%);
 }
 
 .logo {
