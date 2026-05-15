@@ -2748,7 +2748,6 @@ body.light-mode .gh-preview {
 .site-nav-link:hover,
 .site-nav-link.active {
   color: var(--accent);
-  background: rgba(111, 168, 201,0.08);
 }
 
 .site-nav-link--gh {
