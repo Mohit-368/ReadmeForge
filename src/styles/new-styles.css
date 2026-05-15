@@ -707,39 +707,41 @@
 
 .swipe-glow {
   position: absolute;
-  top: -50%;
-  left: -150%;
-  width: 300%;
-  height: 200%;
+  top: -100%;
+  left: -200%;
+  width: 400%;
+  height: 300%;
   background: linear-gradient(
     115deg,
     transparent 0%,
-    transparent 40%,
-    rgba(111, 168, 201, 0.4) 45%,
-    rgba(255, 255, 255, 0.9) 50%,
-    rgba(111, 168, 201, 0.4) 55%,
-    transparent 60%,
+    transparent 25%,
+    rgba(111, 168, 201, 0.1) 35%,
+    rgba(111, 168, 201, 0.5) 45%,
+    var(--accent) 50%,
+    rgba(111, 168, 201, 0.5) 55%,
+    rgba(111, 168, 201, 0.1) 65%,
+    transparent 75%,
     transparent 100%
   );
-  filter: blur(40px);
+  filter: blur(80px);
   transform: rotate(-15deg);
-  animation: sweepGlow 1.2s cubic-bezier(0.65, 0, 0.35, 1) forwards;
-  box-shadow: 0 0 100px rgba(111, 168, 201, 0.2);
+  animation: sweepGlow 1.4s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+  box-shadow: 0 0 150px var(--accent);
 }
 
 @keyframes sweepGlow {
   0% {
-    left: -150%;
+    left: -200%;
     opacity: 0;
   }
-  20% {
+  30% {
     opacity: 1;
   }
-  80% {
+  70% {
     opacity: 1;
   }
   100% {
-    left: 150%;
+    left: 200%;
     opacity: 0;
   }
 }
