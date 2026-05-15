@@ -591,8 +591,8 @@ body.light-mode .hero-title {
   color: var(--text);
   border-color: var(--accent);
   background: var(--surface3);
-  transform: translateY(-3px) scale(1.05);
-  box-shadow: 0 8px 20px rgba(27, 60, 83, 0.3);
+  transform: translateY(-1.5px) scale(1.02);
+  box-shadow: 0 4px 12px rgba(27, 60, 83, 0.2);
 }
 
 .hbtn.primary {
@@ -838,8 +838,8 @@ input:checked+.tslider::before {
 }
 
 .editor-section:hover {
-  box-shadow: 0 20px 60px rgba(27, 60, 83, 0.4);
-  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 10px 40px rgba(27, 60, 83, 0.25);
+  transform: translateY(-2px);
   border-color: var(--accent);
 }
 
@@ -938,6 +938,11 @@ select:focus {
   box-shadow: 0 0 0 4px rgba(111, 168, 201, 0.35);
 }
 
+.quality-panel-header:hover {
+  background: var(--surface3);
+  border-color: var(--accent);
+}
+
 textarea {
   resize: vertical;
   line-height: 1.65;
@@ -981,7 +986,7 @@ select option {
   border-color: var(--accent);
   color: var(--accent);
   background: rgba(111, 168, 201, 0.05);
-  transform: translateY(-2px);
+  transform: translateY(-1px);
 }
 
 .tech-chip.selected {
@@ -1213,10 +1218,11 @@ select option {
   white-space: nowrap;
 }
 
-.pbtn:hover {
+.pbtn:hover:not(:disabled) {
+  background: var(--surface3);
   border-color: var(--accent);
-  color: var(--accent);
-  transform: translateY(-1px);
+  color: var(--text);
+  transform: translateY(-1.5px);
 }
 
 .pbtn.green {
@@ -1228,6 +1234,7 @@ select option {
 .pbtn.green:hover {
   background: rgba(16, 185, 129, 0.2);
   color: #10b981;
+  transform: translateY(-1px);
 }
 
 .pbtn.print {
@@ -1240,6 +1247,7 @@ select option {
   background: rgba(143, 189, 212, 0.18);
   color: var(--accent2);
   border-color: var(--accent2);
+  transform: translateY(-1px);
 }
 
 .preview-body {
