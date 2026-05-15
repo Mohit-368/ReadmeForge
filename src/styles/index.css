@@ -137,7 +137,17 @@ body.theme-transitioning .preview,
 body.theme-transitioning .header,
 body.theme-transitioning .editor-section,
 body.theme-transitioning .gh-preview,
-body.theme-transitioning .footer {
+body.theme-transitioning .footer,
+body.theme-transitioning .site-nav,
+body.theme-transitioning .hero-wrapper,
+body.theme-transitioning .landing-stats,
+body.theme-transitioning .stat-card,
+body.theme-transitioning .feature-card,
+body.theme-transitioning .cta-box,
+body.theme-transitioning .htu-hero,
+body.theme-transitioning .htu-step,
+body.theme-transitioning .tip-card,
+body.theme-transitioning .faq-item {
   transition: background-color 0.3s ease,
               color 0.3s ease,
               border-color 0.3s ease !important;
