@@ -712,10 +712,10 @@
   background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
 }
 
-.smoke-1 { width: 80vw; height: 80vw; top: -10%; left: -20%; background: radial-gradient(circle, var(--accent) 0%, transparent 70%); animation: smokeSweep 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
-.smoke-2 { width: 100vw; height: 100vw; top: 10%; left: -30%; background: radial-gradient(circle, var(--accent2) 0%, transparent 70%); animation: smokeSweep 1.2s cubic-bezier(0.4, 0, 0.2, 1) 0.1s forwards; }
-.smoke-3 { width: 70vw; height: 70vw; top: 40%; left: -20%; background: radial-gradient(circle, var(--accent) 0%, transparent 70%); animation: smokeSweep 1.2s cubic-bezier(0.4, 0, 0.2, 1) 0.05s forwards; }
-.smoke-4 { width: 90vw; height: 90vw; top: 60%; left: -40%; background: radial-gradient(circle, var(--accent2) 0%, transparent 70%); animation: smokeSweep 1.2s cubic-bezier(0.4, 0, 0.2, 1) 0.15s forwards; }
+.smoke-1 { width: 80vw; height: 80vw; top: -10%; left: -20%; background: radial-gradient(circle, var(--accent) 0%, transparent 70%); animation: smokeSweep var(--transition-duration, 1.2s) cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+.smoke-2 { width: 100vw; height: 100vw; top: 10%; left: -30%; background: radial-gradient(circle, var(--accent2) 0%, transparent 70%); animation: smokeSweep var(--transition-duration, 1.2s) cubic-bezier(0.4, 0, 0.2, 1) 0.1s forwards; }
+.smoke-3 { width: 70vw; height: 70vw; top: 40%; left: -20%; background: radial-gradient(circle, var(--accent) 0%, transparent 70%); animation: smokeSweep var(--transition-duration, 1.2s) cubic-bezier(0.4, 0, 0.2, 1) 0.05s forwards; }
+.smoke-4 { width: 90vw; height: 90vw; top: 60%; left: -40%; background: radial-gradient(circle, var(--accent2) 0%, transparent 70%); animation: smokeSweep var(--transition-duration, 1.2s) cubic-bezier(0.4, 0, 0.2, 1) 0.15s forwards; }
 
 @keyframes smokeSweep {
   0% {
@@ -737,7 +737,7 @@
 /* Base page fade for better transition layering */
 .page-transition {
   opacity: 0;
-  animation: pageFadeInSmooth 1s cubic-bezier(0.4, 0, 0.2, 1) 0.3s forwards;
+  animation: pageFadeInSmooth var(--transition-duration, 1s) cubic-bezier(0.4, 0, 0.2, 1) var(--transition-delay, 0.3s) forwards;
 }
 
 @keyframes pageFadeInSmooth {
