@@ -40,7 +40,6 @@ export default function HowToUsePage() {
         title="How To Use — READMEForge"
         description="Step-by-step guide to creating a professional GitHub README with READMEForge. Learn templates, sections, export, and tips."
       />
-      <Navbar />
 
       <div className="htu-page">
         <div className="htu-hero">

@@ -26,11 +26,11 @@ export default function LandingPage() {
   const revealRef = useScrollReveal();
 
   return (
+    <>
       <SEOHead
         title="READMEForge — Generate Professional GitHub READMEs in 30 Seconds"
         description="Free, open-source README generator. Live preview, 8 templates, quality scoring, and one-click export. No sign-up required."
       />
-      <Navbar />
       <div ref={revealRef} className="page-transition">
 
       <div className="hero-wrapper" style={{ paddingTop: 64 }}>
@@ -98,6 +98,6 @@ export default function LandingPage() {
 
       <Footer />
       </div>
-    </div>
+    </>
   );
 }
