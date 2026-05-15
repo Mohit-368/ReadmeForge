@@ -577,14 +577,14 @@ body.light-mode .hero-title {
   background: var(--header-bg-glass);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
-  border-bottom: 1px solid var(--border);
   height: 64px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 24px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-  border-bottom: 1px solid rgba(111, 168, 201, 0.2);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+  mask-image: linear-gradient(to bottom, black 90%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, black 90%, transparent 100%);
 }
 
 .logo {
