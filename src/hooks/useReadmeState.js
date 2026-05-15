@@ -49,6 +49,94 @@ export function useReadmeState() {
   const saveTimerRef = useRef(null);
   const autoSaveTimerRef = useRef(null);
 
+  // ── AI Suggestion State ──────────────────────────────────────
+  const [aiState, setAIState] = useState({
+    isOpen: false,
+    isLoading: false,
+    scope: 'full',     // 'full' | 'description' | 'features' | 'installation' | 'title'
+    suggestions: [],   // { id, section, icon, type, before, after, reason, status, edited }
+    lastError: null,   // null | 'RATE_LIMIT' | 'INVALID_KEY' | 'PARSE_EMPTY' | 'UNKNOWN'
+  });
+
+  const openAIModal = useCallback((scope = 'full') => {
+    setAIState(prev => ({ ...prev, isOpen: true, scope, suggestions: [], lastError: null }));
+  }, []);
+
+  const closeAIModal = useCallback(() => {
+    setAIState(prev => ({ ...prev, isOpen: false }));
+  }, []);
+
+  const setAIScope = useCallback((scope) => {
+    setAIState(prev => ({ ...prev, scope, suggestions: [], lastError: null }));
+  }, []);
+
+  const setAILoading = useCallback((loading) => {
+    setAIState(prev => ({ ...prev, isLoading: loading, lastError: null }));
+  }, []);
+
+  const setAISuggestions = useCallback((suggestions) => {
+    setAIState(prev => ({ ...prev, isLoading: false, suggestions, lastError: null }));
+  }, []);
+
+  const setAIError = useCallback((code) => {
+    setAIState(prev => ({ ...prev, isLoading: false, lastError: code }));
+  }, []);
+
+  const acceptSuggestion = useCallback((idx, editedValue = null) => {
+    setAIState(prev => ({
+      ...prev,
+      suggestions: prev.suggestions.map((s, i) =>
+        i === idx ? { ...s, status: 'accepted', edited: editedValue ?? s.edited } : s
+      ),
+    }));
+  }, []);
+
+  const rejectSuggestion = useCallback((idx) => {
+    setAIState(prev => ({
+      ...prev,
+      suggestions: prev.suggestions.map((s, i) =>
+        i === idx ? { ...s, status: 'rejected' } : s
+      ),
+    }));
+  }, []);
+
+  const undoSuggestion = useCallback((idx) => {
+    setAIState(prev => ({
+      ...prev,
+      suggestions: prev.suggestions.map((s, i) =>
+        i === idx ? { ...s, status: 'pending' } : s
+      ),
+    }));
+  }, []);
+
+  const editSuggestion = useCallback((idx, value) => {
+    setAIState(prev => ({
+      ...prev,
+      suggestions: prev.suggestions.map((s, i) =>
+        i === idx ? { ...s, edited: value } : s
+      ),
+    }));
+  }, []);
+
+  const toggleEditSuggestion = useCallback((idx) => {
+    setAIState(prev => ({
+      ...prev,
+      suggestions: prev.suggestions.map((s, i) =>
+        i === idx ? { ...s, isEditing: !s.isEditing } : s
+      ),
+    }));
+  }, []);
+
+  const acceptAllSuggestions = useCallback(() => {
+    setAIState(prev => ({
+      ...prev,
+      suggestions: prev.suggestions.map(s =>
+        s.status === 'pending' ? { ...s, status: 'accepted' } : s
+      ),
+    }));
+  }, []);
+  // ────────────────────────────────────────────────────────────
+
   const scheduleSave = useCallback((fd, ss, st, sb) => {
     clearTimeout(saveTimerRef.current);
     saveTimerRef.current = setTimeout(() => {
@@ -144,5 +232,11 @@ export function useReadmeState() {
     screenshots, addScreenshots, removeScreenshot,
     applyTemplate, resetAll, clearSaved,
     autoSaved,
+    // AI suggestion system
+    aiState,
+    openAIModal, closeAIModal, setAIScope,
+    setAILoading, setAISuggestions, setAIError,
+    acceptSuggestion, rejectSuggestion, undoSuggestion,
+    editSuggestion, toggleEditSuggestion, acceptAllSuggestions,
   };
 }

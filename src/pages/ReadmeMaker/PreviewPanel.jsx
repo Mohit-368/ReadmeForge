@@ -49,7 +49,7 @@ function calculateQuality({ formData, sectionState, selectedTechs, screenshots }
   return { score: Math.min(score, 100), suggestions };
 }
 
-export default function PreviewPanel({ currentMd, formData, sectionState, selectedTechs, screenshots }) {
+export default function PreviewPanel({ currentMd, formData, sectionState, selectedTechs, screenshots, openAIModal }) {
   const toast = useToast();
   const [tab, setTabState] = useState('rendered');
   const [zoom, setZoom] = useState(() => {
@@ -169,6 +169,13 @@ export default function PreviewPanel({ currentMd, formData, sectionState, select
               <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" /><polyline points="7,10 12,15 17,10" /><line x1="12" y1="15" x2="12" y2="3" />
             </svg>
             Download .md
+          </button>
+          <button className="ai-improve-btn" onClick={() => openAIModal('full')} title="Get AI-powered suggestions for your entire README">
+            <span className="ai-btn-pulse"></span>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 2L14.4 9.6L22 12L14.4 14.4L12 22L9.6 14.4L2 12L9.6 9.6L12 2Z" />
+            </svg>
+            Improve
           </button>
           <button className="pbtn print" onClick={printPreview}>
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
