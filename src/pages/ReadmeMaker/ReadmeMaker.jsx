@@ -11,9 +11,12 @@ import Logo from '../../components/ui/Logo';
 import SEOHead from '../../components/shared/SEOHead';
 import { useState } from 'react';
 
+import { useNavbarExtra } from '../../context/NavbarContext';
+
 export default function ReadmeMaker() {
   const toast = useToast();
   const { theme, toggleTheme } = useTheme();
+  const { setExtraContent } = useNavbarExtra();
 
   const {
     formData, updateField,
@@ -33,6 +36,27 @@ export default function ReadmeMaker() {
   );
 
   const activeSectionCount = Object.values(sectionState).filter(Boolean).length;
+
+  // Inject Editor actions into Navbar
+  useEffect(() => {
+    setExtraContent(
+      <div className="editor-nav-actions">
+        <div className="header-center">
+          <span style={{ fontSize: 11, color: 'var(--muted)', fontFamily: '"JetBrains Mono", monospace', marginRight: 4 }}>sections:</span>
+          <span id="sectionCount" style={{ fontSize: 12, fontWeight: 700, color: 'var(--accent)' }}>{activeSectionCount}</span>
+          <span style={{ fontSize: 11, color: 'var(--muted)', fontFamily: '"JetBrains Mono", monospace' }}> active</span>
+          <span className={`autosave-status${autoSaved ? ' visible' : ''}`}>✓ Auto-saved</span>
+        </div>
+        <div className="header-right">
+          <button className="hbtn" onClick={handleClearSaved}>🗑 Clear</button>
+          <button className="hbtn" onClick={handleResetAll}>↺ Reset</button>
+          <button className="hbtn primary" onClick={handleCopyMarkdown}>Copy Markdown</button>
+        </div>
+      </div>
+    );
+
+    return () => setExtraContent(null);
+  }, [activeSectionCount, autoSaved, setExtraContent]);
 
   function handleApplyTemplate(template, key) {
     applyTemplate(template);
@@ -65,35 +89,7 @@ export default function ReadmeMaker() {
         description="Generate a professional GitHub README in seconds with live preview, templates, and one-click export."
       />
       <div className="page-transition">
-        <div id="app-builder">
-          <header className="header">
-            <a href="/" className="logo">
-              <Logo size={36} />
-              <span className="logo-name">README<span>Forge</span></span>
-            </a>
-            <div className="header-center">
-              <span style={{ fontSize: 11, color: 'var(--muted)', fontFamily: '"JetBrains Mono", monospace', marginRight: 4 }}>sections:</span>
-              <span id="sectionCount" style={{ fontSize: 12, fontWeight: 700, color: 'var(--accent)' }}>{activeSectionCount}</span>
-              <span style={{ fontSize: 11, color: 'var(--muted)', fontFamily: '"JetBrains Mono", monospace' }}> active</span>
-              <span className={`autosave-status${autoSaved ? ' visible' : ''}`}>✓ Auto-saved</span>
-            </div>
-            <div className="header-right">
-              <a href="https://github.com/Mohit-368/ReadmeForge" target="_blank" rel="noreferrer"
-                className="hbtn" style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 6 }}>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="16 18 22 12 16 6" /><polyline points="8 6 2 12 8 18" />
-                </svg>
-                Source
-              </a>
-              <button className="hbtn" onClick={handleClearSaved}>🗑 Clear Saved</button>
-              <button className="hbtn" onClick={handleResetAll}>↺ Reset All Fields</button>
-              <button className="hbtn" onClick={handleCopyMarkdown}>Copy Markdown</button>
-              <button className="theme-toggle" id="themeToggle" title="Toggle dark/light mode" onClick={toggleTheme}>
-                {theme === 'dark' ? '🌙' : '☀️'}
-              </button>
-            </div>
-          </header>
-
+        <div id="app-builder" style={{ paddingTop: 64 }}>
           <div className="main">
             <Sidebar
               sectionState={sectionState}

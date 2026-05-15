@@ -5,15 +5,19 @@ import AppRoutes from './routes/AppRoutes';
 import Navbar from './components/layout/Navbar';
 import PageTransition from './components/shared/PageTransition';
 
+import { NavbarProvider } from './context/NavbarContext';
+
 export default function App() {
   return (
     <BrowserRouter>
       <ThemeProvider>
-        <ToastProvider>
-          <PageTransition />
-          <Navbar />
-          <AppRoutes />
-        </ToastProvider>
+        <NavbarProvider>
+          <ToastProvider>
+            <PageTransition />
+            <Navbar />
+            <AppRoutes />
+          </ToastProvider>
+        </NavbarProvider>
       </ThemeProvider>
     </BrowserRouter>
   );

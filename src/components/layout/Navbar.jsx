@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { NavLink, Link, useLocation } from 'react-router-dom';
 import { useTheme } from '../../hooks/useTheme';
 import Logo from '../ui/Logo';
+import { useNavbarExtra } from '../../context/NavbarContext';
 
 export default function Navbar() {
   const { theme, toggleTheme } = useTheme();
@@ -10,6 +11,7 @@ export default function Navbar() {
   const location = useLocation();
   const navRef = useRef(null);
   const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0, opacity: 0 });
+  const { extraContent } = useNavbarExtra();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -58,6 +60,9 @@ export default function Navbar() {
         <Logo size={scrolled ? 32 : 38} />
         <span className="logo-name">README<span>Forge</span></span>
       </Link>
+
+      {/* Editor-specific extra content injected here */}
+      {extraContent && <div className="nav-extra-content">{extraContent}</div>}
 
       <div className={`site-nav-links${menuOpen ? ' open' : ''}`} ref={navRef}>
         {/* Sliding Indicator */}
