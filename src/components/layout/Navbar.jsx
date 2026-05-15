@@ -52,7 +52,7 @@ export default function Navbar() {
       cancelAnimationFrame(rafId);
       window.removeEventListener('resize', updateIndicator);
     };
-  }, [location.pathname]);
+  }, [location.pathname, scrolled]);
 
   return (
     <nav className={`site-nav${scrolled ? ' scrolled' : ''}`}>
