@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import Navbar from '../../components/layout/Navbar';
 import Footer from '../../components/layout/Footer';
 import SEOHead from '../../components/shared/SEOHead';
+import { seoPages } from '../../utils/seoConfig';
 
 const steps = [
   { num: '01', icon: '📋', title: 'Choose a Template', desc: 'Pick from 8 project templates — Web App, ML/AI, API, CLI, Mobile, Library, Hackathon, or Open Source. Each pre-fills the most relevant sections for your project type.' },
@@ -37,8 +38,8 @@ export default function HowToUsePage() {
   return (
     <>
       <SEOHead
-        title="How To Use — READMEForge"
-        description="Step-by-step guide to creating a professional GitHub README with READMEForge. Learn templates, sections, export, and tips."
+        {...seoPages['/how-to-use']}
+        path="/how-to-use"
       />
       <Navbar />
 

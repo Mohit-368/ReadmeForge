@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">READMEForge social preview</title>
+  <desc id="desc">READMEForge creates professional GitHub READMEs with templates, live preview, scoring, and export tools.</desc>
+  <rect width="1200" height="630" fill="#0f172a"/>
+  <rect x="54" y="54" width="1092" height="522" rx="32" fill="#111827" stroke="#38bdf8" stroke-width="4"/>
+  <circle cx="112" cy="112" r="14" fill="#f87171"/>
+  <circle cx="156" cy="112" r="14" fill="#fbbf24"/>
+  <circle cx="200" cy="112" r="14" fill="#34d399"/>
+  <text x="96" y="246" fill="#f8fafc" font-family="Inter, Arial, sans-serif" font-size="82" font-weight="800">READMEForge</text>
+  <text x="100" y="332" fill="#bae6fd" font-family="Inter, Arial, sans-serif" font-size="42" font-weight="700">Professional GitHub READMEs in seconds</text>
+  <text x="100" y="415" fill="#cbd5e1" font-family="Inter, Arial, sans-serif" font-size="30">Live preview | templates | quality scoring | one-click export</text>
+  <rect x="100" y="472" width="292" height="58" rx="18" fill="#38bdf8"/>
+  <text x="128" y="511" fill="#082f49" font-family="Inter, Arial, sans-serif" font-size="26" font-weight="800">Start building</text>
+</svg>

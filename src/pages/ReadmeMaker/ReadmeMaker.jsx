@@ -1,14 +1,13 @@
-import { useEffect, useRef, useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useReadmeState } from '../../hooks/useReadmeState';
 import { useToast } from '../../components/ui/Toast';
 import { generateMarkdown } from '../../utils/markdownUtils';
-import { SECTIONS } from '../../utils/constants';
 import Sidebar from './Sidebar';
 import EditorPanel from './EditorPanel';
 import PreviewPanel from './PreviewPanel';
 import Navbar from '../../components/layout/Navbar';
 import SEOHead from '../../components/shared/SEOHead';
-import { useState } from 'react';
+import { seoPages } from '../../utils/seoConfig';
 
 export default function ReadmeMaker() {
   const toast = useToast();
@@ -59,8 +58,8 @@ export default function ReadmeMaker() {
   return (
     <>
       <SEOHead
-        title="README Maker — READMEForge"
-        description="Generate a professional GitHub README in seconds with live preview, templates, and one-click export."
+        {...seoPages['/readme-maker']}
+        path="/readme-maker"
       />
       <Navbar />
       <div id="app-builder" style={{ paddingTop: 64 }}>
@@ -85,7 +84,7 @@ export default function ReadmeMaker() {
           </div>
         </header>
 
-        <div className="main" style={{ height: 'calc(100vh - 128px)' }}>
+        <main className="main" style={{ height: 'calc(100vh - 128px)' }} aria-label="README builder workspace">
           <Sidebar
             sectionState={sectionState}
             toggleSection={toggleSection}
@@ -113,7 +112,7 @@ export default function ReadmeMaker() {
             selectedTechs={selectedTechs}
             screenshots={screenshots}
           />
-        </div>
+        </main>
       </div>
     </>
   );

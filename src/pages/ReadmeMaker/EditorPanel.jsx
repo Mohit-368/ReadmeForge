@@ -241,10 +241,19 @@ export default function EditorPanel({
             <div
               ref={dropZoneRef}
               className="drop-zone"
+              role="button"
+              tabIndex={0}
+              aria-label="Upload README screenshots"
               onDragOver={handleDragOver}
               onDragLeave={handleDragLeave}
               onDrop={handleDrop}
               onClick={() => fileInputRef.current?.click()}
+              onKeyDown={e => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  fileInputRef.current?.click();
+                }
+              }}
             >
               <div className="drop-zone-icon">🖼️</div>
               <p>Drop images here or click to browse</p>
@@ -261,9 +270,15 @@ export default function EditorPanel({
             <div className="screenshot-list">
               {screenshots.map((ss, idx) => (
                 <div key={idx} className="screenshot-item">
-                  <img src={ss.dataUrl} alt="" />
+                  <img src={ss.dataUrl} alt={`${ss.name} preview`} loading="lazy" />
                   <span className="screenshot-item-name">{ss.name}</span>
-                  <button className="screenshot-item-remove" onClick={() => removeScreenshot(idx)}>✕</button>
+                  <button
+                    className="screenshot-item-remove"
+                    aria-label={`Remove ${ss.name}`}
+                    onClick={() => removeScreenshot(idx)}
+                  >
+                    ✕
+                  </button>
                 </div>
               ))}
             </div>
