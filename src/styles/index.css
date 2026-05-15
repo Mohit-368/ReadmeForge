@@ -48,20 +48,20 @@
 
 /* Light Mode — Based on Warm White #F9F3EF & Soft Beige #D2C1B6 */
 body.light-mode {
-  --bg: #F9F3EF;
+  --bg: #F9F3EF;          /* Warm White */
   --surface: #ffffff;
-  --surface2: #f3ece6;
-  --surface3: #e8ddd5;
-  --border: #e0d4cb;
-  --border2: #D2C1B6;
+  --surface2: #f8f1ec;    /* Warm White tint */
+  --surface3: #f1e4dc;    /* Soft Beige tint */
+  --border: #e8ddd5;
+  --border2: #D2C1B6;     /* Soft Beige */
   --accent: #1B3C53;
   --accent2: #456882;
   --green: #059669;
   --yellow: #d97706;
   --red: #dc2626;
   --text: #1B3C53;
-  --muted: #6b7a85;
-  --muted2: #34515f;
+  --muted: #5a6b78;
+  --muted2: #2e4352;
   --header-bg: rgba(249, 243, 239, 0.92);
   --code-text: #1B3C53;
   --hero-chip-bg: rgba(27, 60, 83, 0.06);
@@ -97,17 +97,17 @@ body.light-mode {
 body.light-mode::before {
   background-image:
     radial-gradient(circle at 20% 20%,
-      rgba(69, 104, 130, 0.06) 0%,
+      rgba(210, 193, 182, 0.15) 0%,
       transparent 50%),
     radial-gradient(circle at 80% 80%,
-      rgba(27, 60, 83, 0.06) 0%,
+      rgba(27, 60, 83, 0.08) 0%,
       transparent 50%);
 }
 
 body.light-mode::after {
   background-image:
-    linear-gradient(rgba(27, 60, 83, 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(27, 60, 83, 0.04) 1px, transparent 1px);
+    linear-gradient(rgba(210, 193, 182, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(210, 193, 182, 0.1) 1px, transparent 1px);
 }
 
 * {
