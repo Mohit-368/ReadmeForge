@@ -1,5 +1,5 @@
-import { useState, useEffect, useRef } from 'react';
-import { NavLink, Link, useLocation } from 'react-router-dom';
+import { useEffect, useState, useRef } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { useTheme } from '../../hooks/useTheme';
 import Logo from '../ui/Logo';
 import { useNavbarExtra } from '../../context/NavbarContext';
@@ -7,21 +7,26 @@ import { useNavbarExtra } from '../../context/NavbarContext';
 export default function Navbar() {
   const { theme, toggleTheme } = useTheme();
   const [menuOpen, setMenuOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
   const navRef = useRef(null);
   const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0, opacity: 0 });
   const { extraContent } = useNavbarExtra();
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
+    const updateScrollState = () => setIsScrolled(window.scrollY > 0);
+    updateScrollState();
+    window.addEventListener('scroll', updateScrollState, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', updateScrollState);
     };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-    // Update indicator position when route changes or window resizes
+  useEffect(() => {
+    setMenuOpen(false);
+  }, [location.pathname]);
+
+  // Update indicator position when route changes or window resizes
   useEffect(() => {
     let rafId;
     const updateIndicator = () => {
@@ -52,7 +57,7 @@ export default function Navbar() {
       }
     };
     
-    if (scrolled !== undefined) {
+    if (isScrolled !== undefined) {
       transitionLoop();
     }
 
@@ -62,19 +67,26 @@ export default function Navbar() {
       cancelAnimationFrame(rafId);
       window.removeEventListener('resize', updateIndicator);
     };
-  }, [location.pathname, scrolled]);
+  }, [location.pathname, isScrolled]);
+
+  const isActiveRoute = (path, exact = false) => {
+    if (exact) return location.pathname === path;
+    return location.pathname === path || location.pathname.startsWith(`${path}/`);
+  };
+
+  const linkClassName = (isActive, extraClass = '') => `site-nav-link${isActive ? ' active' : ''}${extraClass ? ` ${extraClass}` : ''}`;
 
   return (
-    <nav className={`site-nav${scrolled ? ' scrolled' : ''}`}>
+    <nav className={`site-nav${isScrolled ? ' is-scrolled scrolled' : ''}`}>
       <Link to="/" className="logo" onClick={() => setMenuOpen(false)}>
-        <Logo size={scrolled ? 32 : 38} />
+        <Logo size={isScrolled ? 32 : 38} />
         <span className="logo-name">README<span>Forge</span></span>
       </Link>
 
       {/* Editor-specific extra content injected here */}
       {extraContent && <div className="nav-extra-content">{extraContent}</div>}
 
-      <div className={`site-nav-links${menuOpen ? ' open' : ''}`} ref={navRef}>
+      <div id="site-navigation" className={`site-nav-links${menuOpen ? ' open' : ''}`} ref={navRef}>
         {/* Sliding Indicator */}
         <div 
           className="nav-active-indicator" 
@@ -85,33 +97,33 @@ export default function Navbar() {
           }}
         />
 
-        <NavLink
+        <Link
           to="/"
-          end
-          className={({ isActive }) => `site-nav-link${isActive ? ' active' : ''}`}
+          className={linkClassName(isActiveRoute('/', true))}
           onClick={() => setMenuOpen(false)}
         >
           Home
-        </NavLink>
-        <NavLink
+        </Link>
+        <Link
           to="/readme-maker"
-          className={({ isActive }) => `site-nav-link${isActive ? ' active' : ''}`}
+          className={linkClassName(isActiveRoute('/readme-maker'))}
           onClick={() => setMenuOpen(false)}
         >
           README Maker
-        </NavLink>
-        <NavLink
+        </Link>
+        <Link
           to="/how-to-use"
-          className={({ isActive }) => `site-nav-link${isActive ? ' active' : ''}`}
+          className={linkClassName(isActiveRoute('/how-to-use'))}
           onClick={() => setMenuOpen(false)}
         >
           How To Use
-        </NavLink>
+        </Link>
         <a
           href="https://github.com/Mohit-368/ReadmeForge"
           target="_blank"
           rel="noreferrer"
-          className="site-nav-link site-nav-link--gh"
+          className="site-nav-link site-nav-link--gh mobile-only"
+          onClick={() => setMenuOpen(false)}
         >
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <polyline points="16 18 22 12 16 6" /><polyline points="8 6 2 12 8 18" />
@@ -119,8 +131,8 @@ export default function Navbar() {
           Source
         </a>
         <button
-          className="theme-toggle"
-          id="themeToggle"
+          type="button"
+          className="theme-toggle mobile-only"
           title="Toggle dark/light mode"
           onClick={toggleTheme}
         >
@@ -128,13 +140,42 @@ export default function Navbar() {
         </button>
       </div>
 
-      <button
-        className="nav-hamburger"
-        aria-label="Toggle menu"
-        onClick={() => setMenuOpen(o => !o)}
-      >
-        <span /><span /><span />
-      </button>
+      <div className="site-nav-actions">
+        <a
+          href="https://github.com/Mohit-368/ReadmeForge"
+          target="_blank"
+          rel="noreferrer"
+          className="site-nav-link site-nav-link--gh desktop-only"
+          title="View source on GitHub"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="16 18 22 12 16 6" /><polyline points="8 6 2 12 8 18" />
+          </svg>
+          Source
+        </a>
+
+        <button
+          type="button"
+          className="theme-toggle desktop-only"
+          id="themeToggle"
+          title="Toggle dark/light mode"
+          onClick={toggleTheme}
+        >
+          {theme === 'dark' ? '🌙' : '☀️'}
+        </button>
+
+        <button
+          className="nav-hamburger"
+          aria-label="Toggle menu"
+          aria-expanded={menuOpen}
+          aria-controls="site-navigation"
+          onClick={() => setMenuOpen((open) => !open)}
+        >
+          <span />
+          <span />
+          <span />
+        </button>
+      </div>
     </nav>
   );
 }

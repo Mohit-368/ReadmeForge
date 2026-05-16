@@ -1,21 +1,15 @@
-import { useEffect, useRef, useMemo } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useReadmeState } from '../../hooks/useReadmeState';
-import { useTheme } from '../../hooks/useTheme';
 import { useToast } from '../../components/ui/Toast';
 import { generateMarkdown } from '../../utils/markdownUtils';
-import { SECTIONS } from '../../utils/constants';
 import Sidebar from './Sidebar';
 import EditorPanel from './EditorPanel';
 import PreviewPanel from './PreviewPanel';
-import Logo from '../../components/ui/Logo';
 import SEOHead from '../../components/shared/SEOHead';
-import { useState } from 'react';
-
 import { useNavbarExtra } from '../../context/NavbarContext';
 
 export default function ReadmeMaker() {
   const toast = useToast();
-  const { theme, toggleTheme } = useTheme();
   const { setExtraContent } = useNavbarExtra();
 
   const {
@@ -90,7 +84,7 @@ export default function ReadmeMaker() {
       />
       <div className="page-transition">
         <div id="app-builder" style={{ paddingTop: 64 }}>
-          <div className="main">
+          <div className="main" style={{ height: 'calc(100vh - 128px)' }}>
             <Sidebar
               sectionState={sectionState}
               toggleSection={toggleSection}
