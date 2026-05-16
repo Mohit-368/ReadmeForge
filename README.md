@@ -5,7 +5,7 @@
 **The fastest way to craft beautiful GitHub READMEs — no Markdown knowledge required.**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Made with HTML](https://img.shields.io/badge/Made%20with-HTML%2FJS%2FCSS-orange.svg)](#)
+[![Made with React](https://img.shields.io/badge/Made%20with-React-61DAFB?logo=react&logoColor=white)](#)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
 [ Live Demo](https://makeareadme.netlify.app) · [ Report a Bug](../../issues) · [Request a Feature](../../issues)
@@ -52,8 +52,7 @@
 -  **Screenshot support** — Insert images directly into your README
 -  **One-click raw copy** — Grab the raw Markdown and paste it into GitHub instantly
 -  **Toggle sections** — Include only what your project needs
--  **Zero dependencies** — Pure HTML, CSS, and JavaScript; runs entirely in the browser
-
+- **Modern React architecture** — Built with React, JavaScript and Vite for a fast modern development experience
 ---
 
 ##  Screenshots
@@ -148,7 +147,7 @@ Distributed under the MIT License. See [`LICENSE`](LICENSE) for more information
 
 
 
-Made with ❤️ using plain HTML, CSS & JavaScript
+Made with ❤️ using React, JavaScript and Vite
 
 ⭐ Star this repo if you found it useful!
 
