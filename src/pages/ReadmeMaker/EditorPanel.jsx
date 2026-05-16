@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { TECHS, BADGES } from '../../utils/constants';
 import { convertStructure } from '../../utils/structureUtils';
 import { getWordCount } from '../../utils/markdownUtils';
@@ -13,16 +13,20 @@ function WordCount({ text }) {
   );
 }
 
-function EditorSection({ num, title, badge, hidden, children }) {
+function EditorSection({ sectionId, num, title, badge, hidden, collapsed, onToggleCollapse, hasContent, children }) {
   if (hidden) return null;
   return (
-    <div className="editor-section">
-      <div className="es-header">
+    <div className={`editor-section${collapsed ? ' collapsed' : ''}`}>
+      <div className="es-header" onClick={() => onToggleCollapse?.(sectionId)}>
         <div className="es-num">{num}</div>
-        <div className="es-title">{title}</div>
+        <div className="es-title">
+          {title}
+          {collapsed && hasContent && <span className="es-collapse-indicator" title="Section has content" />}
+        </div>
         {badge && <span className="es-badge">{badge}</span>}
+        <span className={`es-collapse-icon${collapsed ? ' collapsed' : ''}`} aria-hidden="true">▾</span>
       </div>
-      <div className="es-body">{children}</div>
+      {!collapsed && <div className="es-body">{children}</div>}
     </div>
   );
 }
@@ -36,6 +40,42 @@ export default function EditorPanel({
 }) {
   const fileInputRef = useRef(null);
   const dropZoneRef = useRef(null);
+
+  const COLLAPSE_KEY = 'READMEFORGE_COLLAPSED_SECTIONS';
+  const [collapsedSections, setCollapsedSections] = useState(() => {
+    try {
+      const raw = localStorage.getItem(COLLAPSE_KEY);
+      return raw ? JSON.parse(raw) : {};
+    } catch {
+      return {};
+    }
+  });
+
+  const toggleCollapsedSection = (sectionId) => {
+    setCollapsedSections(prev => {
+      const next = { ...prev, [sectionId]: !prev[sectionId] };
+      try { localStorage.setItem(COLLAPSE_KEY, JSON.stringify(next)); } catch {}
+      return next;
+    });
+  };
+
+  const sectionHasContent = (sectionId) => {
+    switch (sectionId) {
+      case '1': return !!(formData.projName || formData.tagline || formData.ghUser || formData.repoSlug || selectedBadges.size > 0);
+      case '2': return !!(formData.description || formData.demoUrl);
+      case '3A': return !!(formData.abstractText || formData.paperLink || formData.datasetLink || formData.methodology || formData.bibtexCitation);
+      case '3': return !!formData.features;
+      case '4': return !!(selectedTechs.size > 0 || formData.customTech);
+      case '5': return !!(formData.prereqs || formData.installCmds || formData.envVars || formData.usageCmd);
+      case '7': return !!formData.rawStructure;
+      case '8': return !!(formData.videoUrl || formData.imageUrls || screenshots.length > 0);
+      case '9': return !!(formData.apiDocs || formData.apiBase);
+      case '10': return !!formData.contribNotes;
+      case '11': return !!(formData.authorName || formData.authorGh || formData.authorEmail || formData.authorLinkedin || formData.authorWebsite || (formData.license && formData.license !== 'MIT'));
+      case '12': return !!(formData.supportMsg || formData.supportBmac || formData.supportKofi || formData.supportPatreon || formData.supportGhSponsors);
+      default: return false;
+    }
+  };
 
   const structPreview = formData.rawStructure
     ? convertStructure(formData.rawStructure, formData.projName || 'project')
@@ -60,7 +100,15 @@ export default function EditorPanel({
     <div className="editor">
       <div className="editor-inner" id="editorInner">
 
-        <EditorSection num={1} title="Project Title & Badges" hidden={!sectionState.title}>
+        <EditorSection
+          sectionId="1"
+          num={1}
+          title="Project Title & Badges"
+          hidden={!sectionState.title}
+          collapsed={!!collapsedSections['1']}
+          onToggleCollapse={toggleCollapsedSection}
+          hasContent={sectionHasContent('1')}
+        >
           <div className="two-col">
             <div>
               <label>PROJECT NAME *</label>
@@ -101,7 +149,15 @@ export default function EditorPanel({
           </div>
         </EditorSection>
 
-        <EditorSection num={2} title="Description" hidden={!sectionState.description}>
+        <EditorSection
+          sectionId="2"
+          num={2}
+          title="Description"
+          hidden={!sectionState.description}
+          collapsed={!!collapsedSections['2']}
+          onToggleCollapse={toggleCollapsedSection}
+          hasContent={sectionHasContent('2')}
+        >
           <div>
             <label>SHORT DESCRIPTION</label>
             <textarea className="textInput" id="description" style={{ minHeight: 90 }}
@@ -116,7 +172,15 @@ export default function EditorPanel({
           </div>
         </EditorSection>
 
-        <EditorSection num="3A" title="Academic / Research Details" hidden={!sectionState.academic}>
+        <EditorSection
+          sectionId="3A"
+          num="3A"
+          title="Academic / Research Details"
+          hidden={!sectionState.academic}
+          collapsed={!!collapsedSections['3A']}
+          onToggleCollapse={toggleCollapsedSection}
+          hasContent={sectionHasContent('3A')}
+        >
           <div>
             <label>ABSTRACT</label>
             <textarea className="textInput" id="abstractText" style={{ minHeight: 100 }}
@@ -152,7 +216,15 @@ export default function EditorPanel({
           </div>
         </EditorSection>
 
-        <EditorSection num={3} title="Features" hidden={!sectionState.features}>
+        <EditorSection
+          sectionId="3"
+          num={3}
+          title="Features"
+          hidden={!sectionState.features}
+          collapsed={!!collapsedSections['3']}
+          onToggleCollapse={toggleCollapsedSection}
+          hasContent={sectionHasContent('3')}
+        >
           <div>
             <label>KEY FEATURES — use "### Category" for groups, "- item" for bullets</label>
             <textarea className="textInput" id="features" style={{ minHeight: 130 }}
@@ -163,8 +235,12 @@ export default function EditorPanel({
         </EditorSection>
 
         <EditorSection
+          sectionId="4"
           num={4} title="Tech Stack" hidden={!sectionState.techstack}
           badge={techCount > 0 ? `${techCount} selected` : undefined}
+          collapsed={!!collapsedSections['4']}
+          onToggleCollapse={toggleCollapsedSection}
+          hasContent={sectionHasContent('4')}
         >
           <div>
             <label>CLICK TO SELECT YOUR STACK</label>
@@ -187,7 +263,15 @@ export default function EditorPanel({
           </div>
         </EditorSection>
 
-        <EditorSection num={5} title="Installation" hidden={!sectionState.installation}>
+        <EditorSection
+          sectionId="5"
+          num={5}
+          title="Installation"
+          hidden={!sectionState.installation}
+          collapsed={!!collapsedSections['5']}
+          onToggleCollapse={toggleCollapsedSection}
+          hasContent={sectionHasContent('5')}
+        >
           <div>
             <label>PREREQUISITES</label>
             <input type="text" id="prereqs" placeholder="Python 3.10+, Node.js 18+"
@@ -216,7 +300,15 @@ export default function EditorPanel({
           </div>
         </EditorSection>
 
-        <EditorSection num={7} title="Project Structure Visualizer" hidden={!sectionState.structure}>
+        <EditorSection
+          sectionId="7"
+          num={7}
+          title="Project Structure Visualizer"
+          hidden={!sectionState.structure}
+          collapsed={!!collapsedSections['7']}
+          onToggleCollapse={toggleCollapsedSection}
+          hasContent={sectionHasContent('7')}
+        >
           <div>
             <label>PASTE YOUR FOLDER STRUCTURE (indented with spaces)</label>
             <textarea className="textInput" id="rawStructure" style={{ minHeight: 120 }}
@@ -230,7 +322,15 @@ export default function EditorPanel({
           </div>
         </EditorSection>
 
-        <EditorSection num={8} title="Screenshots" hidden={!sectionState.screenshots}>
+        <EditorSection
+          sectionId="8"
+          num={8}
+          title="Screenshots"
+          hidden={!sectionState.screenshots}
+          collapsed={!!collapsedSections['8']}
+          onToggleCollapse={toggleCollapsedSection}
+          hasContent={sectionHasContent('8')}
+        >
           <div>
             <label>LIVE DEMO / VIDEO LINK (optional)</label>
             <input type="url" id="videoUrl" placeholder="https://youtube.com/watch?v=..."
@@ -277,7 +377,15 @@ export default function EditorPanel({
           </div>
         </EditorSection>
 
-        <EditorSection num={9} title="API Documentation" hidden={!sectionState.api}>
+        <EditorSection
+          sectionId="9"
+          num={9}
+          title="API Documentation"
+          hidden={!sectionState.api}
+          collapsed={!!collapsedSections['9']}
+          onToggleCollapse={toggleCollapsedSection}
+          hasContent={sectionHasContent('9')}
+        >
           <div>
             <label>API ENDPOINTS — format: METHOD /path | Description (one per line)</label>
             <textarea className="textInput" id="apiDocs" style={{ minHeight: 100 }}
@@ -292,7 +400,15 @@ export default function EditorPanel({
           </div>
         </EditorSection>
 
-        <EditorSection num={10} title="Contributing" hidden={!sectionState.contributing}>
+        <EditorSection
+          sectionId="10"
+          num={10}
+          title="Contributing"
+          hidden={!sectionState.contributing}
+          collapsed={!!collapsedSections['10']}
+          onToggleCollapse={toggleCollapsedSection}
+          hasContent={sectionHasContent('10')}
+        >
           <div>
             <label>CUSTOM CONTRIBUTING NOTES (optional — default guide auto-generated)</label>
             <textarea className="textInput" id="contribNotes" style={{ minHeight: 70 }}
@@ -302,7 +418,15 @@ export default function EditorPanel({
           </div>
         </EditorSection>
 
-        <EditorSection num={11} title="License & Author" hidden={!sectionState.author}>
+        <EditorSection
+          sectionId="11"
+          num={11}
+          title="License & Author"
+          hidden={!sectionState.author}
+          collapsed={!!collapsedSections['11']}
+          onToggleCollapse={toggleCollapsedSection}
+          hasContent={sectionHasContent('11')}
+        >
           <div className="two-col">
             <div>
               <label>LICENSE</label>
@@ -349,7 +473,15 @@ export default function EditorPanel({
           </div>
         </EditorSection>
 
-        <EditorSection num={12} title="Support & Donation" hidden={!sectionState.support}>
+        <EditorSection
+          sectionId="12"
+          num={12}
+          title="Support & Donation"
+          hidden={!sectionState.support}
+          collapsed={!!collapsedSections['12']}
+          onToggleCollapse={toggleCollapsedSection}
+          hasContent={sectionHasContent('12')}
+        >
           <div>
             <label>SUPPORT MESSAGE (optional)</label>
             <textarea className="textInput" id="supportMsg" style={{ minHeight: 60 }}
