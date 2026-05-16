@@ -1,14 +1,18 @@
 
 
-#  ReadmeForge
+<div align="center">
+  
+# 🚀 ReadmeForge
 
 **The fastest way to craft beautiful GitHub READMEs — no Markdown knowledge required.**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Made with HTML](https://img.shields.io/badge/Made%20with-HTML%2FJS%2FCSS-orange.svg)](#)
+[![Made with React](https://img.shields.io/badge/Made%20with-React%20%2B%20Vite-61DAFB?logo=react&logoColor=white)](#)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
-[ Live Demo](https://makeareadme.netlify.app) · [ Report a Bug](../../issues) · [Request a Feature](../../issues)
+[**Live Demo**](https://makeareadme.netlify.app) · [**Report a Bug**](../../issues) · [**Request a Feature**](../../issues)
+
+</div>
 
 ---
 
@@ -52,14 +56,21 @@
 -  **Screenshot support** — Insert images directly into your README
 -  **One-click raw copy** — Grab the raw Markdown and paste it into GitHub instantly
 -  **Toggle sections** — Include only what your project needs
--  **Zero dependencies** — Pure HTML, CSS, and JavaScript; runs entirely in the browser
+-  **Modern Tech Stack** — Built with React and Vite for blazing fast performance
 
 ---
 
-##  Screenshots
-<img width="1918" height="1076" alt="Screenshot 2026-03-09 142503" src="https://github.com/user-attachments/assets/542aac38-9554-49ee-adec-369281ad399f" />
+## 🖼️ Screenshots
 
-<img width="1915" height="1077" alt="Screenshot 2026-03-09 142522" src="https://github.com/user-attachments/assets/f7f12c58-c2e8-4fb3-b30a-12835a2f62cc" />
+<div align="center">
+  <img width="800" alt="Editor Screenshot" src="https://github.com/user-attachments/assets/542aac38-9554-49ee-adec-369281ad399f" />
+  <br />
+  <em>ReadmeForge Generator Dashboard</em>
+  <br /><br />
+  <img width="800" alt="Preview Screenshot" src="https://github.com/user-attachments/assets/f7f12c58-c2e8-4fb3-b30a-12835a2f62cc" />
+  <br />
+  <em>Live Side-by-Side Markdown Preview</em>
+</div>
 
 
 ---
@@ -68,9 +79,9 @@
 
 ### Prerequisites
 
-No installation required. ReadmeForge runs entirely in the browser.
+You will need **Node.js** (v16 or higher) and **npm** installed on your machine.
 
-### Usage
+### Installation
 
 1. **Clone the repository**
    ```bash
@@ -78,31 +89,44 @@ No installation required. ReadmeForge runs entirely in the browser.
    cd readmeforge
    ```
 
-2. **Open in your browser**
+2. **Install dependencies**
    ```bash
-   open index.html
-   # or simply double-click index.html
+   npm install
    ```
 
-3. **Build your README**
-   - Fill in your project's details section by section
-   - Toggle sections on/off as needed
-   - Insert screenshots where relevant
-   - Watch the live preview update in real time
+### 🛠️ Available Scripts
 
-4. **Export**
-   - Click **Copy Raw** to copy the generated Markdown
-   - Paste it directly into your GitHub repository's `README.md`
+In the project directory, you can run:
+
+- `npm run dev`: Starts the Vite development server.
+- `npm run build`: Builds the app for production to the `dist` folder.
+- `npm run preview`: Locally previews the production build.
+
+### 💻 Usage
+
+1. **Start the app locally** (`npm run dev`) or open the **[Live Demo](https://makeareadme.netlify.app)**.
+2. **Build your README** by filling in your project's details section by section.
+3. Toggle sections on/off as needed from the sidebar.
+4. Watch the live preview update in real time.
+5. Click **Copy Markdown** to grab the generated raw Markdown and paste it directly into your GitHub repository's `README.md`.
 
 ---
 
 ## 🗂️ Project Structure
 
-```
+```text
 readmeforge/
-├── index.html          # Main application entry point
-├── readmeforge.css     # Styling and layout
-├── readmeforge.js      # Core logic and preview generation
+├── src/                # Source code
+│   ├── components/     # Reusable React components
+│   ├── hooks/          # Custom React hooks (e.g., useReadmeState)
+│   ├── pages/          # Application pages (Landing, ReadmeMaker)
+│   ├── utils/          # Utility functions for markdown generation
+│   ├── App.jsx         # Main application component
+│   └── main.jsx        # Entry point for React
+├── public/             # Static assets
+├── index.html          # HTML entry point
+├── package.json        # Dependencies and scripts
+├── vite.config.js      # Vite configuration
 └── README.md           # You are here
 ```
 
@@ -148,7 +172,7 @@ Distributed under the MIT License. See [`LICENSE`](LICENSE) for more information
 
 
 
-Made with ❤️ using plain HTML, CSS & JavaScript
+Made with ❤️ using React & Vite
 
 ⭐ Star this repo if you found it useful!
 
