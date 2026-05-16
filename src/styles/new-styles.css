@@ -16,6 +16,14 @@
   justify-content: space-between;
   padding: 0 40px;
   transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  border-bottom: none !important;
+  mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+}
+
+.site-nav.menu-open {
+  mask-image: none !important;
+  -webkit-mask-image: none !important;
 }
 
 .site-nav.scrolled,
