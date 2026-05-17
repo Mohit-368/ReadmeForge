@@ -1779,9 +1779,20 @@
       return "<pre><code>" + esc(code) + "</code></pre>";
     });
     h = h.replace(/`([^`\n]+)`/g, "<code>$1</code>");
-    h = h.replace(/^### (.+)$/gm, "<h3>$1</h3>");
-    h = h.replace(/^## (.+)$/gm, "<h2>$1</h2>");
-    h = h.replace(/^# (.+)$/gm, "<h1>$1</h1>");
+    h = h.replace(/^### (.+)$/gm, function(_, text) {
+  const id = text.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-');
+  return '<h3 id="' + id + '">' + text + '</h3>';
+  });
+
+  h = h.replace(/^## (.+)$/gm, function(_, text) {
+  const id = text.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-');
+  return '<h2 id="' + id + '">' + text + '</h2>';
+  });
+
+  h = h.replace(/^# (.+)$/gm, function(_, text) {
+  const id = text.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-');
+  return '<h1 id="' + id + '">' + text + '</h1>';
+  });
     h = h.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
     h = h.replace(/__(.+?)__/g, "<strong>$1</strong>");
     h = h.replace(/\*(.+?)\*/g, "<em>$1</em>");
@@ -1811,10 +1822,12 @@
         '" style="max-width:100%;border-radius:4px;margin:4px 0">'
       );
     });
-    h = h.replace(
-      /\[([^\]]+)\]\(([^)]+)\)/g,
-      '<a href="$2" target="_blank">$1</a>',
-    );
+    h = h.replace(/\[([^\]]+)\]\(([^)]+)\)/g, function (_, text, url) {
+    if (url.startsWith("#")) {
+      return '<a href="' + url + '">' + text + '</a>';
+    }
+    return '<a href="' + url + '" target="_blank">' + text + '</a>';
+  });
     h = h.replace(/^> (.+)$/gm, "<blockquote>$1</blockquote>");
     h = h.replace(/((\|.+\|\n)+)/g, function (table) {
       var rows = table.trim().split("\n");
