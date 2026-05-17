@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import Navbar from '../../components/layout/Navbar';
 import Footer from '../../components/layout/Footer';
 import SEOHead from '../../components/shared/SEOHead';
+import useScrollReveal from '../../hooks/useScrollReveal';
 
 const features = [
   { icon: '⚡', title: 'Live Preview', desc: 'See your README rendered in real-time as you type. GitHub-accurate preview with badge rendering.' },
@@ -22,17 +23,19 @@ const stats = [
 ];
 
 export default function LandingPage() {
+  const revealRef = useScrollReveal();
+
   return (
     <>
       <SEOHead
         title="READMEForge — Generate Professional GitHub READMEs in 30 Seconds"
         description="Free, open-source README generator. Live preview, 8 templates, quality scoring, and one-click export. No sign-up required."
       />
-      <Navbar />
+      <div ref={revealRef} className="page-transition">
 
       <div className="hero-wrapper" style={{ paddingTop: 64 }}>
         <main className="hero-content">
-          <h1 className="hero-title">GitHub<br />Readme.Md<br />maker</h1>
+          <h1 className="hero-title animate-entrance">GitHub<br />Readme.Md<br />maker</h1>
         </main>
 
         <div className="css-asterisk">
@@ -42,15 +45,15 @@ export default function LandingPage() {
           <div className="css-pill" /><div className="css-pill" /><div className="css-pill" />
         </div>
 
-        <div className="scroll-action">
+        <div className="scroll-action animate-entrance delay-300">
           <Link to="/readme-maker" className="scroll-btn">Start Building →</Link>
         </div>
       </div>
 
-      <section className="landing-stats">
+      <section className="landing-stats reveal reveal-fade-up">
         <div className="landing-container">
-          {stats.map(s => (
-            <div key={s.label} className="stat-card">
+          {stats.map((s, i) => (
+            <div key={s.label} className={`stat-card reveal reveal-zoom-in delay-${(i + 1) * 100}`}>
               <div className="stat-value">{s.value}</div>
               <div className="stat-label">{s.label}</div>
             </div>
@@ -60,11 +63,11 @@ export default function LandingPage() {
 
       <section className="landing-features">
         <div className="landing-container">
-          <div className="section-label-tag">What's inside</div>
-          <h2 className="landing-section-title">Everything you need to write<br />a <span className="accent-text">perfect README</span></h2>
+          <div className="section-label-tag reveal reveal-fade-up">What's inside</div>
+          <h2 className="landing-section-title reveal reveal-fade-up delay-100">Everything you need to write<br />a <span className="accent-text">perfect README</span></h2>
           <div className="features-grid">
-            {features.map(f => (
-              <div key={f.title} className="feature-card">
+            {features.map((f, i) => (
+              <div key={f.title} className={`feature-card reveal reveal-fade-up delay-${(i % 4 + 1) * 100}`}>
                 <div className="feature-icon">{f.icon}</div>
                 <h3 className="feature-title">{f.title}</h3>
                 <p className="feature-desc">{f.desc}</p>
@@ -76,7 +79,7 @@ export default function LandingPage() {
 
       <section className="landing-cta">
         <div className="landing-container">
-          <div className="cta-box">
+          <div className="cta-box reveal reveal-zoom-in">
             <div className="cta-badge">Free & Open Source</div>
             <h2 className="cta-title">Ready to craft your README?</h2>
             <p className="cta-sub">No sign-up. No limits. Just a great README in under 60 seconds.</p>
@@ -94,6 +97,7 @@ export default function LandingPage() {
       </section>
 
       <Footer />
+      </div>
     </>
   );
 }

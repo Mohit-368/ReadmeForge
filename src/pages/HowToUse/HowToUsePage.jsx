@@ -40,87 +40,88 @@ export default function HowToUsePage() {
         title="How To Use — READMEForge"
         description="Step-by-step guide to creating a professional GitHub README with READMEForge. Learn templates, sections, export, and tips."
       />
-      <Navbar />
 
-      <div className="htu-page">
-        <div className="htu-hero">
-          <div className="landing-container">
-            <div className="section-label-tag">Documentation</div>
-            <h1 className="htu-title">How to use <span className="accent-text">READMEForge</span></h1>
-            <p className="htu-subtitle">From zero to a professional README in under 60 seconds. Here's everything you need to know.</p>
-            <Link to="/readme-maker" className="cta-btn cta-btn--primary" style={{ display: 'inline-flex', marginTop: 8 }}>
-              Open README Maker →
-            </Link>
+      <div className="page-transition">
+        <div className="htu-page">
+          <div className="htu-hero">
+            <div className="landing-container">
+              <div className="section-label-tag">Documentation</div>
+              <h1 className="htu-title">How to use <span className="accent-text">READMEForge</span></h1>
+              <p className="htu-subtitle">From zero to a professional README in under 60 seconds. Here's everything you need to know.</p>
+              <Link to="/readme-maker" className="cta-btn cta-btn--primary" style={{ display: 'inline-flex', marginTop: 8 }}>
+                Open README Maker →
+              </Link>
+            </div>
           </div>
-        </div>
 
-        <section className="htu-steps-section">
-          <div className="landing-container">
-            <h2 className="landing-section-title">Step-by-step guide</h2>
-            <div className="htu-steps">
-              {steps.map(s => (
-                <div key={s.num} className="htu-step">
-                  <div className="htu-step-num">{s.num}</div>
-                  <div className="htu-step-content">
-                    <div className="htu-step-icon">{s.icon}</div>
-                    <h3 className="htu-step-title">{s.title}</h3>
-                    <p className="htu-step-desc">{s.desc}</p>
+          <section className="htu-steps-section">
+            <div className="landing-container">
+              <h2 className="landing-section-title">Step-by-step guide</h2>
+              <div className="htu-steps">
+                {steps.map(s => (
+                  <div key={s.num} className="htu-step">
+                    <div className="htu-step-num">{s.num}</div>
+                    <div className="htu-step-content">
+                      <div className="htu-step-icon">{s.icon}</div>
+                      <h3 className="htu-step-title">{s.title}</h3>
+                      <p className="htu-step-desc">{s.desc}</p>
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="htu-tips-section">
-          <div className="landing-container">
-            <h2 className="landing-section-title">Tips &amp; best practices</h2>
-            <div className="tips-grid">
-              {tips.map((t, i) => (
-                <div key={i} className="tip-card">
-                  <span className="tip-icon">{t.icon}</span>
-                  <p className="tip-text">{t.tip}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="htu-faq-section">
-          <div className="landing-container">
-            <h2 className="landing-section-title">Frequently asked questions</h2>
-            <div className="faq-list">
-              {faqs.map((f, i) => (
-                <div key={i} className={`faq-item${openFaq === i ? ' open' : ''}`}>
-                  <button className="faq-question" onClick={() => setOpenFaq(openFaq === i ? null : i)}>
-                    {f.q}
-                    <svg className="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <polyline points="6 9 12 15 18 9" />
-                    </svg>
-                  </button>
-                  {openFaq === i && <div className="faq-answer">{f.a}</div>}
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="landing-cta" style={{ paddingTop: 0 }}>
-          <div className="landing-container">
-            <div className="cta-box">
-              <h2 className="cta-title">Ready to start?</h2>
-              <p className="cta-sub">Open the README Maker and build your first professional README now.</p>
-              <div className="cta-buttons">
-                <Link to="/readme-maker" className="cta-btn cta-btn--primary">
-                  Open README Maker
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M5 12h14M12 5l7 7-7 7" />
-                  </svg>
-                </Link>
+                ))}
               </div>
             </div>
-          </div>
-        </section>
+          </section>
+
+          <section className="htu-tips-section">
+            <div className="landing-container">
+              <h2 className="landing-section-title">Tips &amp; best practices</h2>
+              <div className="tips-grid">
+                {tips.map((t, i) => (
+                  <div key={i} className="tip-card">
+                    <span className="tip-icon">{t.icon}</span>
+                    <p className="tip-text">{t.tip}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          <section className="htu-faq-section">
+            <div className="landing-container">
+              <h2 className="landing-section-title">Frequently asked questions</h2>
+              <div className="faq-list">
+                {faqs.map((f, i) => (
+                  <div key={i} className={`faq-item${openFaq === i ? ' open' : ''}`}>
+                    <button className="faq-question" onClick={() => setOpenFaq(openFaq === i ? null : i)}>
+                      {f.q}
+                      <svg className="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <polyline points="6 9 12 15 18 9" />
+                      </svg>
+                    </button>
+                    {openFaq === i && <div className="faq-answer">{f.a}</div>}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          <section className="landing-cta" style={{ paddingTop: 0 }}>
+            <div className="landing-container">
+              <div className="cta-box">
+                <h2 className="cta-title">Ready to start?</h2>
+                <p className="cta-sub">Open the README Maker and build your first professional README now.</p>
+                <div className="cta-buttons">
+                  <Link to="/readme-maker" className="cta-btn cta-btn--primary">
+                    Open README Maker
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
       </div>
 
       <Footer />
