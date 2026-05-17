@@ -24,6 +24,7 @@ export default function ReadmeMaker() {
   } = useReadmeState();
 
   const [activeTemplate, setActiveTemplate] = useState(null);
+  const [mobileTab, setMobileTab] = useState('editor');
 
   const currentMd = useMemo(() =>
     generateMarkdown({ formData, sectionState, selectedTechs, selectedBadges, screenshots }),
@@ -62,6 +63,41 @@ export default function ReadmeMaker() {
         title="README Maker — READMEForge"
         description="Generate a professional GitHub README in seconds with live preview, templates, and one-click export."
       />
+
+      {/* Mobile-only styles — zero effect on desktop */}
+      <style>{`
+        .mobile-tab-bar {
+          display: none;
+          border-bottom: 1px solid var(--border, #2a2a3a);
+          background: var(--surface, #13131f);
+        }
+        .mobile-tab-btn {
+          flex: 1;
+          padding: 10px 0;
+          font-size: 13px;
+          font-weight: 600;
+          background: none;
+          border: none;
+          border-bottom: 2px solid transparent;
+          cursor: pointer;
+          color: var(--muted, #666);
+          transition: color 0.2s, border-color 0.2s;
+          font-family: inherit;
+        }
+        .mobile-tab-btn.active {
+          color: var(--accent, #7c6aff);
+          border-bottom: 2px solid var(--accent, #7c6aff);
+        }
+        @media (max-width: 767px) {
+          .mobile-tab-bar {
+            display: flex;
+          }
+          .mobile-panel-hidden {
+            display: none !important;
+          }
+        }
+      `}</style>
+
       <Navbar />
       <div id="app-builder" style={{ paddingTop: 64 }}>
         <header className="header">
@@ -85,34 +121,57 @@ export default function ReadmeMaker() {
           </div>
         </header>
 
+        {/* Mobile Tab Bar — only visible below 768px */}
+        <div className="mobile-tab-bar">
+          <button
+            className={`mobile-tab-btn${mobileTab === 'editor' ? ' active' : ''}`}
+            onClick={() => setMobileTab('editor')}
+          >
+            ✏️ Editor
+          </button>
+          <button
+            className={`mobile-tab-btn${mobileTab === 'preview' ? ' active' : ''}`}
+            onClick={() => setMobileTab('preview')}
+          >
+            👁️ Preview
+          </button>
+        </div>
+
         <div className="main" style={{ height: 'calc(100vh - 128px)' }}>
-          <Sidebar
-            sectionState={sectionState}
-            toggleSection={toggleSection}
-            selectedTechs={selectedTechs}
-            toggleTech={toggleTech}
-            applyTemplate={handleApplyTemplate}
-            activeTemplate={activeTemplate}
-          />
-          <EditorPanel
-            formData={formData}
-            updateField={updateField}
-            sectionState={sectionState}
-            selectedTechs={selectedTechs}
-            toggleTech={toggleTech}
-            selectedBadges={selectedBadges}
-            toggleBadge={toggleBadge}
-            screenshots={screenshots}
-            addScreenshots={addScreenshots}
-            removeScreenshot={removeScreenshot}
-          />
-          <PreviewPanel
-            currentMd={currentMd}
-            formData={formData}
-            sectionState={sectionState}
-            selectedTechs={selectedTechs}
-            screenshots={screenshots}
-          />
+          {/* Sidebar + Editor: hidden on mobile when preview tab is active */}
+          <div style={{ display: 'contents' }} className={mobileTab === 'preview' ? 'mobile-panel-hidden' : ''}>
+            <Sidebar
+              sectionState={sectionState}
+              toggleSection={toggleSection}
+              selectedTechs={selectedTechs}
+              toggleTech={toggleTech}
+              applyTemplate={handleApplyTemplate}
+              activeTemplate={activeTemplate}
+            />
+            <EditorPanel
+              formData={formData}
+              updateField={updateField}
+              sectionState={sectionState}
+              selectedTechs={selectedTechs}
+              toggleTech={toggleTech}
+              selectedBadges={selectedBadges}
+              toggleBadge={toggleBadge}
+              screenshots={screenshots}
+              addScreenshots={addScreenshots}
+              removeScreenshot={removeScreenshot}
+            />
+          </div>
+
+          {/* Preview: hidden on mobile when editor tab is active */}
+          <div style={{ display: 'contents' }} className={mobileTab === 'editor' ? 'mobile-panel-hidden' : ''}>
+            <PreviewPanel
+              currentMd={currentMd}
+              formData={formData}
+              sectionState={sectionState}
+              selectedTechs={selectedTechs}
+              screenshots={screenshots}
+            />
+          </div>
         </div>
       </div>
     </>
