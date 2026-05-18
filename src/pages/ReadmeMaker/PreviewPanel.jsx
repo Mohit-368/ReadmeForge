@@ -52,6 +52,7 @@ function calculateQuality({ formData, sectionState, selectedTechs, screenshots }
 export default function PreviewPanel({ currentMd, formData, sectionState, selectedTechs, screenshots }) {
   const toast = useToast();
   const [tab, setTabState] = useState('rendered');
+  const [isFocusMode, setIsFocusMode] = useState(false);
   const [zoom, setZoom] = useState(() => {
     try {
       const raw = localStorage.getItem(PREVIEW_ZOOM_KEY);
@@ -87,6 +88,15 @@ export default function PreviewPanel({ currentMd, formData, sectionState, select
     document.addEventListener('keydown', handler);
     return () => document.removeEventListener('keydown', handler);
   }, [zoom]);
+
+  useEffect(() => {
+    if (isFocusMode) {
+      document.body.classList.add('mobile-focus-active');
+    } else {
+      document.body.classList.remove('mobile-focus-active');
+    }
+    return () => document.body.classList.remove('mobile-focus-active');
+  }, [isFocusMode]);
 
   function zoomIn() {
     const next = ZOOM_LEVELS.find(l => l > zoom);
@@ -135,49 +145,45 @@ export default function PreviewPanel({ currentMd, formData, sectionState, select
   const zoomPct = Math.round(zoom * 100) + '%';
 
   return (
-    <aside className="preview">
-      <div className="preview-header">
-        <div className="preview-tabs">
-          <button
-            className={`ptab${tab === 'rendered' ? ' active' : ''}`}
-            onClick={() => setTabState('rendered')}
-          >
-            Preview
-          </button>
-          <button
-            className={`ptab${tab === 'raw' ? ' active' : ''}`}
-            onClick={() => setTabState('raw')}
-          >
-            Raw MD
-          </button>
-        </div>
-        <div className="preview-actions">
-          <div className="preview-zoom-controls">
-            <button className="pbtn" onClick={zoomOut} disabled={zoom <= ZOOM_LEVELS[0]} title="Zoom out (Ctrl -)">−</button>
-            <span className="zoom-indicator">{zoomPct}</span>
-            <button className="pbtn" onClick={zoomIn} disabled={zoom >= ZOOM_LEVELS[ZOOM_LEVELS.length - 1]} title="Zoom in (Ctrl +)">+</button>
-            <button className="pbtn" onClick={() => setZoom(1)} title="Reset zoom (Ctrl 0)">Reset</button>
+    <aside className={`preview${isFocusMode ? ' fullscreen-preview-overlay' : ''}`}>
+      {!isFocusMode ? (
+        <div className="preview-header">
+          <div className="preview-tabs">
+            <button
+              className={`ptab${tab === 'rendered' ? ' active' : ''}`}
+              onClick={() => setTabState('rendered')}
+            >
+              Preview
+            </button>
+            <button
+              className={`ptab${tab === 'raw' ? ' active' : ''}`}
+              onClick={() => setTabState('raw')}
+            >
+              Raw MD
+            </button>
           </div>
-          <button className="pbtn green" onClick={copyMarkdown}>
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <rect x="9" y="9" width="13" height="13" rx="2" /><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" />
-            </svg>
-            Copy Markdown
-          </button>
-          <button className="pbtn" onClick={downloadMd}>
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" /><polyline points="7,10 12,15 17,10" /><line x1="12" y1="15" x2="12" y2="3" />
-            </svg>
-            Download .md
-          </button>
-          <button className="pbtn print" onClick={printPreview}>
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <polyline points="6 9 6 2 18 2 18 9" /><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2" /><rect x="6" y="14" width="12" height="8" />
-            </svg>
-            Print Preview
-          </button>
+          <div className="preview-actions">
+            <button className="pbtn green" onClick={copyMarkdown}>
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" /><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" />
+              </svg>
+              Copy Markdown
+            </button>
+            <button className="pbtn" onClick={downloadMd}>
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" /><polyline points="7,10 12,15 17,10" /><line x1="12" y1="15" x2="12" y2="3" />
+              </svg>
+              Download .md
+            </button>
+            <button className="pbtn print" onClick={printPreview}>
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <polyline points="6 9 6 2 18 2 18 9" /><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2" /><rect x="6" y="14" width="12" height="8" />
+              </svg>
+              Print Preview
+            </button>
+          </div>
         </div>
-      </div>
+      ) : null}
 
       {hasContent && (
         <div className="quality-panel" id="qualityPanel">
@@ -247,6 +253,22 @@ export default function PreviewPanel({ currentMd, formData, sectionState, select
       )}
 
       <div className="preview-body" ref={previewBodyRef} style={{ '--preview-zoom': zoom }}>
+        <div className="preview-zoom-controls">
+          <button className="pbtn" onClick={zoomOut} disabled={zoom <= ZOOM_LEVELS[0]} title="Zoom out (Ctrl -)">−</button>
+          <span className="zoom-indicator">{zoomPct}</span>
+          <button className="pbtn" onClick={zoomIn} disabled={zoom >= ZOOM_LEVELS[ZOOM_LEVELS.length - 1]} title="Zoom in (Ctrl +)">+</button>
+          <button className="pbtn" onClick={() => setZoom(1)} title="Reset zoom (Ctrl 0)">Reset</button>
+
+          {!isFocusMode && (
+            <button onClick={() => setIsFocusMode(true)} className="floating-focus-btn" aria-label="Focus View">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+            </button>
+          )}
+        </div>
+
         {!hasContent ? (
           <div className="preview-zoom-wrap">
             <div className="empty-preview">
@@ -265,6 +287,16 @@ export default function PreviewPanel({ currentMd, formData, sectionState, select
           </div>
         )}
       </div>
+
+      {isFocusMode ? (
+        <button onClick={() => setIsFocusMode(false)} className="exit-focus-btn" aria-label="Exit Focus Mode">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+          Exit Focus
+        </button>
+      ) : null}
 
       {showBackTop && (
         <button

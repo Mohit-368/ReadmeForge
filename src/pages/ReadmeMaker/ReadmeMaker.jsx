@@ -1,4 +1,4 @@
-import { useEffect, useRef, useMemo } from 'react';
+import { useEffect, useRef, useMemo, useState } from 'react';
 import { useReadmeState } from '../../hooks/useReadmeState';
 import { useToast } from '../../components/ui/Toast';
 import { generateMarkdown } from '../../utils/markdownUtils';
@@ -8,7 +8,6 @@ import EditorPanel from './EditorPanel';
 import PreviewPanel from './PreviewPanel';
 import Navbar from '../../components/layout/Navbar';
 import SEOHead from '../../components/shared/SEOHead';
-import { useState } from 'react';
 
 export default function ReadmeMaker() {
   const toast = useToast();
@@ -24,6 +23,7 @@ export default function ReadmeMaker() {
   } = useReadmeState();
 
   const [activeTemplate, setActiveTemplate] = useState(null);
+  const [activeMobileTab, setActiveMobileTab] = useState('editor');
 
   const currentMd = useMemo(() =>
     generateMarkdown({ formData, sectionState, selectedTechs, selectedBadges, screenshots }),
@@ -56,6 +56,21 @@ export default function ReadmeMaker() {
     toast('✓ Saved data cleared!');
   }
 
+  useEffect(() => {
+    // Industry-standard fix for iOS Safari keyboard void glitch
+    const handleKeyboardDismiss = (e) => {
+      if (['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName)) {
+        // Wait a tiny fraction of a second for the keyboard to fully retract, then snap the viewport back
+        setTimeout(() => {
+          window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+        }, 50);
+      }
+    };
+    
+    document.addEventListener('focusout', handleKeyboardDismiss);
+    return () => document.removeEventListener('focusout', handleKeyboardDismiss);
+  }, []);
+
   return (
     <>
       <SEOHead
@@ -85,35 +100,82 @@ export default function ReadmeMaker() {
           </div>
         </header>
 
-        <div className="main" style={{ height: 'calc(100vh - 128px)' }}>
-          <Sidebar
-            sectionState={sectionState}
-            toggleSection={toggleSection}
-            selectedTechs={selectedTechs}
-            toggleTech={toggleTech}
-            applyTemplate={handleApplyTemplate}
-            activeTemplate={activeTemplate}
-          />
-          <EditorPanel
-            formData={formData}
-            updateField={updateField}
-            sectionState={sectionState}
-            selectedTechs={selectedTechs}
-            toggleTech={toggleTech}
-            selectedBadges={selectedBadges}
-            toggleBadge={toggleBadge}
-            screenshots={screenshots}
-            addScreenshots={addScreenshots}
-            removeScreenshot={removeScreenshot}
-          />
-          <PreviewPanel
-            currentMd={currentMd}
-            formData={formData}
-            sectionState={sectionState}
-            selectedTechs={selectedTechs}
-            screenshots={screenshots}
-          />
+        <div className="mobile-tab-switcher">
+          <button
+            type="button"
+            className={`mobile-tab-switcher-btn${activeMobileTab === 'setup' ? ' active' : ''}`}
+            onClick={() => setActiveMobileTab('setup')}
+          >
+            Setup
+          </button>
+          <button
+            type="button"
+            className={`mobile-tab-switcher-btn${activeMobileTab === 'editor' ? ' active' : ''}`}
+            onClick={() => setActiveMobileTab('editor')}
+          >
+            Editor
+          </button>
+          <button
+            type="button"
+            className={`mobile-tab-switcher-btn${activeMobileTab === 'preview' ? ' active' : ''}`}
+            onClick={() => setActiveMobileTab('preview')}
+          >
+            Preview
+          </button>
         </div>
+
+        <div className="main" style={{ height: 'calc(100vh - 128px)' }}>
+          <div className={`mobile-panel-wrapper${activeMobileTab === 'setup' ? ' active' : ''}`}>
+            <Sidebar
+              sectionState={sectionState}
+              toggleSection={toggleSection}
+              selectedTechs={selectedTechs}
+              toggleTech={toggleTech}
+              applyTemplate={handleApplyTemplate}
+              activeTemplate={activeTemplate}
+            />
+          </div>
+          <div className={`mobile-panel-wrapper${activeMobileTab === 'editor' ? ' active' : ''}`}>
+            <EditorPanel
+              formData={formData}
+              updateField={updateField}
+              sectionState={sectionState}
+              selectedTechs={selectedTechs}
+              toggleTech={toggleTech}
+              selectedBadges={selectedBadges}
+              toggleBadge={toggleBadge}
+              screenshots={screenshots}
+              addScreenshots={addScreenshots}
+              removeScreenshot={removeScreenshot}
+            />
+          </div>
+          <div className={`mobile-panel-wrapper${activeMobileTab === 'preview' ? ' active' : ''}`}>
+            <PreviewPanel
+              currentMd={currentMd}
+              formData={formData}
+              sectionState={sectionState}
+              selectedTechs={selectedTechs}
+              screenshots={screenshots}
+            />
+          </div>
+        </div>
+
+        {/* Mobile Global Scroll-to-Top */}
+        <button
+          className="mobile-global-top-btn"
+          onClick={() => {
+            const activeWrapper = document.querySelector('.mobile-panel-wrapper.active');
+            if (activeWrapper) activeWrapper.scrollTo({ top: 0, behavior: 'smooth' });
+            const innerTarget = activeWrapper?.firstElementChild;
+            if (innerTarget) innerTarget.scrollTo({ top: 0, behavior: 'smooth' });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
+          aria-label="Scroll to top"
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="18 15 12 9 6 15" />
+          </svg>
+        </button>
       </div>
     </>
   );

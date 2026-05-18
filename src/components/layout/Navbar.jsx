@@ -73,14 +73,6 @@ export default function Navbar() {
           </svg>
           Source
         </a>
-        <button
-          type="button"
-          className="theme-toggle mobile-only"
-          title="Toggle dark/light mode"
-          onClick={toggleTheme}
-        >
-          {theme === 'dark' ? '🌙' : '☀️'}
-        </button>
         {/* Source link moved to actions area so it stays beside theme toggle */}
       </div>
 
@@ -102,6 +94,15 @@ export default function Navbar() {
           type="button"
           className="theme-toggle desktop-only"
           id="themeToggle"
+          title="Toggle dark/light mode"
+          onClick={toggleTheme}
+        >
+          {theme === 'dark' ? '🌙' : '☀️'}
+        </button>
+
+        <button
+          type="button"
+          className="theme-toggle mobile-only-toggle"
           title="Toggle dark/light mode"
           onClick={toggleTheme}
         >

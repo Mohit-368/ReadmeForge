@@ -1917,7 +1917,6 @@ body.light-mode .gh-preview {
 @media (max-width: 1024px) {
   .main {
     flex-direction: column;
-    height: auto;
     min-height: calc(100vh - 64px);
   }
 
@@ -1947,9 +1946,9 @@ body.light-mode .gh-preview {
 @media (max-width: 768px) {
   .header {
     height: auto;
-    padding: 16px;
+    padding: 10px 16px !important;
     flex-direction: column;
-    gap: 16px;
+    gap: 8px !important;
     align-items: center;
   }
 
@@ -1973,6 +1972,10 @@ body.light-mode .gh-preview {
     min-width: 100px;
   }
 
+  .header-right .hbtn {
+    padding: 6px 12px !important;
+  }
+
   .two-col {
     grid-template-columns: 1fr;
     gap: 16px;
@@ -1987,35 +1990,152 @@ body.light-mode .gh-preview {
   }
 
   .preview-header {
-    flex-direction: column;
-    gap: 12px;
-    align-items: stretch;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+    align-items: stretch !important;
+    padding: 8px 16px !important;
   }
 
   .preview-tabs {
-    flex-wrap: wrap;
-    justify-content: center;
     width: 100%;
+    height: auto !important;
+    background: var(--surface3) !important;
+    padding: 3px !important;
+    border-radius: 10px !important;
+    display: flex;
+    align-items: center;
   }
 
   .preview-tabs .ptab {
-    flex: 1 1 140px;
+    flex: 1 !important;
+    padding: 8px 12px !important;
+    font-size: 12px !important;
+    border-radius: 8px !important;
+    text-align: center;
   }
 
   .preview-actions {
     width: 100%;
-    justify-content: space-between;
+    height: auto !important;
+    justify-content: flex-start;
     flex-wrap: wrap;
+    gap: 8px !important;
+    align-items: center;
   }
 
   .preview-actions .pbtn {
-    flex: 1;
+    flex: 1 !important;
+    width: auto !important;
+    min-width: 0 !important;
+    padding: 8px 14px !important;
     justify-content: center;
+  }
+
+  /* Force compact button height — overrides any global min-height bloat */
+  .preview-tabs .ptab,
+  .preview-actions .pbtn {
+    height: 32px !important;
+    min-height: 32px !important;
+    padding: 0 12px !important;
+    font-size: 12px !important;
+    line-height: 32px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  /* Kill the inherited flex-basis that is acting as a massive height */
+  .preview-tabs,
+  .preview-actions {
+    flex: 0 0 auto !important;
+    width: 100% !important;
+    height: auto !important;
+    padding: 6px !important;
+    border-radius: 12px !important;
+  }
+
+  /* Ensure buttons inside aren't creating hidden gaps */
+  .preview-actions .pbtn,
+  .preview-tabs .ptab {
+    margin: 0 !important;
   }
 
   .preview-zoom-controls {
     width: 100%;
     justify-content: center;
+    position: relative !important;
+    padding: 12px 16px !important;
+    gap: 16px !important;
+    padding-bottom: 16px;
+    margin-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .preview-zoom-controls .floating-focus-btn {
+    position: absolute !important;
+    top: 50% !important;
+    right: 16px !important;
+    transform: translateY(-50%) !important;
+  }
+
+  .preview-zoom-controls .pbtn {
+    width: 44px !important;
+    height: 44px !important;
+    padding: 0 !important;
+    border-radius: 50% !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto !important;
+  }
+
+  .preview-zoom-controls .zoom-indicator {
+    height: 44px !important;
+    padding: 0 20px !important;
+    display: flex;
+    align-items: center;
+  }
+
+  .preview-body {
+    padding: 16px 0 !important;
+  }
+
+  .gh-preview {
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    padding: 16px !important;
+  }
+
+  /* 1. Prevent mobile browser viewport shift by forcing accessible text sizing on inputs */
+  input[type="text"],
+  input[type="email"],
+  input[type="url"],
+  textarea,
+  select {
+    font-size: 16px !important;
+  }
+
+  /* 2. Hide surrounding cards, navbars, and score blocks during mobile focus view */
+  body.mobile-focus-active .site-nav,
+  body.mobile-focus-active .header,
+  body.mobile-focus-active .mobile-tab-switcher,
+  body.mobile-focus-active #qualityPanel {
+    display: none !important;
+  }
+
+  /* 3. Reclaim full viewport dimension for the main container */
+  body.mobile-focus-active .main {
+    height: 100dvh !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Mobile Pinch-to-Zoom override inside Focus Mode */
+  .fullscreen-preview-overlay,
+  .fullscreen-preview-overlay .preview-body {
+    touch-action: pan-x pan-y pinch-zoom !important;
   }
 }
 
@@ -2575,6 +2695,35 @@ body.light-mode .gh-preview {
   transform: translateY(-3px);
   box-shadow: 0 6px 16px rgba(56, 189, 248, 0.6);
   background: var(--accent2);
+}
+
+.preview-body {
+  position: relative;
+}
+
+.floating-focus-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: var(--header-bg);
+  border: 1px solid var(--border2);
+  color: var(--text);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: all 0.2s ease;
+}
+
+.floating-focus-btn:active {
+  transform: scale(0.92);
 }
 
 /* ── PRINT MEDIA STYLES ── */
@@ -3401,3 +3550,233 @@ body.light-mode .gh-preview {
   .faq-question { font-size: 14px; padding: 16px; }
   .faq-answer { padding: 0 16px 16px; padding-top: 12px; }
 }
+
+.mobile-global-top-btn {
+  display: none; /* Hidden by default on desktop */
+}
+
+/* =======================================================
+   README MAKER MOBILE TAB SWITCHER OVERRIDES
+   ======================================================= */
+.mobile-tab-switcher {
+  display: none;
+}
+
+.mobile-panel-wrapper {
+  display: contents;
+}
+
+@media (max-width: 1024px) {
+  .mobile-tab-switcher {
+    display: flex;
+    gap: 8px;
+    padding: 16px 16px !important;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .mobile-tab-switcher button {
+    flex: 1;
+    padding: 12px;
+    font-size: 14px;
+    border: 1px solid var(--border2);
+    border-radius: 8px;
+    background: var(--surface2);
+    color: var(--muted);
+    font-family: "Space Grotesk", sans-serif;
+    font-weight: 600;
+  }
+
+  .mobile-tab-switcher button.active {
+    background: rgba(56, 189, 248, 0.1);
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .main {
+    display: flex;
+    flex-direction: column;
+    height: calc(100dvh - 130px) !important;
+    overflow: hidden !important;
+  }
+
+  .mobile-panel-wrapper {
+    display: none;
+  }
+
+  .mobile-panel-wrapper.active {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+  }
+
+  .mobile-panel-wrapper > * {
+    width: 100% !important;
+    min-height: 100% !important;
+    height: max-content !important;
+    border: none !important;
+    padding-bottom: 120px !important;
+  }
+
+  .mobile-panel-wrapper > .sidebar,
+  .mobile-panel-wrapper > .preview {
+    background-color: var(--surface) !important;
+  }
+
+  .mobile-global-top-btn {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 24px !important;
+    right: 24px !important;
+    left: auto !important;
+    transform: none !important;
+    width: 44px !important;
+    height: 44px !important;
+    background: var(--surface2) !important;
+    color: var(--text) !important;
+    border: 1px solid var(--border2) !important;
+    padding: 0 !important;
+    border-radius: 50% !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4) !important;
+    z-index: 99990 !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    backdrop-filter: blur(12px) !important;
+    transition: all 0.2s ease !important;
+  }
+
+  .mobile-global-top-btn:active {
+    background: var(--surface3) !important;
+    transform: scale(0.92) !important;
+  }
+
+  /* Keep the focus mode completely clean */
+  body.mobile-focus-active .mobile-global-top-btn {
+    display: none !important;
+  }
+}
+
+  /* ── FULLSCREEN FOCUS MODE ── */
+  .fullscreen-preview-overlay {
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 99999 !important;
+    background: var(--bg) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100dvh !important;
+    width: 100vw !important;
+  }
+
+  .fullscreen-preview-overlay .preview-body {
+    padding: 24px 16px 100px !important; /* Extra bottom padding for the floating button */
+    height: 100% !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* ── FLOATING EXIT BUTTON ── */
+  .exit-focus-btn {
+    position: fixed;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--surface2);
+    color: var(--text);
+    border: 1px solid var(--border2);
+    padding: 14px 28px;
+    border-radius: 50px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    z-index: 100000;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .exit-focus-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    transform: translateX(-50%) translateY(-4px);
+  }
+
+  /* ── COMPACT ICON BUTTON FIX ── */
+  .pbtn.icon-btn {
+    padding: 8px;
+    width: 36px;
+    height: 36px;
+    justify-content: center;
+    flex: 0 0 auto !important;
+    min-width: unset !important;
+  }
+
+/* ── DESKTOP-ONLY PREVIEW PANEL ALIGNMENT ── */
+@media (min-width: 1025px) {
+  .preview-body .preview-zoom-controls {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 12px !important;
+    background: var(--surface2) !important;
+    border-bottom: 1px solid var(--border) !important;
+    padding: 10px 24px !important;
+    margin: -24px -24px 24px -24px !important;
+    width: calc(100% + 48px) !important;
+  }
+
+  .preview-body .preview-zoom-controls .pbtn {
+    width: 32px !important;
+    height: 32px !important;
+    border-radius: 6px !important;
+  }
+
+  .preview-body .preview-zoom-controls .pbtn[title*="Reset"] {
+    width: auto !important;
+    padding: 0 12px !important;
+  }
+
+  .preview-body .preview-zoom-controls .floating-focus-btn {
+    position: static !important;
+    transform: none !important;
+    width: 32px !important;
+    height: 32px !important;
+    border-radius: 6px !important;
+    background: var(--surface3) !important;
+    border: 1px solid var(--border2) !important;
+    margin-left: 8px !important;
+  }
+}
+
+/* ── MOBILE TOP BAR THEME TOGGLE ── */
+.mobile-only-toggle {
+  display: none; /* Hidden on desktop viewports */
+}
+
+@media (max-width: 768px) {
+  .mobile-only-toggle {
+    display: inline-flex !important;
+    padding: 8px !important;
+    border-radius: 8px !important;
+    font-size: 16px !important;
+    border: 1px solid var(--border2) !important;
+    background: var(--surface2) !important;
+    color: var(--text) !important;
+    cursor: pointer !important;
+    width: 36px !important;
+    height: 36px !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin-right: 4px !important; /* Elegant padding space right before the hamburger */
+  }
+  
+  .mobile-only-toggle:active {
+    transform: scale(0.92);
+  }
+}
+

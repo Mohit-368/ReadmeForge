@@ -617,6 +617,14 @@ body.light-mode .hero-title {
   height: calc(100vh - 64px);
 }
 
+.mobile-tab-switcher {
+  display: none;
+}
+
+.mobile-panel-wrapper {
+  min-width: 0;
+}
+
 .sidebar {
   width: 280px;
   flex-shrink: 0;
@@ -1821,10 +1829,60 @@ body.light-mode .gh-preview {
    RESPONSIVENESS (MOBILE & TABLET)
 ======================================================= */
 @media (max-width: 1024px) {
+  #app-builder {
+    height: calc(100dvh - 64px);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .mobile-tab-switcher {
+    display: flex;
+    gap: 8px;
+    padding: 12px 16px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+    flex-shrink: 0;
+  }
+
+  .mobile-tab-switcher-btn {
+    flex: 1 0 0;
+    min-width: 0;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid var(--border2);
+    background: var(--surface2);
+    color: var(--muted2);
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .mobile-tab-switcher-btn.active {
+    color: #fff;
+    border-color: var(--accent);
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    box-shadow: 0 8px 24px rgba(56, 189, 248, 0.18);
+  }
+
   .main {
     flex-direction: column;
     height: auto;
     min-height: calc(100vh - 64px);
+    flex: 1;
+    min-height: 0;
+  }
+
+  .mobile-panel-wrapper {
+    display: none;
+    flex: 1;
+    min-height: 0;
+  }
+
+  .mobile-panel-wrapper.active {
+    display: block;
   }
 
   .sidebar {
@@ -1847,6 +1905,14 @@ body.light-mode .gh-preview {
   .editor,
   .preview {
     overflow: visible;
+  }
+
+  .mobile-panel-wrapper.active .sidebar,
+  .mobile-panel-wrapper.active .editor,
+  .mobile-panel-wrapper.active .preview {
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
   }
 }
 
@@ -2323,6 +2389,59 @@ body.light-mode .gh-preview {
   transform: translateY(-3px);
   box-shadow: 0 6px 16px rgba(56, 189, 248, 0.6);
   background: var(--accent2);
+}
+
+/* ── PREVIEW FOCUS MODE ── */
+.fullscreen-preview-overlay {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 5000;
+  width: 100vw;
+  height: 100dvh;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+}
+
+.preview-tabs .icon-btn {
+  flex: 0 0 36px;
+  width: 36px;
+  min-width: 36px;
+  height: 36px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.exit-focus-btn {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 5100;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--border2);
+  background: rgba(10, 15, 26, 0.92);
+  color: var(--text);
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  backdrop-filter: blur(16px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+}
+
+.exit-focus-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+body.light-mode .exit-focus-btn {
+  background: rgba(255, 255, 255, 0.94);
 }
 
 /* ── PRINT MEDIA STYLES ── */
