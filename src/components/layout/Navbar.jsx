@@ -1,20 +1,31 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useTheme } from '../../hooks/useTheme';
 import Logo from '../ui/Logo';
+import LanguageSelector from '../LanguageSelector';
+import { LanguageContext } from '../../context/LanguageContext';
+import { translations } from '../../i18n';
+import { useTranslation } from '../../hooks/useTranslation';
 
 export default function Navbar() {
   const { theme, toggleTheme } = useTheme();
+
+  const { language } = useContext(LanguageContext);
+
   const [menuOpen, setMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+
   const location = useLocation();
+  const t = useTranslation();
 
   useEffect(() => {
     const updateScrollState = () => setIsScrolled(window.scrollY > 0);
 
     updateScrollState();
 
-    window.addEventListener('scroll', updateScrollState, { passive: true });
+    window.addEventListener('scroll', updateScrollState, {
+      passive: true,
+    });
 
     return () => {
       window.removeEventListener('scroll', updateScrollState);
@@ -27,40 +38,64 @@ export default function Navbar() {
 
   const isActiveRoute = (path, exact = false) => {
     if (exact) return location.pathname === path;
-    return location.pathname === path || location.pathname.startsWith(`${path}/`);
+
+    return (
+      location.pathname === path ||
+      location.pathname.startsWith(`${path}/`)
+    );
   };
 
-  const linkClassName = (isActive, extraClass = '') => `site-nav-link${isActive ? ' active' : ''}${extraClass ? ` ${extraClass}` : ''}`;
+  const linkClassName = (isActive, extraClass = '') =>
+    `site-nav-link${isActive ? ' active' : ''}${
+      extraClass ? ` ${extraClass}` : ''
+    }`;
 
   return (
     <nav className={`site-nav${isScrolled ? ' is-scrolled' : ''}`}>
-      <Link to="/" className="logo" onClick={() => setMenuOpen(false)}>
+      <Link
+        to="/"
+        className="logo"
+        onClick={() => setMenuOpen(false)}
+      >
         <Logo size={36} />
-        <span className="logo-name">README<span>Forge</span></span>
+
+        <span className="logo-name">
+          README<span>Forge</span>
+        </span>
       </Link>
 
-      <div id="site-navigation" className={`site-nav-links${menuOpen ? ' open' : ''}`}>
+      <div
+        id="site-navigation"
+        className={`site-nav-links${menuOpen ? ' open' : ''}`}
+      >
         <Link
           to="/"
           className={linkClassName(isActiveRoute('/', true))}
           onClick={() => setMenuOpen(false)}
         >
-          Home
+          {t.home}
         </Link>
+
         <Link
           to="/readme-maker"
-          className={linkClassName(isActiveRoute('/readme-maker'))}
+          className={linkClassName(
+            isActiveRoute('/readme-maker')
+          )}
           onClick={() => setMenuOpen(false)}
         >
-          README Maker
+          {t.readmeMaker}
         </Link>
+
         <Link
           to="/how-to-use"
-          className={linkClassName(isActiveRoute('/how-to-use'))}
+          className={linkClassName(
+            isActiveRoute('/how-to-use')
+          )}
           onClick={() => setMenuOpen(false)}
         >
-          How To Use
+          {t.howToUse}
         </Link>
+
         <a
           href="https://github.com/Mohit-368/ReadmeForge"
           target="_blank"
@@ -68,11 +103,23 @@ export default function Navbar() {
           className="site-nav-link site-nav-link--gh mobile-only"
           onClick={() => setMenuOpen(false)}
         >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <polyline points="16 18 22 12 16 6" /><polyline points="8 6 2 12 8 18" />
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <polyline points="16 18 22 12 16 6" />
+            <polyline points="8 6 2 12 8 18" />
           </svg>
-          Source
+
+          {t.source}
         </a>
+
         <button
           type="button"
           className="theme-toggle mobile-only"
@@ -81,10 +128,16 @@ export default function Navbar() {
         >
           {theme === 'dark' ? '🌙' : '☀️'}
         </button>
-        {/* Source link moved to actions area so it stays beside theme toggle */}
       </div>
 
-      <div className="site-nav-actions">
+      <div
+        className="site-nav-actions"
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '10px',
+        }}
+      >
         <a
           href="https://github.com/Mohit-368/ReadmeForge"
           target="_blank"
@@ -92,11 +145,24 @@ export default function Navbar() {
           className="site-nav-link site-nav-link--gh desktop-only"
           title="View source on GitHub"
         >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <polyline points="16 18 22 12 16 6" /><polyline points="8 6 2 12 8 18" />
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <polyline points="16 18 22 12 16 6" />
+            <polyline points="8 6 2 12 8 18" />
           </svg>
-          Source
+
+          {t.source}
         </a>
+
+        <LanguageSelector />
 
         <button
           type="button"

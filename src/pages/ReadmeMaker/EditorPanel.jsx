@@ -2,14 +2,17 @@ import { isValidUrl } from '../../hooks/useUrlValidation';
 import { useRef } from 'react';
 import { TECHS, BADGES } from '../../utils/constants';
 import { convertStructure } from '../../utils/structureUtils';
+import { useTranslation } from '../../hooks/useTranslation';
 import { getWordCount } from '../../utils/markdownUtils';
 
-function WordCount({ text }) {
+function WordCount({ text ,t}) {
   const count = getWordCount(text);
   return (
     <label>
       <span className="wordCount">{count}</span>{' '}
-      <span className="wordCountText">{count === 1 ? 'Word' : 'Words'}</span>
+      <span className="wordCountText">
+  {count === 1 ? t.word : t.words}
+</span>
     </label>
   );
 }
@@ -37,10 +40,11 @@ export default function EditorPanel({
 }) {
   const fileInputRef = useRef(null);
   const dropZoneRef = useRef(null);
+  const t = useTranslation();
 
   const structPreview = formData.rawStructure
     ? convertStructure(formData.rawStructure, formData.projName || 'project')
-    : 'Paste structure above to preview...';
+    : t.structurePreview;
 
   const techCount = selectedTechs.size;
 
@@ -61,33 +65,37 @@ export default function EditorPanel({
     <div className="editor">
       <div className="editor-inner" id="editorInner">
 
-        <EditorSection num={1} title="Project Title & Badges" hidden={!sectionState.title}>
+        <EditorSection
+  num={1}
+  title={t.projectTitle}
+  hidden={!sectionState.title}
+>
           <div className="two-col">
             <div>
-              <label>PROJECT NAME *</label>
-              <input type="text" id="projName" placeholder="AwesomeProject"
+              <label>{t.projectName}</label>
+              <input type="text" id="projName" placeholder={t.awesomeProject}
                 value={formData.projName} onChange={e => updateField('projName', e.target.value)} />
             </div>
             <div>
-              <label>TAGLINE</label>
-              <input type="text" id="tagline" placeholder="A blazing-fast tool for..."
+              <label>{t.tagline}</label>
+              <input type="text" id="tagline" placeholder={t.blazingFast}
                 value={formData.tagline} onChange={e => updateField('tagline', e.target.value)} />
             </div>
           </div>
           <div className="two-col">
             <div>
-              <label>GITHUB USER</label>
-              <input type="text" id="ghUser" placeholder="octocat"
+              <label>{t.githubUser}</label>
+              <input type="text" id="ghUser" placeholder={t.octocat}
                 value={formData.ghUser} onChange={e => updateField('ghUser', e.target.value)} />
             </div>
             <div>
-              <label>REPO NAME</label>
-              <input type="text" id="repoSlug" placeholder="awesome-project"
+              <label>{t.repoName}</label>
+              <input type="text" id="repoSlug" placeholder={t.awesomeRepo}
                 value={formData.repoSlug} onChange={e => updateField('repoSlug', e.target.value)} />
             </div>
           </div>
           <div>
-            <label>AUTO BADGES — click to toggle</label>
+            <label>{t.autoBadges}</label>
             <div className="badge-picker">
               {BADGES.map(b => (
                 <button
@@ -102,142 +110,164 @@ export default function EditorPanel({
           </div>
         </EditorSection>
 
-        <EditorSection num={2} title="Description" hidden={!sectionState.description}>
+        <EditorSection
+  num={2}
+  title={t.description}
+  hidden={!sectionState.description}
+>
           <div>
-            <label>SHORT DESCRIPTION</label>
+            <label>{t.shortDescription}</label>
             <textarea className="textInput" id="description" style={{ minHeight: 90 }}
-              placeholder="What does your project do? What problem does it solve?"
+              placeholder={t.projectProblem}
               value={formData.description} onChange={e => updateField('description', e.target.value)} />
-            <WordCount text={formData.description} />
+            <WordCount text={formData.description} t={t}/>
           </div>
           <div>
-            <label>LIVE DEMO URL (optional)</label>
-             <input type="url" id="demoUrl" placeholder="https://yourapp.com"
-  value={formData.demoUrl} onChange={e => updateField('demoUrl', e.target.value)}
-  className={!isValidUrl(formData.demoUrl) ? 'input-url-invalid' : ''} />
+<label>{t.liveDemoUrl}</label>
+<input
+  type="url"
+  id="demoUrl"
+  placeholder="https://yourapp.com"
+  value={formData.demoUrl}
+  onChange={e => updateField('demoUrl', e.target.value)}
+  className={!isValidUrl(formData.demoUrl) ? 'input-url-invalid' : ''}
+/>
+
 {!isValidUrl(formData.demoUrl) && (
-  <span className="url-warning">⚠️ Please enter a valid URL starting with https://</span>
+  <span className="url-warning">
+    ⚠️ Please enter a valid URL starting with https://
+  </span>
 )}
           </div>
         </EditorSection>
 
-        <EditorSection num="3A" title="Academic / Research Details" hidden={!sectionState.academic}>
+        <EditorSection num="3A" title={t.academicDetails} hidden={!sectionState.academic}>
           <div>
-            <label>ABSTRACT</label>
+            <label>{t.abstract}</label>
             <textarea className="textInput" id="abstractText" style={{ minHeight: 100 }}
-              placeholder="Summarize the research problem, approach, and key findings."
+              placeholder={t.abstractPlaceholder}
               value={formData.abstractText} onChange={e => updateField('abstractText', e.target.value)} />
-            <WordCount text={formData.abstractText} />
+            <WordCount text={formData.abstractText} t={t}/>
           </div>
           <div className="two-col">
             <div>
-              <label>PAPER LINK</label>
+              <label>{t.paperLink}</label>
               <input type="url" id="paperLink" placeholder="https://arxiv.org/abs/..."
                 value={formData.paperLink} onChange={e => updateField('paperLink', e.target.value)} />
             </div>
             <div>
-              <label>DATASET ACCESS</label>
+              <label>{t.datasetAccess}</label>
               <input type="url" id="datasetLink" placeholder="https://doi.org/... or https://huggingface.co/datasets/..."
                 value={formData.datasetLink} onChange={e => updateField('datasetLink', e.target.value)} />
             </div>
           </div>
           <div>
-            <label>METHODOLOGY</label>
+            <label>{t.methodology}</label>
             <textarea className="textInput" id="methodology" style={{ minHeight: 100 }}
-              placeholder={'### Data Collection\n- Describe dataset source and preprocessing\n\n### Experiments\n- Describe model, baselines, and evaluation metrics'}
+              placeholder={t.methodologyPlaceholder}
               value={formData.methodology} onChange={e => updateField('methodology', e.target.value)} />
-            <WordCount text={formData.methodology} />
+            <WordCount text={formData.methodology} t={t}/>
           </div>
           <div>
-            <label>CITATIONS / BIBTEX</label>
+            <label>{t.citations}</label>
             <textarea className="textInput" id="bibtexCitation" style={{ minHeight: 120 }}
-              placeholder={'@article{yourpaper2026,\n  title={Your Paper Title},\n  author={First Author and Second Author},\n  journal={Conference or Journal},\n  year={2026}\n}'}
+              placeholder={t.citationPlaceholder}
               value={formData.bibtexCitation} onChange={e => updateField('bibtexCitation', e.target.value)} />
-            <WordCount text={formData.bibtexCitation} />
-          </div>
-        </EditorSection>
-
-        <EditorSection num={3} title="Features" hidden={!sectionState.features}>
-          <div>
-            <label>KEY FEATURES — use "### Category" for groups, "- item" for bullets</label>
-            <textarea className="textInput" id="features" style={{ minHeight: 130 }}
-              placeholder={'### 🔐 Authentication\n- Email OTP verification\n- Secure login / logout\n\n### 📝 Posts\n- Create, Read, Update, Delete'}
-              value={formData.features} onChange={e => updateField('features', e.target.value)} />
-            <WordCount text={formData.features} />
+            <WordCount text={formData.bibtexCitation} t={t}/>
           </div>
         </EditorSection>
 
         <EditorSection
-          num={4} title="Tech Stack" hidden={!sectionState.techstack}
+  num={3}
+  title={t.features}
+  hidden={!sectionState.features}
+>
+          <div>
+            <label>{t.keyFeatures}</label>
+            <textarea className="textInput" id="features" style={{ minHeight: 130 }}
+              placeholder={t.featuresPlaceholder}
+              value={formData.features} onChange={e => updateField('features', e.target.value)} />
+            <WordCount text={formData.features} t={t}/>
+          </div>
+        </EditorSection>
+
+        <EditorSection
+  num={4}
+  title={t.techStack}
+  hidden={!sectionState.techstack}
           badge={techCount > 0 ? `${techCount} selected` : undefined}
         >
           <div>
-            <label>CLICK TO SELECT YOUR STACK</label>
+            <label>{t.selectStack}</label>
             <div className="tech-picker">
-              {TECHS.map(t => (
+              {TECHS.map(tech => (
                 <button
-                  key={t.label}
-                  className={`tech-chip${selectedTechs.has(t.label) ? ' selected' : ''}`}
-                  onClick={() => toggleTech(t.label)}
+                  key={tech.label}
+                  className={`tech-chip${selectedTechs.has(tech.label) ? ' selected' : ''}`}
+                  onClick={() => toggleTech(tech.label)}
                 >
-                  <span className="emoji">{t.emoji}</span>{t.label}
+                  <span className="emoji">{tech.emoji}</span>{tech.label}
                 </button>
               ))}
             </div>
           </div>
           <div>
-            <label>OR ADD CUSTOM (comma separated)</label>
+            <label>{t.customTech}</label>
             <input type="text" id="customTech" placeholder="Celery, Redis, Nginx..."
               value={formData.customTech} onChange={e => updateField('customTech', e.target.value)} />
           </div>
         </EditorSection>
 
-        <EditorSection num={5} title="Installation" hidden={!sectionState.installation}>
+        <EditorSection
+  num={5}
+  title={t.installation}
+  hidden={!sectionState.installation}
+>
           <div>
-            <label>PREREQUISITES</label>
-            <input type="text" id="prereqs" placeholder="Python 3.10+, Node.js 18+"
+            <label>{t.prerequisites}</label>
+            <input type="text" id="prereqs" placeholder={t.prerequisitesPlaceholder}
               value={formData.prereqs} onChange={e => updateField('prereqs', e.target.value)} />
           </div>
           <div>
-            <label>INSTALL COMMANDS (one per line)</label>
+            <label>{t.installCommands}</label>
             <textarea className="textInput" id="installCmds" style={{ minHeight: 100 }}
-              placeholder={'git clone https://github.com/user/repo.git\ncd repo\npip install -r requirements.txt'}
+              placeholder={t.installPlaceholder}
               value={formData.installCmds} onChange={e => updateField('installCmds', e.target.value)} />
-            <WordCount text={formData.installCmds} />
+            <WordCount text={formData.installCmds} t={t}/>
           </div>
           <div>
-            <label>ENV VARIABLES (optional)</label>
+            <label>{t.envVariables}</label>
             <textarea className="textInput" id="envVars" style={{ minHeight: 70 }}
-              placeholder={'SECRET_KEY=your_secret\nDATABASE_URL=sqlite:///db.sqlite3'}
+              placeholder={t.envPlaceholder}
               value={formData.envVars} onChange={e => updateField('envVars', e.target.value)} />
-            <WordCount text={formData.envVars} />
+            <WordCount text={formData.envVars} t={t}/>
           </div>
           <div>
-            <label>RUN COMMAND / USAGE INSTRUCTIONS</label>
+            <label>{t.runCommand}</label>
             <textarea className="textInput" id="usageCmd" style={{ minHeight: 80 }}
-              placeholder={'python manage.py runserver\n\n# Then open http://127.0.0.1:8000/'}
+              placeholder={t.runPlaceholder}
               value={formData.usageCmd} onChange={e => updateField('usageCmd', e.target.value)} />
-            <WordCount text={formData.usageCmd} />
+            <WordCount text={formData.usageCmd} t={t}/>
           </div>
         </EditorSection>
 
-        <EditorSection num={7} title="Project Structure Visualizer" hidden={!sectionState.structure}>
+        <EditorSection num={7} title={t.projectStructure} hidden={!sectionState.structure}>
           <div>
-            <label>PASTE YOUR FOLDER STRUCTURE (indented with spaces)</label>
+            <label>{t.folderStructure}</label>
             <textarea className="textInput" id="rawStructure" style={{ minHeight: 120 }}
-              placeholder={'src/\n  api/\n  models/\n  utils/\ntemplates/\nmain.py\nrequirements.txt'}
+              placeholder={t.structurePlaceholder}
               value={formData.rawStructure} onChange={e => updateField('rawStructure', e.target.value)} />
-            <WordCount text={formData.rawStructure} />
+            <WordCount text={formData.rawStructure} t={t}/>
           </div>
           <div>
-            <label>VISUAL PREVIEW</label>
+            <label>{t.visualPreview}</label>
             <div className="struct-preview">{structPreview}</div>
           </div>
         </EditorSection>
 
-        <EditorSection num={8} title="Screenshots" hidden={!sectionState.screenshots}>
+        <EditorSection num={8} title={t.screenshots} hidden={!sectionState.screenshots}>
           <div>
-            <label>LIVE DEMO / VIDEO LINK (optional)</label>
+            <label>{t.videoLink}</label>
             <input type="url" id="videoUrl" placeholder="https://youtube.com/watch?v=..."
   value={formData.videoUrl} onChange={e => updateField('videoUrl', e.target.value)}
   className={!isValidUrl(formData.videoUrl) ? 'input-url-invalid' : ''} />
@@ -246,7 +276,7 @@ export default function EditorPanel({
 )}
           </div>
           <div>
-            <label>DRAG &amp; DROP SCREENSHOTS</label>
+            <label>{t.dragScreenshots}</label>
             <div
               ref={dropZoneRef}
               className="drop-zone"
@@ -256,8 +286,8 @@ export default function EditorPanel({
               onClick={() => fileInputRef.current?.click()}
             >
               <div className="drop-zone-icon">🖼️</div>
-              <p>Drop images here or click to browse</p>
-              <small>PNG, JPG, GIF — they'll be linked as Markdown</small>
+              <p>{t.dropImages}</p>
+              <small>{t.imageFormats}</small>
               <input
                 ref={fileInputRef}
                 type="file"
@@ -278,43 +308,43 @@ export default function EditorPanel({
             </div>
           </div>
           <div>
-            <label>OR ADD IMAGE URLS (format: Label | URL, one per line)</label>
+            <label>{t.imageUrls}</label>
             <textarea className="textInput" id="imageUrls" style={{ minHeight: 60 }}
-              placeholder={'Landing Page | https://i.imgur.com/abc.png\nDashboard | https://i.imgur.com/xyz.png'}
+              placeholder={t.imageUrlPlaceholder}
               value={formData.imageUrls} onChange={e => updateField('imageUrls', e.target.value)} />
-            <WordCount text={formData.imageUrls} />
+            <WordCount text={formData.imageUrls} t={t}/>
           </div>
         </EditorSection>
 
-        <EditorSection num={9} title="API Documentation" hidden={!sectionState.api}>
+        <EditorSection num={9} title={t.apiDocs} hidden={!sectionState.api}>
           <div>
-            <label>API ENDPOINTS — format: METHOD /path | Description (one per line)</label>
+            <label>{t.apiEndpoints}</label>
             <textarea className="textInput" id="apiDocs" style={{ minHeight: 100 }}
-              placeholder={'GET /api/users | Get all users\nPOST /api/users | Create a new user'}
+              placeholder={t.apiPlaceholder}
               value={formData.apiDocs} onChange={e => updateField('apiDocs', e.target.value)} />
-            <WordCount text={formData.apiDocs} />
+            <WordCount text={formData.apiDocs} t={t}/>
           </div>
           <div>
-            <label>API BASE URL (optional)</label>
+            <label>{t.apiBaseUrl}</label>
             <input type="text" id="apiBase" placeholder="https://api.yourapp.com/v1"
               value={formData.apiBase} onChange={e => updateField('apiBase', e.target.value)} />
           </div>
         </EditorSection>
 
-        <EditorSection num={10} title="Contributing" hidden={!sectionState.contributing}>
+        <EditorSection num={10} title={t.contributing} hidden={!sectionState.contributing}>
           <div>
-            <label>CUSTOM CONTRIBUTING NOTES (optional — default guide auto-generated)</label>
+            <label>{t.contributingNotes}</label>
             <textarea className="textInput" id="contribNotes" style={{ minHeight: 70 }}
-              placeholder="Any specific guidelines, code style rules, branch naming conventions..."
+              placeholder={t.contributingPlaceholder}
               value={formData.contribNotes} onChange={e => updateField('contribNotes', e.target.value)} />
-            <WordCount text={formData.contribNotes} />
+            <WordCount text={formData.contribNotes} t={t}/>
           </div>
         </EditorSection>
 
-        <EditorSection num={11} title="License & Author" hidden={!sectionState.author}>
+        <EditorSection num={11} title={t.licenseAuthor} hidden={!sectionState.author}>
           <div className="two-col">
             <div>
-              <label>LICENSE</label>
+              <label>{t.license}</label>
               <select id="license" value={formData.license} onChange={e => updateField('license', e.target.value)}>
                 <option value="MIT">MIT</option>
                 <option value="Apache-2.0">Apache 2.0</option>
@@ -327,26 +357,26 @@ export default function EditorPanel({
               </select>
             </div>
             <div>
-              <label>FULL NAME</label>
+              <label>{t.fullName}</label>
               <input type="text" id="authorName" placeholder="Your Name"
                 value={formData.authorName} onChange={e => updateField('authorName', e.target.value)} />
             </div>
           </div>
           <div className="two-col">
             <div>
-              <label>GITHUB USERNAME</label>
+              <label>{t.githubUsername}</label>
               <input type="text" id="authorGh" placeholder="username"
                 value={formData.authorGh} onChange={e => updateField('authorGh', e.target.value)} />
             </div>
             <div>
-              <label>EMAIL (optional)</label>
+              <label>{t.email}</label>
               <input type="email" id="authorEmail" placeholder="you@email.com"
                 value={formData.authorEmail} onChange={e => updateField('authorEmail', e.target.value)} />
             </div>
           </div>
           <div className="two-col">
             <div>
-              <label>LINKEDIN (optional)</label>
+              <label>{t.linkedin}</label>
               <input type="url" id="authorLinkedin" placeholder="https://linkedin.com/in/you"
   value={formData.authorLinkedin} onChange={e => updateField('authorLinkedin', e.target.value)}
   className={!isValidUrl(formData.authorLinkedin) ? 'input-url-invalid' : ''} />
@@ -355,7 +385,7 @@ export default function EditorPanel({
 )}
             </div>
             <div>
-              <label>PORTFOLIO (optional)</label>
+              <label>{t.portfolio}</label>
               <input type="url" id="authorWebsite" placeholder="https://yoursite.com"
   value={formData.authorWebsite} onChange={e => updateField('authorWebsite', e.target.value)}
   className={!isValidUrl(formData.authorWebsite) ? 'input-url-invalid' : ''} />
@@ -366,34 +396,34 @@ export default function EditorPanel({
           </div>
         </EditorSection>
 
-        <EditorSection num={12} title="Support & Donation" hidden={!sectionState.support}>
+        <EditorSection num={12} title={t.supportDonation} hidden={!sectionState.support}>
           <div>
-            <label>SUPPORT MESSAGE (optional)</label>
+            <label>{t.supportMessage}</label>
             <textarea className="textInput" id="supportMsg" style={{ minHeight: 60 }}
-              placeholder="If you find this project helpful, please consider supporting its development:"
+              placeholder={t.supportPlaceholder}
               value={formData.supportMsg} onChange={e => updateField('supportMsg', e.target.value)} />
-            <WordCount text={formData.supportMsg} />
+            <WordCount text={formData.supportMsg} t={t}/>
           </div>
           <div className="two-col">
             <div>
-              <label>BUY ME A COFFEE (username)</label>
+              <label>{t.buyMeCoffee}</label>
               <input type="text" id="supportBmac" placeholder="username"
                 value={formData.supportBmac} onChange={e => updateField('supportBmac', e.target.value)} />
             </div>
             <div>
-              <label>KO-FI (username)</label>
+              <label>{t.kofi}</label>
               <input type="text" id="supportKofi" placeholder="username"
                 value={formData.supportKofi} onChange={e => updateField('supportKofi', e.target.value)} />
             </div>
           </div>
           <div className="two-col">
             <div>
-              <label>PATREON (username)</label>
+              <label>{t.patreon}</label>
               <input type="text" id="supportPatreon" placeholder="username"
                 value={formData.supportPatreon} onChange={e => updateField('supportPatreon', e.target.value)} />
             </div>
             <div>
-              <label>GITHUB SPONSORS (username)</label>
+              <label>{t.githubSponsors}</label>
               <input type="text" id="supportGhSponsors" placeholder="username"
                 value={formData.supportGhSponsors} onChange={e => updateField('supportGhSponsors', e.target.value)} />
             </div>

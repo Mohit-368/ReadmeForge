@@ -1,39 +1,41 @@
 import { SECTIONS, TECHS, TEMPLATES } from '../../utils/constants';
+import { useTranslation } from '../../hooks/useTranslation';
 
 export default function Sidebar({
   sectionState, toggleSection,
   selectedTechs, toggleTech,
   applyTemplate, activeTemplate,
 }) {
+  const t = useTranslation();
   const activeSectionCount = Object.values(sectionState).filter(Boolean).length;
 
   return (
     <aside className="sidebar">
       <div className="sidebar-section">
-        <div className="sidebar-label">Templates</div>
+        <div className="sidebar-label">{t.templates}</div>
         <div className="templates-grid">
-          {Object.entries(TEMPLATES).map(([key, t]) => (
+          {Object.entries(TEMPLATES).map(([key, template]) => (
             <button
               key={key}
               className={`template-btn${activeTemplate === key ? ' selected' : ''}`}
-              onClick={() => applyTemplate(t, key)}
+              onClick={() => applyTemplate(template, key)}
             >
-              {key === 'webapp' && '🌐 Web App'}
-              {key === 'ml' && '🤖 ML / AI'}
-              {key === 'api' && '⚡ Backend API'}
-              {key === 'cli' && '💻 CLI Tool'}
-              {key === 'academic' && '🎓 Academic / Research'}
-              {key === 'mobile' && '📱 Mobile App'}
-              {key === 'lib' && '📦 Library'}
-              {key === 'hackathon' && '🏆 Hackathon'}
-              {key === 'oss' && '🔓 Open Source'}
+              {key === 'webapp' && `🌐 ${t.webApp}`}
+              {key === 'ml' && `🤖 ${t.mlAi}`}
+              {key === 'api' && `⚡ ${t.backendApi}`}
+              {key === 'cli' && `💻 ${t.cliTool}`}
+              {key === 'academic' && `🎓 ${t.academicResearch}`}
+              {key === 'mobile' && `📱 ${t.mobileApp}`}
+              {key === 'lib' && `📦 ${t.library}`}
+              {key === 'hackathon' && `🏆 ${t.hackathon}`}
+              {key === 'oss' && `🔓 ${t.openSource}`}
             </button>
           ))}
         </div>
       </div>
 
       <div className="sidebar-section" style={{ flex: 1 }}>
-        <div className="sidebar-label">Sections</div>
+        <div className="sidebar-label">{t.sections}</div>
         <div className="section-toggles">
           {SECTIONS.map(sec => (
             <div
