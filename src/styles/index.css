@@ -1644,10 +1644,13 @@ body.light-mode .gh-preview {
   content: "";
   position: absolute;
   inset: 0;
+
   background-image:
     linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+
   background-size: 40px 40px;
+
   pointer-events: none;
   z-index: -1;
 }
@@ -1655,9 +1658,12 @@ body.light-mode .gh-preview {
 .rf-footer-top {
   max-width: 1200px;
   margin: auto;
+
   display: grid;
   grid-template-columns: 1.4fr 1fr 1fr;
+
   gap: 40px;
+
   align-items: start;
 }
 
@@ -1686,6 +1692,10 @@ body.light-mode .gh-preview {
   flex-direction: column;
 }
 
+.rf-footer-socials {
+  align-items: center;
+}
+
 .rf-footer-links h4,
 .rf-footer-socials h4 {
   font-size: 15px;
@@ -1697,25 +1707,44 @@ body.light-mode .gh-preview {
 .rf-footer-links h4::after,
 .rf-footer-socials h4::after {
   content: "";
+
   position: absolute;
+
   left: 0;
   bottom: -8px;
+
   width: 28px;
   height: 2px;
+
   border-radius: 10px;
+
   background: var(--accent);
+}
+
+/* Connect underline centered */
+
+.rf-footer-socials h4::after {
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .rf-footer-links a {
   display: inline-flex;
   align-items: center;
+
   width: fit-content;
+
   padding: 10px 14px;
+
   border-radius: 12px;
+
   text-decoration: none;
+
   color: var(--muted);
+
   font-size: 14px;
   font-weight: 500;
+
   transition:
     transform 0.28s ease,
     color 0.28s ease,
@@ -1725,11 +1754,14 @@ body.light-mode .gh-preview {
 
 .rf-footer-links a:hover {
   color: var(--accent);
+
   background:
     rgba(56,189,248,0.08);
+
   transform:
     translateX(4px)
     scale(1.04);
+
   box-shadow:
     0 0 18px rgba(56,189,248,0.08);
 }
@@ -1738,14 +1770,24 @@ body.light-mode .gh-preview {
   display: inline-flex;
   align-items: center;
   gap: 10px;
+
   width: fit-content;
+
   padding: 12px 18px;
+
   border-radius: 14px;
+
   text-decoration: none;
+
   color: var(--text);
+
   background: rgba(255,255,255,0.03);
+
   border: 1px solid rgba(255,255,255,0.08);
+
   transition: all 0.3s ease;
+
+  align-self: center;
 }
 
 .rf-source-btn:hover {
@@ -1776,20 +1818,34 @@ body.light-mode .gh-preview {
 
 .rf-social-icons {
   display: flex;
-  gap: 14px;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 16px;
+
   margin-top: 22px;
 }
 
 .rf-social-icons a {
   width: 48px;
   height: 48px;
+
   border-radius: 14px;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
+  flex-shrink: 0;
+
   color: var(--muted);
+
   background: rgba(255,255,255,0.03);
+
   border: 1px solid rgba(255,255,255,0.08);
+
   transition: all 0.3s ease;
 }
 
@@ -1834,15 +1890,20 @@ body.light-mode .gh-preview {
 
 .rf-social-icons a:hover svg {
   transform: scale(1.08);
+
   filter:
     drop-shadow(0 0 10px rgba(56,189,248,0.5));
 }
 
 .rf-footer-bottom {
   max-width: 1200px;
+
   margin: 55px auto 0;
+
   padding-top: 22px;
+
   border-top: 1px solid rgba(255,255,255,0.06);
+
   text-align: center;
 }
 
@@ -1862,6 +1923,90 @@ body.light-mode .gh-preview {
 .rf-credit strong {
   color: var(--text);
   font-weight: 700;
+}
+
+/* =======================================================
+   RESPONSIVE
+======================================================= */
+
+@media (max-width: 900px) {
+
+  .rf-footer {
+    padding: 60px 24px 24px;
+  }
+
+  .rf-footer-top {
+    grid-template-columns: 1fr;
+    gap: 45px;
+  }
+
+  .rf-footer-brand {
+    flex-direction: column;
+  }
+
+  .rf-footer-brand h2 {
+    font-size: 24px;
+  }
+
+}
+
+@media (max-width: 768px) {
+
+  .rf-footer-bottom {
+    margin-top: 40px;
+  }
+
+  .rf-footer-signature {
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .rf-footer-links a {
+    padding-left: 0;
+  }
+
+}
+
+/* =======================================================
+   RESPONSIVE
+======================================================= */
+
+@media (max-width: 900px) {
+
+  .rf-footer {
+    padding: 60px 24px 24px;
+  }
+
+  .rf-footer-top {
+    grid-template-columns: 1fr;
+    gap: 45px;
+  }
+
+  .rf-footer-brand {
+    flex-direction: column;
+  }
+
+  .rf-footer-brand h2 {
+    font-size: 24px;
+  }
+
+}
+
+@media (max-width: 768px) {
+
+  .rf-footer-bottom {
+    margin-top: 40px;
+  }
+
+  .rf-footer-signature {
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .rf-footer-links a {
+    padding-left: 0;
+  }
+
 }
 
 /* =======================================================

@@ -49,28 +49,7 @@ const InstagramIcon = () => (
   </svg>
 );
 
-const FacebookIcon = () => (
-  <svg
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-  >
-    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
-  </svg>
-);
-
-const DiscordIcon = () => (
-  <svg
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-  >
-    <path d="M8.5 9.5C9.3 9.5 10 10.2 10 11s-.7 1.5-1.5 1.5S7 11.8 7 11s.7-1.5 1.5-1.5zm7 0c.8 0 1.5.7 1.5 1.5s-.7 1.5-1.5 1.5S14 11.8 14 11s.7-1.5 1.5-1.5z" />
-    <path d="M18 4a16 16 0 0 0-4-1l-.2.4c1.5.4 2.2 1 2.2 1a13 13 0 0 0-4-.6 13 13 0 0 0-4 .6s.7-.6 2.2-1L10 3a16 16 0 0 0-4 1C3.5 7.5 3 10.9 3 10.9A16 16 0 0 0 8 13l1-1.3c-1.9-.5-2.6-1.6-2.6-1.6.6.4 1.2.7 1.8.9a10 10 0 0 0 7.6 0c.6-.2 1.2-.5 1.8-.9 0 0-.7 1.1-2.6 1.6l1 1.3a16 16 0 0 0 5-2.1S20.5 7.5 18 4z" />
-  </svg>
-);
+;
 
 export default function Footer() {
   return (
@@ -137,23 +116,6 @@ export default function Footer() {
             >
               <InstagramIcon />
             </a>
-
-            <a
-              href="https://facebook.com"
-              target="_blank"
-              rel="noreferrer"
-              aria-label="Facebook"
-            >
-              <FacebookIcon />
-            </a>
-            <a
-               href="https://discord.com"
-               target="_blank"
-               rel="noreferrer"
-               aria-label="Discord"
-            >
-  <DiscordIcon />
-</a>
           </div>
         </div>
       </div>
