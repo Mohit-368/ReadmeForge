@@ -87,15 +87,18 @@ export default function EditorPanel({
             </div>
           </div>
           <div>
-            <label>AUTO BADGES — click to toggle</label>
-            <div className="badge-picker">
+            <label>BADGE PICKER — click to toggle shields.io badges</label>
+            <div className="badge-picker badge-picker--enhanced">
               {BADGES.map(b => (
                 <button
                   key={b.id}
-                  className={`badge-chip${selectedBadges.has(b.id) ? ' selected' : ''}`}
+                  type="button"
+                  className={`badge-chip badge-chip--preview${selectedBadges.has(b.id) ? ' selected' : ''}`}
                   onClick={() => toggleBadge(b.id)}
+                  title={b.label}
                 >
-                  {b.label}
+                  <img src={b.shield} alt="" className="badge-chip-shield" loading="lazy" />
+                  <span className="badge-chip-label">{b.label}</span>
                 </button>
               ))}
             </div>

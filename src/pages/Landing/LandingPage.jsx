@@ -12,6 +12,8 @@ const features = [
   { icon: '📥', title: 'Export Options', desc: 'Copy to clipboard, download as README.md, or print to PDF — all in one click.' },
   { icon: '💾', title: 'Auto-Save', desc: 'Your work is automatically saved to localStorage. Pick up exactly where you left off.' },
   { icon: '🌙', title: 'Dark & Light Mode', desc: 'Full dark and light theme support with smooth transitions and system preference detection.' },
+  { icon: '🌍', title: 'Community Showcase', desc: 'Browse featured READMEs from the community with preview cards and links to creators on GitHub.' },
+  { icon: '📎', title: 'GitHub Gist Share', desc: 'Save your README to a Gist and share a link instantly — copy or open in one click.' },
 ];
 
 const stats = [
@@ -70,6 +72,43 @@ export default function LandingPage() {
                 <p className="feature-desc">{f.desc}</p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="landing-showcase-teaser">
+        <div className="landing-container">
+          <div className="showcase-teaser-grid">
+            <div className="showcase-teaser-copy">
+              <div className="section-label-tag">Community</div>
+              <h2 className="landing-section-title" style={{ textAlign: 'left', marginBottom: 16 }}>
+                Made with <span className="accent-text">ReadmeForge</span>
+              </h2>
+              <p className="showcase-teaser-desc">
+                Browse community READMEs — preview cards, featured picks, and links to creators on GitHub.
+              </p>
+              <Link to="/showcase" className="cta-btn cta-btn--primary" style={{ marginTop: 8 }}>
+                Explore Showcase
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                  <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
+              </Link>
+            </div>
+            <div className="showcase-teaser-cards">
+              <div className="showcase-teaser-card showcase-teaser-card--1">
+                <span className="showcase-teaser-card-tag">Featured</span>
+                <strong>DevDash</strong>
+                <p>Real-time developer analytics</p>
+              </div>
+              <div className="showcase-teaser-card showcase-teaser-card--2">
+                <strong>VisionNet</strong>
+                <p>ML image classification</p>
+              </div>
+              <div className="showcase-teaser-card showcase-teaser-card--3">
+                <strong>Profile README</strong>
+                <p>GitHub profile showcase</p>
+              </div>
+            </div>
           </div>
         </div>
       </section>

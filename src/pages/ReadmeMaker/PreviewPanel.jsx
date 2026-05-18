@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { md2html, esc } from '../../utils/markdownUtils';
+import { md2html } from '../../utils/markdownUtils';
 import { ZOOM_LEVELS, PREVIEW_ZOOM_KEY } from '../../utils/constants';
 import { useToast } from '../../components/ui/Toast';
+import GistShareModal from '../../components/gist/GistShareModal';
 
 function getNearestZoom(level) {
   return ZOOM_LEVELS.reduce((c, v) => Math.abs(v - level) < Math.abs(c - level) ? v : c, ZOOM_LEVELS[0]);
@@ -60,6 +61,7 @@ export default function PreviewPanel({ currentMd, formData, sectionState, select
     return 1;
   });
   const [qualityOpen, setQualityOpen] = useState(false);
+  const [gistOpen, setGistOpen] = useState(false);
   const previewBodyRef = useRef(null);
   const [showBackTop, setShowBackTop] = useState(false);
 
@@ -170,6 +172,20 @@ export default function PreviewPanel({ currentMd, formData, sectionState, select
             </svg>
             Download .md
           </button>
+          <button
+            className="pbtn gist"
+            onClick={() => {
+              if (!currentMd?.trim()) { toast('Nothing to share yet!'); return; }
+              setGistOpen(true);
+            }}
+            title="Save to GitHub Gist"
+          >
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <circle cx="12" cy="12" r="10" /><line x1="2" y1="12" x2="22" y2="12" />
+              <path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z" />
+            </svg>
+            Save Gist
+          </button>
           <button className="pbtn print" onClick={printPreview}>
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <polyline points="6 9 6 2 18 2 18 9" /><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2" /><rect x="6" y="14" width="12" height="8" />
@@ -277,6 +293,14 @@ export default function PreviewPanel({ currentMd, formData, sectionState, select
           </svg>
         </button>
       )}
+
+      <GistShareModal
+        open={gistOpen}
+        onClose={() => setGistOpen(false)}
+        markdown={currentMd}
+        projectName={formData.projName}
+        onSuccess={() => toast('✓ Gist created — link ready to share!')}
+      />
     </aside>
   );
 }
