@@ -1915,8 +1915,46 @@
       document.body.removeChild(ta);  // Clean up
     }
   }
-  window.copyMarkdown = copyMarkdown;  // Expose globally for HTML
+window.copyMarkdown = copyMarkdown;
 
+// ── COPY BUTTON SHORTCUT + TOOLTIP ────────────────────────────
+document.addEventListener("DOMContentLoaded", function () {
+
+  // Find copy button
+  const copyBtn =
+    document.getElementById("copyRawBtn") ||
+    document.querySelector('[onclick="copyMarkdown()"]');
+
+  // Add tooltip
+  if (copyBtn) {
+    const isMac = navigator.platform.toUpperCase().includes("MAC");
+
+    copyBtn.title = isMac
+      ? "Shortcut: Cmd + Alt + C"
+      : "Shortcut: Ctrl + Alt + C";
+  }
+
+  // Keyboard shortcut
+  document.addEventListener("keydown", function (event) {
+
+    const isMac = navigator.platform.toUpperCase().includes("MAC");
+
+    const ctrlOrCmd = isMac
+      ? event.metaKey
+      : event.ctrlKey;
+
+    // Ctrl/Cmd + Alt + C
+    if (
+      ctrlOrCmd &&
+      event.altKey &&
+      event.key.toLowerCase() === "c"
+    ) {
+      event.preventDefault();
+
+      copyMarkdown();
+    }
+  });
+});
   /**
    * Closes the download/export modal overlay.
    *
