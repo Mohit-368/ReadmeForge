@@ -1,0 +1,25 @@
+# Netlify Configuration for ReadmeForge
+# Static site - no build command needed
+
+[build]
+  # Publish directory for static files
+  publish = "."
+  # No build command needed for static HTML/CSS/JS
+  command = ""
+
+# Redirect all routes to index.html for client-side routing
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Cache settings for static assets
+[[headers]]
+  for = "/**/*"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"
+
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "no-cache, no-store, must-revalidate"

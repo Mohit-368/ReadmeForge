@@ -52,6 +52,8 @@
 -  **Screenshot support** — Insert images directly into your README
 -  **One-click raw copy** — Grab the raw Markdown and paste it into GitHub instantly
 -  **Toggle sections** — Include only what your project needs
+-  **Light & Dark theme support** — Switch between light and dark themes for comfortable viewing
+-  **Zero dependencies** — Pure HTML, CSS, and JavaScript; runs entirely in the browser
 -  **Modern React architecture** — Built using React + Vite for fast development and improved maintainability
 
 ---
@@ -137,11 +139,20 @@ Please make sure your PR description clearly describes the problem and solution.
 
 ## 🛣️ Roadmap
 
-- [ ] Dark mode support
+- [x] Dark mode support
 - [ ] Predefined README templates (e.g., library, CLI tool, web app)
 - [ ] Export as `.md` file download
 - [ ] Badge picker integration
 - [ ] GitHub Gist save & share
+
+---
+
+## 📝 Changes
+
+- Added light and dark theme support
+- Enhanced theme switching functionality
+- Improved user interface for better accessibility
+- Theme preferences persist across sessions
 
 ---
 
