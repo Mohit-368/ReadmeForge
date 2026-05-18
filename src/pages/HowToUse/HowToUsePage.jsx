@@ -73,18 +73,34 @@ export default function HowToUsePage() {
         </section>
 
         <section className="htu-tips-section">
-          <div className="landing-container">
-            <h2 className="landing-section-title">Tips &amp; best practices</h2>
-            <div className="tips-grid">
-              {tips.map((t, i) => (
-                <div key={i} className="tip-card">
-                  <span className="tip-icon">{t.icon}</span>
-                  <p className="tip-text">{t.tip}</p>
-                </div>
-              ))}
-            </div>
+  <div className="landing-container">
+    <h2 className="landing-section-title">Tips &amp; best practices</h2>
+    <div className="terminal-box">
+      <div className="terminal-header">
+        <div className="terminal-dots">
+          <span className="terminal-dot terminal-dot--red"></span>
+          <span className="terminal-dot terminal-dot--yellow"></span>
+          <span className="terminal-dot terminal-dot--green"></span>
+        </div>
+        <span className="terminal-title">
+          <span className="terminal-prompt">$</span>
+        <span className="terminal-command">readme-tips.sh</span>
+        </span>
+      </div>
+      <div className="terminal-body">
+        {tips.map((t, i) => (
+          <div key={i} className="terminal-line">
+            <span className="terminal-num">
+              {String(i + 1).padStart(2, '0')}
+            </span>
+            <span className="terminal-icon">{t.icon}</span>
+            <span className="terminal-text">{t.tip}</span>
           </div>
-        </section>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
 
         <section className="htu-faq-section">
           <div className="landing-container">
