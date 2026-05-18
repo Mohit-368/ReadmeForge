@@ -2437,4 +2437,16 @@ body.light-mode .gh-preview {
   .scroll-action {
     display: none !important;
   }
+/* URL Validation Styles */
+.input-url-invalid {
+  border: 2px solid #e74c3c !important;
+  outline: none !important;
+}
+
+.url-warning {
+  color: #e74c3c;
+  font-size: 0.75rem;
+  margin-top: 4px;
+  display: block;
+}
 }
