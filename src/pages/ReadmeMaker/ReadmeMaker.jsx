@@ -60,7 +60,8 @@ export default function ReadmeMaker() {
     <>
       <SEOHead
         title="README Maker — READMEForge"
-        description="Generate a professional GitHub README in seconds with live preview, templates, and one-click export."
+        description="Generate a professional GitHub README in seconds with live preview, templates, quality scoring, and one-click Markdown export."
+        path="/readme-maker"
       />
       <Navbar />
       <div id="app-builder" style={{ paddingTop: 64 }}>

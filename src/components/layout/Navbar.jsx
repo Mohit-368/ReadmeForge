@@ -33,8 +33,8 @@ export default function Navbar() {
   const linkClassName = (isActive, extraClass = '') => `site-nav-link${isActive ? ' active' : ''}${extraClass ? ` ${extraClass}` : ''}`;
 
   return (
-    <nav className={`site-nav${isScrolled ? ' is-scrolled' : ''}`}>
-      <Link to="/" className="logo" onClick={() => setMenuOpen(false)}>
+    <nav className={`site-nav${isScrolled ? ' is-scrolled' : ''}`} aria-label="Primary navigation">
+      <Link to="/" className="logo" aria-label="READMEForge home" onClick={() => setMenuOpen(false)}>
         <Logo size={36} />
         <span className="logo-name">README<span>Forge</span></span>
       </Link>
@@ -76,6 +76,7 @@ export default function Navbar() {
         <button
           type="button"
           className="theme-toggle mobile-only"
+          aria-label="Toggle dark/light mode"
           title="Toggle dark/light mode"
           onClick={toggleTheme}
         >
@@ -102,6 +103,7 @@ export default function Navbar() {
           type="button"
           className="theme-toggle desktop-only"
           id="themeToggle"
+          aria-label="Toggle dark/light mode"
           title="Toggle dark/light mode"
           onClick={toggleTheme}
         >

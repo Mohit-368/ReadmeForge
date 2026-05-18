@@ -38,7 +38,8 @@ export default function HowToUsePage() {
     <>
       <SEOHead
         title="How To Use — READMEForge"
-        description="Step-by-step guide to creating a professional GitHub README with READMEForge. Learn templates, sections, export, and tips."
+        description="Step-by-step guide to creating a professional GitHub README with READMEForge. Learn templates, section toggles, quality scoring, export, and best practices."
+        path="/how-to-use"
       />
       <Navbar />
 

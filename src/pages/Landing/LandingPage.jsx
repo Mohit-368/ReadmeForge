@@ -27,6 +27,7 @@ export default function LandingPage() {
       <SEOHead
         title="READMEForge — Generate Professional GitHub READMEs in 30 Seconds"
         description="Free, open-source README generator. Live preview, 8 templates, quality scoring, and one-click export. No sign-up required."
+        path="/"
       />
       <Navbar />
 
