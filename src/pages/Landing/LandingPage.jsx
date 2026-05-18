@@ -2,7 +2,6 @@ import { Link } from 'react-router-dom';
 import Navbar from '../../components/layout/Navbar';
 import Footer from '../../components/layout/Footer';
 import SEOHead from '../../components/shared/SEOHead';
-import { seoPages } from '../../utils/seoConfig';
 
 const features = [
   { icon: '⚡', title: 'Live Preview', desc: 'See your README rendered in real-time as you type. GitHub-accurate preview with badge rendering.' },
@@ -26,14 +25,15 @@ export default function LandingPage() {
   return (
     <>
       <SEOHead
-        {...seoPages['/']}
+        title="READMEForge — Generate Professional GitHub READMEs in 30 Seconds"
+        description="Free, open-source README generator. Live preview, 8 templates, quality scoring, and one-click export. No sign-up required."
         path="/"
       />
       <Navbar />
 
       <div className="hero-wrapper" style={{ paddingTop: 64 }}>
-        <main className="hero-content" aria-labelledby="home-heading">
-          <h1 id="home-heading" className="hero-title">GitHub<br />Readme.Md<br />maker</h1>
+        <main className="hero-content">
+          <h1 className="hero-title">GitHub<br />Readme.Md<br />maker</h1>
         </main>
 
         <div className="css-asterisk">
