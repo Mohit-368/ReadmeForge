@@ -55,7 +55,32 @@ export default function ReadmeMaker() {
     clearSaved();
     toast('✓ Saved data cleared!');
   }
+  useEffect(() => {
+  function handleShortcut(event) {
+    const isMac = navigator.platform.toUpperCase().includes("MAC");
 
+    const ctrlOrCmd = isMac
+      ? event.metaKey
+      : event.ctrlKey;
+
+    // Shortcut: Ctrl/Cmd + Alt + C
+    if (
+      ctrlOrCmd &&
+      event.altKey &&
+      event.key.toLowerCase() === "c"
+    ) {
+      event.preventDefault();
+
+      handleCopyMarkdown();
+    }
+  }
+
+  document.addEventListener("keydown", handleShortcut);
+
+  return () => {
+    document.removeEventListener("keydown", handleShortcut);
+  };
+}, [currentMd]);
   return (
     <>
       <SEOHead
@@ -81,7 +106,17 @@ export default function ReadmeMaker() {
             </a>
             <button className="hbtn" onClick={handleClearSaved}>🗑 Clear Saved</button>
             <button className="hbtn" onClick={handleResetAll}>↺ Reset All Fields</button>
-            <button className="hbtn" onClick={handleCopyMarkdown}>Copy Markdown</button>
+            <button
+  className="hbtn"
+  onClick={handleCopyMarkdown}
+  title={
+    navigator.platform.toUpperCase().includes("MAC")
+      ? "Shortcut: Cmd + Alt + C"
+      : "Shortcut: Ctrl + Alt + C"
+  }
+>
+  Copy Markdown
+</button>
           </div>
         </header>
 
