@@ -1,78 +1,95 @@
 import { useEffect } from 'react';
-import {
-  DEFAULT_DESCRIPTION,
-  DEFAULT_KEYWORDS,
-  DEFAULT_TITLE,
-  SITE_NAME,
-  absoluteUrl,
-  createWebAppSchema,
-} from '../../utils/seoConfig';
+
+const DEFAULT_SITE_URL = 'https://readmeforge.netlify.app';
+const DEFAULT_IMAGE = '/og-image.png';
 
 function upsertMeta(selector, attributes) {
   let element = document.head.querySelector(selector);
+
   if (!element) {
     element = document.createElement('meta');
     document.head.appendChild(element);
   }
 
   Object.entries(attributes).forEach(([key, value]) => {
-    if (value) element.setAttribute(key, value);
+    element.setAttribute(key, value);
   });
 }
 
-function upsertLink(rel, href) {
-  let element = document.head.querySelector(`link[rel="${rel}"]`);
-  if (!element) {
-    element = document.createElement('link');
-    element.setAttribute('rel', rel);
-    document.head.appendChild(element);
+function upsertCanonical(href) {
+  let canonical = document.head.querySelector('link[rel="canonical"]');
+
+  if (!canonical) {
+    canonical = document.createElement('link');
+    canonical.setAttribute('rel', 'canonical');
+    document.head.appendChild(canonical);
   }
-  element.setAttribute('href', href);
+
+  canonical.setAttribute('href', href);
+}
+
+function upsertJsonLd(data) {
+  const id = 'readmeforge-jsonld';
+  let script = document.getElementById(id);
+
+  if (!script) {
+    script = document.createElement('script');
+    script.id = id;
+    script.type = 'application/ld+json';
+    document.head.appendChild(script);
+  }
+
+  script.textContent = JSON.stringify(data);
 }
 
 export default function SEOHead({
-  title = DEFAULT_TITLE,
-  description = DEFAULT_DESCRIPTION,
-  keywords = DEFAULT_KEYWORDS,
-  path = '/',
-  image = '/og-image.svg',
+  title,
+  description,
+  path,
+  image = DEFAULT_IMAGE,
+  type = 'website',
   structuredData,
 }) {
   useEffect(() => {
-    const canonicalUrl = absoluteUrl(path);
-    const imageUrl = absoluteUrl(image);
-    const keywordContent = Array.isArray(keywords) ? keywords.join(', ') : keywords;
-    const schema = structuredData || createWebAppSchema(path);
+    const siteUrl = (import.meta.env.VITE_SITE_URL || DEFAULT_SITE_URL).replace(/\/+$/, '');
+    const pathname = path || window.location.pathname || '/';
+    const canonicalUrl = `${siteUrl}${pathname === '/' ? '/' : pathname}`;
+    const imageUrl = image.startsWith('http') ? image : `${siteUrl}${image}`;
+    const pageTitle = title || 'READMEForge — Professional README Generator';
+    const pageDescription = description || 'Create professional GitHub README files with templates, live preview, quality scoring, and one-click Markdown export.';
 
-    document.title = title;
-    upsertMeta('meta[name="description"]', { name: 'description', content: description });
-    upsertMeta('meta[name="keywords"]', { name: 'keywords', content: keywordContent });
+    document.title = pageTitle;
+
+    upsertMeta('meta[name="description"]', { name: 'description', content: pageDescription });
     upsertMeta('meta[name="robots"]', { name: 'robots', content: 'index, follow' });
-    upsertMeta('meta[name="author"]', { name: 'author', content: 'Mohit Kumar' });
-
-    upsertMeta('meta[property="og:type"]', { property: 'og:type', content: 'website' });
-    upsertMeta('meta[property="og:site_name"]', { property: 'og:site_name', content: SITE_NAME });
-    upsertMeta('meta[property="og:title"]', { property: 'og:title', content: title });
-    upsertMeta('meta[property="og:description"]', { property: 'og:description', content: description });
+    upsertMeta('meta[property="og:type"]', { property: 'og:type', content: type });
+    upsertMeta('meta[property="og:site_name"]', { property: 'og:site_name', content: 'READMEForge' });
+    upsertMeta('meta[property="og:title"]', { property: 'og:title', content: pageTitle });
+    upsertMeta('meta[property="og:description"]', { property: 'og:description', content: pageDescription });
     upsertMeta('meta[property="og:url"]', { property: 'og:url', content: canonicalUrl });
     upsertMeta('meta[property="og:image"]', { property: 'og:image', content: imageUrl });
-
     upsertMeta('meta[name="twitter:card"]', { name: 'twitter:card', content: 'summary_large_image' });
-    upsertMeta('meta[name="twitter:title"]', { name: 'twitter:title', content: title });
-    upsertMeta('meta[name="twitter:description"]', { name: 'twitter:description', content: description });
+    upsertMeta('meta[name="twitter:title"]', { name: 'twitter:title', content: pageTitle });
+    upsertMeta('meta[name="twitter:description"]', { name: 'twitter:description', content: pageDescription });
     upsertMeta('meta[name="twitter:image"]', { name: 'twitter:image', content: imageUrl });
-
-    upsertLink('canonical', canonicalUrl);
-
-    let jsonLd = document.head.querySelector('script[type="application/ld+json"][data-seo="readmeforge"]');
-    if (!jsonLd) {
-      jsonLd = document.createElement('script');
-      jsonLd.type = 'application/ld+json';
-      jsonLd.setAttribute('data-seo', 'readmeforge');
-      document.head.appendChild(jsonLd);
-    }
-    jsonLd.textContent = JSON.stringify(schema);
-  }, [title, description, keywords, path, image, structuredData]);
+    upsertCanonical(canonicalUrl);
+    upsertJsonLd(
+      structuredData || {
+        '@context': 'https://schema.org',
+        '@type': 'SoftwareApplication',
+        name: 'READMEForge',
+        applicationCategory: 'DeveloperApplication',
+        operatingSystem: 'Web',
+        url: canonicalUrl,
+        description: pageDescription,
+        offers: {
+          '@type': 'Offer',
+          price: '0',
+          priceCurrency: 'USD',
+        },
+      },
+    );
+  }, [title, description, path, image, type, structuredData]);
 
   return null;
 }
