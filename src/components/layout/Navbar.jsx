@@ -55,6 +55,13 @@ export default function Navbar() {
           README Maker
         </Link>
         <Link
+          to="/showcase"
+          className={linkClassName(isActiveRoute('/showcase'))}
+          onClick={() => setMenuOpen(false)}
+        >
+          Showcase
+        </Link>
+        <Link
           to="/how-to-use"
           className={linkClassName(isActiveRoute('/how-to-use'))}
           onClick={() => setMenuOpen(false)}

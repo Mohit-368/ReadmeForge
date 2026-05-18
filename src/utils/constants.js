@@ -49,14 +49,14 @@ export const TECHS = [
 ];
 
 export const BADGES = [
-  { id: 'license', label: 'License' },
-  { id: 'stars', label: '⭐ Stars' },
-  { id: 'forks', label: '🍴 Forks' },
-  { id: 'issues', label: 'Issues' },
-  { id: 'prs', label: 'PRs Welcome' },
-  { id: 'build', label: 'Build Passing' },
-  { id: 'coverage', label: 'Coverage' },
-  { id: 'version', label: 'Version' },
+  { id: 'license', label: 'License', shield: 'https://img.shields.io/badge/license-MIT-blue' },
+  { id: 'stars', label: 'Stars', shield: 'https://img.shields.io/github/stars/user/repo?style=social' },
+  { id: 'forks', label: 'Forks', shield: 'https://img.shields.io/github/forks/user/repo?style=social' },
+  { id: 'issues', label: 'Issues', shield: 'https://img.shields.io/github/issues/user/repo' },
+  { id: 'prs', label: 'PRs Welcome', shield: 'https://img.shields.io/badge/PRs-welcome-brightgreen.svg' },
+  { id: 'build', label: 'Build', shield: 'https://img.shields.io/badge/build-passing-brightgreen' },
+  { id: 'coverage', label: 'Coverage', shield: 'https://img.shields.io/badge/coverage-90%25-brightgreen' },
+  { id: 'version', label: 'Version', shield: 'https://img.shields.io/badge/version-1.0.0-blue' },
 ];
 
 export const DEFAULT_BADGES = new Set(['license', 'stars', 'prs']);

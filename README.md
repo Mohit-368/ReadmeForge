@@ -51,8 +51,23 @@
 -  **Live side-by-side preview** — See your rendered README as you type
 -  **Screenshot support** — Insert images directly into your README
 -  **One-click raw copy** — Grab the raw Markdown and paste it into GitHub instantly
+-  **Community showcase** — Discover featured READMEs, preview cards, and creator GitHub profiles
 -  **Toggle sections** — Include only what your project needs
 -  **Modern React architecture** — Built using React + Vite for fast development and improved maintainability
+
+---
+
+## 🌍 Community Showcase
+
+ReadmeForge includes a **Made with ReadmeForge** showcase where users can browse selected READMEs created with the platform.
+
+- Featured community submissions
+- GitHub creator profile links
+- README preview cards
+- Category filters for web apps, APIs, CLI tools, ML/AI projects, and open-source work
+- A submission path for users who want their README featured
+
+Visit the showcase from the app navigation or open `/showcase` in your local development build.
 
 ---
 
@@ -142,6 +157,7 @@ Please make sure your PR description clearly describes the problem and solution.
 - [ ] Export as `.md` file download
 - [ ] Badge picker integration
 - [ ] GitHub Gist save & share
+- [x] Community showcase for READMEs made with ReadmeForge
 
 ---
 
@@ -162,4 +178,3 @@ Distributed under the MIT License. See [`LICENSE`](LICENSE) for more information
 Made with ❤️ using React, JavaScript & Vite
 
 ⭐ Star this repo if you found it useful!
-

@@ -4,6 +4,7 @@ import { Routes, Route } from 'react-router-dom';
 const LandingPage = lazy(() => import('../pages/Landing/LandingPage'));
 const ReadmeMaker = lazy(() => import('../pages/ReadmeMaker/ReadmeMaker'));
 const HowToUsePage = lazy(() => import('../pages/HowToUse/HowToUsePage'));
+const CommunityShowcasePage = lazy(() => import('../pages/CommunityShowcase/CommunityShowcasePage'));
 
 function PageLoader() {
   return (
@@ -20,6 +21,7 @@ export default function AppRoutes() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/readme-maker" element={<ReadmeMaker />} />
         <Route path="/how-to-use" element={<HowToUsePage />} />
+        <Route path="/showcase" element={<CommunityShowcasePage />} />
       </Routes>
     </Suspense>
   );
